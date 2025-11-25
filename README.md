@@ -20,11 +20,11 @@ Console Input/Output, Program Style, Libraries and Namespaces.
 3. [Sales_Profit_Increase](01_Basics/03_Sales_Profit_Increase) \- Calculate sales and profit increases given previous year's figures.
 4. [Loan](01_Basics/04_Loan) \- Compute face value and monthly payment for a discount installment loan.
 5. [Truck_capacity](01_Basics/05_Truck_capacity) \- Determine if a truck is overloaded and how many boxes to add/remove.
-6. [cab_fare](01_Basics/06_cab_fare) \- Compute cab fare based on distance brackets and time charge.
-7. [calories_deficit](01_Basics/07_calories_deficit) \- Calculate calories burned during a staged treadmill workout.
+6. [cab_fare](01_Basics/06_Cab_fare) \- Compute cab fare based on distance brackets and time charge.
+7. [calories_deficit](01_Basics/07_Calories_deficit) \- Calculate calories burned during a staged treadmill workout.
 8. [Babylonian_algorithm](01_Basics/08_Babylonian_algorithm) \- Babylonian method to approximate square roots (5 iterations).
-9. [arcade_prize](01_Basics/09_arcade_prize) \- Redeem coupons for candy bars and gumballs with preference logic.
-10. [Plane_distance](01_Basics/10_Plance_distance) \- Compute airplane distance and convert speed to meters per second.
+9. [arcade_prize](01_Basics/09_Arcade_prize) \- Redeem coupons for candy bars and gumballs with preference logic.
+10. [Plane_distance](01_Basics/10_Plane_distance) \- Compute airplane distance and convert speed to meters per second.
 11. [Time](01_Basics/11_Time) \- Convert total seconds into hours, minutes, and seconds.
 12. [BMI](01_Basics/12_BMI) \- Estimate ideal body weight based on height (5 feet baseline + 5 lb per inch).
 13. [Coffee_intake](01_Basics/13_Coffee_intake) \- Compute how many drinks reach a lethal caffeine dose estimate.
