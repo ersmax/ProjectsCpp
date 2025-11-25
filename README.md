@@ -273,6 +273,6 @@ Introduction to Arrays, Arrays in functions, Programming with Arrays, Multidimen
     \- This program allows the user to icheck the list of players and their score, remove and add new players, check
     if a player exists. It uses a fixed-size array of structures to store player data, and includes input validation 
     to handle file reading errors. It also validates user input by trimming whitespace and ensuring non-empty names.
- 1. <p align="center">
-     <img src="05_Arrays/5.19_Players_Stats/Figures/Players.PNG" alt="Player Stats" width="48%" />
-   </p>
+    <p align="center">
+      <img src="05_Arrays/5.19_Players_Stats/Figures/Players.PNG" alt="Player Stats" width="48%" />
+    </p>
