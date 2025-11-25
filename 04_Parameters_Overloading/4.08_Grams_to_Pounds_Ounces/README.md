@@ -33,7 +33,7 @@ The program converts a weight given as kilograms and grams into pounds and ounce
 - It is possible to treat `ounces` as integer instead of double, at the expense of less precision.
   Replace `convertData` with this code, and change type of parameter `double& ounces` in the remaining code.
 
-```
+```cpp
 void convertData(int kilograms, double grams, int& pounds, double& ounces) {
     double totalPounds = (kilograms + grams / GRAMS_KILO ) * POUNDS_KILO;
     pounds = static_cast<int>(floor(totalPounds));
