@@ -19,3 +19,4 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # Include sub-projects.
 add_subdirectory ("01_Basics")
 add_subdirectory ("02_Flow_of_Control")
+add_subdirectory ("03_Function")
