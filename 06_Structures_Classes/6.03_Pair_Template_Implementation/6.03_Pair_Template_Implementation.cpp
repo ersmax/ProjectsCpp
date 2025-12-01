@@ -1,24 +1,6 @@
-/*
-The type Point is a fairly simple data type, but under another name (the template
-class pair) this data type is defined and used in the C++ Standard Template Library,
-although you need not know anything about the Standard Template Library
-to do this exercise. Write a definition of a class named Point that might be used to
-store and manipulate the location of a point in the plane. You will need to declare
-and implement the following member functions:
-a. A member function set that sets the private data after an object of this class is
-created.
-b. A member function to move the point by an amount along the vertical and
-horizontal directions specified by the first and second arguments.
-c. A member function to rotate the point by 90 degrees clockwise around the
-origin.
-d. Two const inspector functions to retrieve the current coordinates of the point.
-Document these functions with appropriate comments. Embed your class in a test
-program that requests data for several points from the user, creates the points, then
-exercises the member functions.
-*/
-
 #include <iostream>
 #include <string>
+#include <limits>
 
 constexpr int SIZE = 100;
 
@@ -26,27 +8,52 @@ class Point
 {
 public:
 	void setCoordinates(double coordinate1, double coordinate2);
+	//   Precondition: coordinate1 and coordinate2 are valid inputs from user
+	//   Postcondition: sets x to coordinate1 and y to coordinate2
 	double getX() const;
 	double getY() const;
 	void moveCoordinates(double offsetCoordinate1, double offsetCoordinate2);
+	//   Precondition: offsetCoordinate1 and offsetCoordinate2 are valid inputs from user
+	//   Postcondition: adds offsetCoordinate1 to x and offsetCoordinate2 to y
 	void rotatePoint();
+	//   Postcondition: rotates the point 90 degrees counterclockwise around the origin
 
 private:
-	double x;
-	double y;
+	double x = 0;
+	double y = 0;
 };
 
 void askCoordinates(Point points[], int maxSize, int& size);
+//  Precondition: points is an array of Point objects of size maxSize	
+//  Postcondition: fills the points array with user-provided coordinates
 
 double inputData();
+//  Postcondition: returns a valid double input from the user
 
 void showCoordinates(const Point points[], int size);
+//  Precondition: points is an array of Point objects of size at least size
+//  Postcondition: displays the coordinates of each Point in the points array
+
+void rotate(Point points[], int size);
+//  Precondition: points is an array of Point objects of size at least size
+//  Postcondition: rotates each Point in the points array 90 degrees counterclockwise around the origin
+
+void move(Point points[], int size, double offsetX, double offsetY);
+//  Precondition: points is an array of Point objects of size at least size
+//  Postcondition: moves each Point in the points array by offsetX on the x-axis and offsetY on the y-axis
+
 
 int main( )
 {
 	Point points[SIZE];
 	int size = 0;
 	askCoordinates(points, SIZE, size);
+	showCoordinates(points, size);
+	std::cout << "Rotating 90 degrees\n";
+	rotate(points, size);
+	showCoordinates(points, size);
+	std::cout << "Moving by +10 on x-axis and +1 on y-axis\n";
+	move(points, size, 10, 1);
 	showCoordinates(points, size);
 	
 	std::cout << "\n";
@@ -116,4 +123,16 @@ void showCoordinates(const Point points[], const int size)
 		std::cout << "Point " << idx + 1 << " "
 				  << "x-coordinate: " << points[idx].getX()
 				  << ", y-coordinate: " << points[idx].getY() << "\n";
+}
+
+void rotate(Point points[], const int size)
+{
+	for (int idx = 0; idx < size; ++idx)
+		points[idx].rotatePoint();
+}
+
+void move(Point points[], const int size, const double offsetX, const double offsetY)
+{
+	for (int idx = 0; idx < size; ++idx)
+		points[idx].moveCoordinates(offsetX, offsetY);
 }

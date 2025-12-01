@@ -16,3 +16,29 @@ program that requests data for several points from the user, creates the points,
 exercises the member functions.
 
 ---
+
+## 6.03_Pair_Template_Implementation.cpp — Code walkthrough
+
+- `class Point`
+  - `setCoordinates(double, double)`: stores X and Y values.
+  - `getX() const`, `getY() const`: return the current coordinates.
+  - `moveCoordinates(double dx, double dy)`: adds offsets to the stored coordinates.
+  - `rotatePoint()`: rotates the point 90 degrees clockwise about the origin. Implementation swaps `x` and `y` and negates the new `y` (i.e. `swap(x,y); y = -y;`).
+
+- Helper functions
+  - `inputData()`: reads a double from `std::cin`. The project version handles invalid tokens by clearing the stream and discarding the input line before retrying; consider returning `std::optional<double>` for EOF-aware behavior.
+  - `askCoordinates(Point points[], std::size_t maxSize, std::size_t &size)`: interactively asks the user for X and Y values and appends `Point` objects into the provided array until the user answers "no" or the array reaches capacity. It updates `size` with the number of stored points.
+  - `showCoordinates(const Point points[], std::size_t size)`: prints all stored points (1..size) using the `getX`/`getY` inspectors.
+  - `rotate(Point points[], std::size_t size)` and `move(Point points[], std::size_t size, double dx, double dy)`: utility loops that apply `rotatePoint()` and `moveCoordinates()` to the first `size` elements.
+
+- `main()` flow
+  1. Declare a fixed-size array of `Point` objects and a `size` counter.
+  2. Call `askCoordinates` to fill the array and update `size`.
+  3. Print the entered points via `showCoordinates`.
+  4. Rotate and print again.
+  5. Move all points and print the final coordinates.
+
+
+## Implementation for a number of points
+To test the `Point` class and its member functions, an array of `Point` objects is created,
+and the functions `rotate` and `move` call the respective member functions on each `Point` in the array.
