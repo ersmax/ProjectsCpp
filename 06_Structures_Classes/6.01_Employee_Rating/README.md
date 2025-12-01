@@ -18,50 +18,41 @@ use a structure for the employee records.
 ---
 # Overview
 The program collects three component scores from the user:
-•	Core competency: 0–10
-•	Performance evaluation: 0–30
-•	Ideation: 0–10
+- Core competency: 0–10
+- Performance evaluation: 0–30
+- Ideation: 0–10
 
 Each component is weighted and combined to produce a total on a 0–100 scale:
-•	Performance: 50% (contributes up to 50 points)
-•	Core competency: 30% (contributes up to 30 points)
-•	Ideation: 20% (contributes up to 20 points)
+- Performance: 50% (contributes up to 50 points)
+- Core competency: 30% (contributes up to 30 points)
+- Ideation: 20% (contributes up to 20 points)
 
 ## Normalization formula
 Each raw score is converted to a fraction of its maximum, multiplied by its weight, and scaled to the 0..100 range. The code computes the total as:
 Total =
-- (performance / 30.0) * (0.50 * 100.0)
+- (performance / 30.0) * (0.50 * 100.0) +
 - (coreCompetency / 10.0) * (0.30 * 100.0)
 - (ideation / 10.0) * (0.20 * 100.0)
 
-- When all inputs are at their maxima, the total equals 100.
 ## Rating thresholds
-•	total >= 80.0 → rating 1
-•	60.0 <= total < 80.0 → rating 2
-•	50.0 <= total < 60.0 → rating 3
-•	total < 50.0 → rating 4
+- total >= 80.0 → rating 1
+- 60.0 <= total < 80.0 → rating 2
+- 50.0 <= total < 60.0 → rating 3
+- total < 50.0 → rating 4
 
 ## Functions
-•	setSkills(Skills& employee)
-Prompts the user for each component, validates ranges, and stores values in the Skills struct. Accepts -1 as a sentinel to exit.
-
-•	inputData()
-Reads and returns a double from standard input while handling invalid input. Callers rely on -1 to exit.
-
-•	normalize(const Skills& employee)
-Calculates and returns the normalized total score (0..100) using the normalization formula.
-
-•	rateEmployee(double total)
-Maps the normalized total to an integer rating (1..4) using the thresholds above.
-
-•	printResults(double total, int rate)
-Prints the total score and the final rating (formatted for readability).
+1. setSkills(Skills& employee): Prompts the user for each component, validates ranges, and stores values in the Skills struct. Accepts -1 as a sentinel to exit.
+2. inputData(): Reads and returns a double from standard input while handling invalid input. Callers rely on -1 to exit.
+3. normalize(const Skills& employee): Calculates and returns the normalized total score (0..100) using the normalization formula.
+4. rateEmployee(double total): Maps the normalized total to an integer rating (1..4) using the thresholds above.
+5. printResults(double total, int rate): Prints the total score and the final rating (formatted for readability).
 
 ## Examples
-•	Max values: core=10, performance=30, ideation=10 → total = 100 → rating 1
-•	Zero values: core=0, performance=0, ideation=0 → total = 0 → rating 4
-•	Mixed example: core=7.5, perf=18, ideation=4 →
-•	perf contrib = (18/30)*50 = 30
-•	comp contrib = (7.5/10)*30 = 22.5
-•	idea contrib = (4/10)*20 = 8
-•	total = 60.5 → rating 2
+- Max values: core=10, performance=30, ideation=10 → total = 100 → rating 1
+- Zero values: core=0, performance=0, ideation=0 → total = 0 → rating 4
+- Mixed example: core=7.5, perf=18, ideation=4 →
+- perf contrib = (18/30)*50 = 30
+- comp contrib = (7.5/10)*30 = 22.5
+- idea contrib = (4/10)*20 = 8
+- total = 60.5 → rating 2.
+
