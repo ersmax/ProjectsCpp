@@ -276,3 +276,10 @@ Introduction to Arrays, Arrays in functions, Programming with Arrays, Multidimen
     <p align="center">
       <img src="05_Arrays/5.19_Players_Stats/Figures/Players.PNG" alt="Player Stats" width="48%" />
     </p>
+
+---
+
+## 6. Structures and Classes
+Structures, Classes.
+
+1. [???]
