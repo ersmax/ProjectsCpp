@@ -8,6 +8,7 @@
 # List all folders
 set(FOLDERS
     "6.01_Employee_Rating"
+    "6.02_Circle_Class"
 )
 
 # Automatically get all .cpp and headers files 
