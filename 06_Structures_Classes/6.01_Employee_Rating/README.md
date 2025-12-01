@@ -41,11 +41,11 @@ Total =
 - total < 50.0 → rating 4
 
 ## Functions
-1. ```cpp setSkills(Skills& employee)```: Prompts the user for each component, validates ranges, and stores values in the Skills struct. Accepts -1 as a sentinel to exit.
-2. ```cpp inputData()```: Reads and returns a double from standard input while handling invalid input. Callers rely on -1 to exit.
-3. ```cpp normalize(const Skills& employee)```: Calculates and returns the normalized total score (0..100) using the normalization formula.
-4. ```cpp rateEmployee(double total)```: Maps the normalized total to an integer rating (1..4) using the thresholds above.
-5. ```cpp printResults(double total, int rate)```: Prints the total score and the final rating (formatted for readability).
+1. ```setSkills(Skills& employee)```: Prompts the user for each component, validates ranges, and stores values in the Skills struct. Accepts -1 as a sentinel to exit.
+2. ```inputData()```: Reads and returns a double from standard input while handling invalid input. Callers rely on -1 to exit.
+3. ```normalize(const Skills& employee)```: Calculates and returns the normalized total score (0..100) using the normalization formula.
+4. ```rateEmployee(double total)```: Maps the normalized total to an integer rating (1..4) using the thresholds above.
+5. ```printResults(double total, int rate)```: Prints the total score and the final rating (formatted for readability).
 
 ## Examples
 - Max values: core=10, performance=30, ideation=10 → total = 100 → rating 1
