@@ -285,3 +285,8 @@ Structures, Classes.
 1. [Employee Rating](06_Structures_Classes/6.01_Employee_Rating) 
    \- This program collects three component scores from the user, validates them, and computes a normalized total score and rating.
    The program defines a `Skills` structure to hold the component scores and uses functions to set skills, normalize scores, rate employees, and print results.
+2. [Circle Class](06_Structures_Classes/6.02_Circle_Class) 
+   \- This program defines a `Circle` class that encapsulates the properties and behaviors of a circle.
+   It includes member variables for radius, diameter, area, and circumference, along with methods to set the radius,
+   compute derived values, retrieve the radius, and display results. The program demonstrates the use of the class
+   by creating an instance, setting its radius, and displaying the computed properties.
