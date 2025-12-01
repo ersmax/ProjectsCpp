@@ -1,7 +1,7 @@
 ﻿# Projects
 
 
-# Practical C++ Problems — Documentation Index
+# Practical C++ Problems
 
 This repository contains practical, real-life programming problems solved in C++20 and above.
 This README lists the documentation files for the collections: `01-Basics` - `06-OOP`
