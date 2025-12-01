@@ -17,7 +17,7 @@ exercises the member functions.
 
 ---
 
-## 6.03_Pair_Template_Implementation.cpp — Code walkthrough
+# Pair Template Implementation
 
 - `class Point`
   - `setCoordinates(double, double)`: stores X and Y values.
