@@ -290,3 +290,8 @@ Structures, Classes.
    It includes member variables for radius, diameter, area, and circumference, along with methods to set the radius,
    compute derived values, retrieve the radius, and display results. The program demonstrates the use of the class
    by creating an instance, setting its radius, and displaying the computed properties.
+3. [Point Class](06_Structures_Classes/6.03_Pair_Template_Implementation) 
+   \- This program defines a `Point` class to represent a point in a 2D plane and implement the class `Pair` template.
+   It includes member functions to set coordinates, move the point, rotate it 90 degrees clockwise,
+   and retrieve the current coordinates. The program allows the user to input multiple points,
+   displays their coordinates, rotates them, moves them by specified offsets, and shows the updated coordinates.
