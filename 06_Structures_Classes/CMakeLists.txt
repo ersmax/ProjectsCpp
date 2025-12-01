@@ -9,23 +9,23 @@
 set(FOLDERS
     "6.01_Employee_Rating"
     "6.02_Circle_Class"
+    "6.03_Pair_Template_Implementation"
 )
 
 # Automatically get all .cpp and headers files 
 foreach(folder ${FOLDERS})
-    # Gather .cpp and .h files
+
     file(GLOB SOURCES CONFIGURE_DEPENDS "${folder}/*.cpp")
     file(GLOB HEADERS CONFIGURE_DEPENDS "${folder}/*.h")
 
     foreach(source ${SOURCES})
-        # Executable name = filename without extension
-        get_filename_component(exec_name ${source} NAME_WE)
-
-        # Create target
+        get_filename_component(folder_name ${folder} NAME)
+        get_filename_component(file_name ${source} NAME_WE)
+        set(exec_name "${folder_name}_${file_name}")
         add_executable(${exec_name} ${source} ${HEADERS})
+
     endforeach()
 endforeach()
-
 
 
 # TODO: Add tests and install targets if needed.
