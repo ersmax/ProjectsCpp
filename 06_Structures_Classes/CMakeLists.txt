@@ -10,6 +10,7 @@ set(FOLDERS
     "6.01_Employee_Rating"
     "6.02_Circle_Class"
     "6.03_Pair_Template_Implementation"
+    "6.04_Gas_Pump"
 )
 
 # Automatically get all .cpp and headers files 
