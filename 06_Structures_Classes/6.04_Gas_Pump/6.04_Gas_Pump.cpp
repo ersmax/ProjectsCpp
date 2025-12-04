@@ -20,11 +20,6 @@ Implement the behavior of the gas pump as declarations of member functions of
 the gas pump class, then write implementations of these member functions. You
 will have to decide if there is data the gas pump has to keep track of that the user
 of the pump should not have access to. If so, make these private member variables.
-Additional functions that I have thought:
-1. Choose the fuel pump
-2. Refill for a given amount
-3. Select petrol/diesel
-4. Select cash/card
 */
 
 
@@ -32,6 +27,10 @@ Additional functions that I have thought:
 #include <string>
 #include <limits>
 #include <iomanip>
+#include <conio.h> // _kbhit, _getch
+#include <thread>  // sleep_for
+#include <chrono>  // ms
+
 
 
 constexpr double PRICE_GALLON = 2.832;
@@ -78,20 +77,26 @@ double GasPump::getCharges() const
 void GasPump::setAmount(const double userPrice)
 {
 	amount = 0.0;
-	std::string line;
-	std::cout << "Press enter to refill (or 'exit'):\n";
-	while (amount <= userPrice)
+	std::cout << "Press enter to refill (or 'ESC'):\n";
+	while (amount < userPrice)
 	{
-		std::getline(std::cin, line);
-		if (line.empty())
+		if (_kbhit())
 		{
-			amount += STEP_REFILL;
-			std::cout << "\rFuel: " << amount << "        " << std::flush;
+			const char input = _getch();
+			if (input == 27) break;	// ESCAPE
+			if (input == 13)		// Enter
+			{
+				amount += STEP_REFILL;
+				std::cout << "\r" << std::left
+					<< std::setw(40)
+					<< ("Fuel: " + std::to_string(amount));
 
+			}
 		}
-		if (line == "exit")
-			break;
+		// Add small delay
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
+	std::cout << "\n";
 }
 
 void GasPump::setCharges()
