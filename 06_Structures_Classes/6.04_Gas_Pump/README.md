@@ -26,3 +26,34 @@ Additional functions that I have thought:
 4. Select cash/card
 
 ----
+
+
+### Old implementation
+The old implementation of `setAmount` tries to read the input from the 
+user by reading a line of text.
+However, this approach creates a new line as soon as the user press
+'Enter' from keyboard. 
+To avoid the issue, a specific library `conio.h` is used.
+Reference: 
+[Stackoverflow - Creating a progress update by replacing output in the R console from C/C++](https://stackoverflow.com/questions/47623478/creating-a-progress-update-by-replacing-output-in-the-r-console-from-c-c)
+
+```cpp
+void GasPump::setAmount(const double userPrice)
+{
+	amount = 0.0;
+	std::string line;
+	std::cout << "Press enter to refill (or 'exit'):\n";
+	while (amount <= userPrice)
+	{
+		std::getline(std::cin, line);
+		if (line.empty())
+		{
+			amount += STEP_REFILL;
+			std::cout << "\rFuel: " << amount << "        " << std::flush;
+
+		}
+		if (line == "exit")
+			break;
+	}
+}
+```
