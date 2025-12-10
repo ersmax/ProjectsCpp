@@ -1,63 +1,50 @@
-/*
-Write the definition for a class named GasPump to be used to model a pump at an
-automobile service station. Before you go further with this programming exercise,
-write down the behavior you expect from a gas pump from the point of view of the
-purchaser.
-The following are listed things a gas pump might be expected to do. If your list
-differs, and you think your list is as good or better than these, then consult your
-instructor. You and your instructor should jointly decide what behavior you are to
-implement. Then implement and test the agreed upon design for a gas pump class.
-a. A display of the amount dispensed
-b. A display of the amount charged for the amount dispensed
-c. A display of the cost per gallon, liter, or other unit of volume that is used where
-you reside
-d. Before use, the gas pump must reset the amount dispensed and amount charged
-to zero.
-e. Once started, a gas pump continues to dispense fuel, keep track of the amount
-dispensed, and compute the charge for the amount dispensed until stopped.
-f. A stop dispensing control of some kind is needed.
-Implement the behavior of the gas pump as declarations of member functions of
-the gas pump class, then write implementations of these member functions. You
-will have to decide if there is data the gas pump has to keep track of that the user
-of the pump should not have access to. If so, make these private member variables.
-*/
-
-
+#include <algorithm>		// std::min
 #include <iostream>
 #include <string>
-#include <limits>
-#include <iomanip>
-#include <conio.h> // _kbhit, _getch
-#include <thread>  // sleep_for
-#include <chrono>  // ms
+#include <limits>			// std::numeric_limits
+#include <iomanip>			// std::setprecision
+#include <conio.h>			// _kbhit, _getch
+#include <thread>			// sleep_for
+#include <chrono>			// ms
 
-
-
-constexpr double PRICE_GALLON = 2.832;
+constexpr double PRICE_LITER = 2.832;
 constexpr double STEP_REFILL = 0.1;
 
 class GasPump
 {
 public:
 	double getAmount() const;
+	//   Postcondition: return amount of fuel
 	double getCharges() const;
-	void setAmount(double userPrice);
+	//   Postcondition: return the fuel cost
+	void setCharges(double userPrice);
+	//   Precondition: userPrice is the amount of 
+	// money the user is willing to spend
+	//   Postcondition: set the amount of fuel desired
+	// by user, up to `userPrice`
 private:
 	double amount = 0.0;
 	double charges = 0.0;
-	void setCharges();
+	void setAmount();
 };
 
 double showUnitCharge();
+//   Postcondition: return the constant price/liter
 void setFuel(double& userPrice);
+//   Postcondition: set how much the user wanna spend
 
 int main( )
 {
 	GasPump driver1;
 	double userPrice = 0.0;
 	setFuel(userPrice);
-	driver1.setAmount(userPrice);
-	std::cout << "Driver's chosen amount: " << driver1.getAmount() << "\n";
+	driver1.setCharges(userPrice);
+
+	std::cout << std::fixed << std::showpoint << std::setprecision(2);
+	std::cout << "Driver's chosen price: " << driver1.getCharges() << "\n";
+	std::cout << "Price per liter: " << showUnitCharge() << "\n";
+	std::cout << "Total fuel: " << driver1.getAmount() << " liters\n";
+
 
 	std::cout << "\n";
 	return 0;
@@ -74,11 +61,12 @@ double GasPump::getCharges() const
 }
 
 
-void GasPump::setAmount(const double userPrice)
+void GasPump::setCharges(const double userPrice)
 {
-	amount = 0.0;
+	charges = 0.0;
+	constexpr double eps = 1e-9;
 	std::cout << "Press enter to refill (or 'ESC'):\n";
-	while (amount < userPrice)
+	while (charges + eps < userPrice)
 	{
 		if (_kbhit())
 		{
@@ -86,10 +74,11 @@ void GasPump::setAmount(const double userPrice)
 			if (input == 27) break;	// ESCAPE
 			if (input == 13)		// Enter
 			{
-				amount += STEP_REFILL;
+				charges = std::min(charges + STEP_REFILL, userPrice);
 				std::cout << "\r" << std::left
-					<< std::setw(40)
-					<< ("Fuel: " + std::to_string(amount));
+					<< std::setw(20)
+					<< ("Fuel: " + std::to_string(charges) + " $")
+					<< std::flush;
 
 			}
 		}
@@ -97,16 +86,17 @@ void GasPump::setAmount(const double userPrice)
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
 	std::cout << "\n";
+	setAmount();
 }
 
-void GasPump::setCharges()
+void GasPump::setAmount()
 {
-	// TODO
+	amount = charges / PRICE_LITER;
 }
 
 double showUnitCharge( )
 {
-	return PRICE_GALLON;
+	return PRICE_LITER;
 }
 
 void setFuel(double& userPrice)
@@ -128,10 +118,9 @@ void setFuel(double& userPrice)
 		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
 		if (input == -1) break;
-		if ((input >= 5) && (input <= 100) && (input % 5 == 0))
+		if ((input >= 5) && (input % 5 == 0))
 			userPrice += input;
 		else
 			std::cout << "Wrong input\n";
 	}
 }
-
