@@ -295,3 +295,12 @@ Structures, Classes.
    It includes member functions to set coordinates, move the point, rotate it 90 degrees clockwise,
    and retrieve the current coordinates. The program allows the user to input multiple points,
    displays their coordinates, rotates them, moves them by specified offsets, and shows the updated coordinates.
+4. [Gas Pump](06_Structures_Classes/6.04_Gas_Pump)
+   - Simulation of a gas pump allowing interactive fuel volume and cost settings.
+   - Responsive console interface using `_kbhit()` and `_getch()` for real-time user input.
+   - Comprehensive input validation for numeric and menu selections, with detailed error handling.
+   - Dynamic display updates: fuel volume, cost, and price per liter shown in real-time.
+   - Optional receipt printing with precise formatting; demonstrates file output and formatting.
+   - Includes implementation details and notes on conio.h usage, keyboard input handling, and program flow.
+
+---
