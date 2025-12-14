@@ -12,6 +12,7 @@ set(FOLDERS
     "6.03_Pair_Template_Implementation"
     "6.04_Gas_Pump"
     "6.05_Fraction_Class"
+    "6.06_Bicycle_Speedometer"
 )
 
 # Automatically get all .cpp and headers files 

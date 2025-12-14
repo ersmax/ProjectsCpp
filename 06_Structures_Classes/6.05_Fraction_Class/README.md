@@ -40,6 +40,10 @@ and then dividing both by that number. Embed your class in a test program.
 
 # Pseudocode GCD Stein Algorithm:
 ```cpp
+Input: a, b such that 0 < b < a
+Output:	gcd(a, b)
+begin
+
 idx = 0; u = a; v = b;
 while isEven(u) && isEven(v):
   u /= 2; v /= 2; i++;

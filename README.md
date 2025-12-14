@@ -305,4 +305,9 @@ Structures, Classes.
 5. [Fraction Class](06_Structures_Classes/6.05_Fraction_Class) 
    \- This program defines a `Fraction` class to represent and manipulate fractions, as well as 
    reducing to lowest terms by means of binary GCD algorithm (Stein).
+6. [Bicycle Speedometer](06_Structures_Classes/6.06_Bicycle_Speedometer) 
+   \- This program defines a `Bicycle` class that simulates a bicycle speedometer.
+   It includes member variables to compute the average speed based on distance and time travelled.
+   It includes also helper functions for input validation.
+
 ---
