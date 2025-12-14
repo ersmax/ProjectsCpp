@@ -302,5 +302,7 @@ Structures, Classes.
    - Dynamic display updates: fuel volume, cost, and price per liter shown in real-time.
    - Optional receipt printing with precise formatting; demonstrates file output and formatting.
    - Includes implementation details and notes on conio.h usage, keyboard input handling, and program flow.
-
+5. [Fraction Class](06_Structures_Classes/6.05_Fraction_Class) 
+   \- This program defines a `Fraction` class to represent and manipulate fractions, as well as 
+   reducing to lowest terms by means of binary GCD algorithm (Stein).
 ---
