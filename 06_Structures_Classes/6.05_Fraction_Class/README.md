@@ -35,8 +35,8 @@ and then dividing both by that number. Embed your class in a test program.
   - As an alternative to the custom binary GCD, `std::gcd(std::abs(a), std::abs(b))` (from `<numeric>`) is simpler and handles edge cases when available.
 
 # Resources
-https://link.springer.com/chapter/10.1007/978-3-031-33488-7_3
-https://iq.opengenus.org/binary-gcd-algorithm/
+- [HS-Based Error Correction Algorithm for Noisy Binary GCD Side](https://link.springer.com/chapter/10.1007/978-3-031-33488-7_3)
+- [Binary GCD Algorithm](https://iq.opengenus.org/binary-gcd-algorithm/)
 
 # Pseudocode GCD Stein Algorithm:
 ```cpp
