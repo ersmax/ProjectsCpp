@@ -15,6 +15,7 @@ various pizza objects.
 
 #include <iostream>
 #include <string>
+#include <limits>
 
 const std::string PIZZA_TYPE[] = {"Deep Dish", "Hand Tossed", "Pan"};
 constexpr int N_TYPES = 3;
@@ -35,16 +36,19 @@ private:
 	int cheese = 0;
 	std::string getType();
 	std::string getSize();
-	int getPepperoni();
-	int getCheese();
+	int getPepperoni() const;
+	int getCheese() const;
 	double computePice();
-	int inputValidation(int size);
+    int inputValidation(int min, int max);
 };
 
 int main( )
 {
 	Pizza aPizza;
 	aPizza.setType();
+	aPizza.setSize();
+	aPizza.setTopping();
+	aPizza.outputDescription();
 	
 	std::cout << "\n";
 	return 0;
@@ -55,14 +59,37 @@ void Pizza::setType()
 {
 	std::cout << "Choose type of pizza.\n";
 	for (int idx = 0; idx < N_TYPES; ++idx)
-		std::cout << idx + 1 << ") " << PIZZA_TYPE[idx];
+		std::cout << idx + 1 << ") " << PIZZA_TYPE[idx] << "\n";
 
 	std::cout << "Enter your choice:\n";
-	const int choice = inputValidation(N_TYPES);
-	type = PIZZA_TYPE[choice];
+    const int choice = inputValidation(1, N_TYPES);
+    type = PIZZA_TYPE[choice - 1];
 }
 
-int Pizza::inputValidation(const int size)
+void Pizza::setSize()
+{
+	std::cout << "Choose size of pizza.\n";
+	for (int idx = 0; idx < N_SIZES; ++idx)
+		std::cout << idx + 1 << ") " << PIZZA_SIZE[idx] << "\n";
+
+	std::cout << "Enter your choice:\n";
+    const int choice = inputValidation(1, N_SIZES);
+    size = PIZZA_SIZE[choice - 1];
+}
+
+void Pizza::setTopping()
+{
+	std::cout << "Enter portion of pepperoni.\n"
+				 "(0 = none, 1 = regular, 2 = extra)\n";
+	std::cout << "Enter your choice:\n";
+    pepperoni = inputValidation(0, 2);
+	std::cout << "Enter portion of cheese topping.\n"
+				 "(0 = none, 1 = regular, 2 = extra)\n";
+	std::cout << "Enter your choice:\n";
+    cheese = inputValidation(0, 2);
+}
+
+int Pizza::inputValidation(const int min, const int max)
 {
 	int choice = 0;
 	while (true)
@@ -75,8 +102,37 @@ int Pizza::inputValidation(const int size)
 			continue;
 		}
 		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-		if (choice > 0 && choice <= size)
-			return (--choice);
-		std::cout << "Wrong choice\n";
+        if (choice < min || choice > max) {
+            std::cout << "Wrong choice\n";
+            continue;
+        }
+        return choice;
 	}
+}
+
+void Pizza::outputDescription()
+{
+	std::cout << getSize() << " Pizza " << getType()
+		<< " with " << getPepperoni() << " pepperoni"
+		<< " and " << getCheese() << " cheese\n";
+}
+
+std::string Pizza::getSize()
+{
+	return size;
+}
+
+std::string Pizza::getType()
+{
+	return type;
+}
+
+int Pizza::getPepperoni() const
+{
+	return pepperoni;
+}
+
+int Pizza::getCheese() const
+{
+	return cheese;
 }
