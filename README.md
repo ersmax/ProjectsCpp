@@ -309,5 +309,9 @@ Structures, Classes.
    \- This program defines a `Bicycle` class that simulates a bicycle speedometer.
    It includes member variables to compute the average speed based on distance and time travelled.
    It includes also helper functions for input validation.
-
+7. [Pizzeria](06_Structures_Classes/6.07_Pizzeria) 
+   \- This program defines a `Pizza` class that models a pizza order by storing its `type` 
+   (one of `Deep Dish`, `Hand Tossed`, `Pan`), `size `(`Small`, `Medium`, `Large`), 
+   and the number of `pepperoni` and `cheese` toppings (each 0..2 representing none, regular, extra).
+   Then, it displays a description of the pizza and computes its price based on size and toppings.
 ---
