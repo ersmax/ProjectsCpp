@@ -314,4 +314,7 @@ Structures, Classes.
    (one of `Deep Dish`, `Hand Tossed`, `Pan`), `size `(`Small`, `Medium`, `Large`), 
    and the number of `pepperoni` and `cheese` toppings (each 0..2 representing none, regular, extra).
    Then, it displays a description of the pizza and computes its price based on size and toppings.
+8. [Money Portfolio](06_Structures_Classes/6.08_Money_Portfolio) 
+   \- This program defines a `Money` class that stores whole `dollars` and `cents`, provides accessors and mutators, 
+   and a `convertMoney()` method that returns the monetary amount as a `double`. 
 ---
