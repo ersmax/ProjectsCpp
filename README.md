@@ -317,4 +317,12 @@ Structures, Classes.
 8. [Money Portfolio](06_Structures_Classes/6.08_Money_Portfolio) 
    \- This program defines a `Money` class that stores whole `dollars` and `cents`, provides accessors and mutators, 
    and a `convertMoney()` method that returns the monetary amount as a `double`. 
+9. [Money Portfolio Improved](06_Structures_Classes/6.09_Money_Portfolio_Improved) 
+   \- This program improves upon the previous `Money` class by storing the monetary amount as a single `double` value.
+   It retains the same Abtstract programming interface (accessors, mutators, and `convertMoney()` method), 
+   while changing the internal representation.
+   This approach showcases a test for encapsulation. That is, the class definition produces an ADT (i.e. Abstract Data Type),
+   since it separates the interface from the implementation. In fact, the program changes the implementation of some
+   member functions without affecting the interface (other code that uses the class definition).
+   
 ---
