@@ -324,5 +324,9 @@ Structures, Classes.
    This approach showcases a test for encapsulation. That is, the class definition produces an ADT (i.e. Abstract Data Type),
    since it separates the interface from the implementation. In fact, the program changes the implementation of some
    member functions without affecting the interface (other code that uses the class definition).
-   
+10. [Weight Conversion](06_Structures_Classes/6.10_Weight_Conversion) 
+    \- This program defines a `Weight` class that stores a weight internally in pounds.
+    It includes functions to set the weight in pounds, kilograms, and ounces,
+    converting as necessary, and functions to retrieve the weight in all three units.
+    The program includes input validation to ensure valid non-negative weights are entered, and function overloading to handle conversions.
 ---
