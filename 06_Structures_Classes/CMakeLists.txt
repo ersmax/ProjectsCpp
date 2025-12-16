@@ -16,6 +16,7 @@ set(FOLDERS
     "6.07_Pizzeria"
     "6.08_Money_Portfolio"
     "6.09_Money_Portfolio_Improved"
+    "6.10_Weight_Conversion"
 )
 
 # Automatically get all .cpp and headers files 
