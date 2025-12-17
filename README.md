@@ -329,4 +329,10 @@ Structures, Classes.
     It includes functions to set the weight in pounds, kilograms, and ounces,
     converting as necessary, and functions to retrieve the weight in all three units.
     The program includes input validation to ensure valid non-negative weights are entered, and function overloading to handle conversions.
+11. [Highest Score with Player class](06_Structures_Classes/6.11_Highest_Score) 
+    \- This program reads names and scores from a file, sorts the entries using Merge Sort to find the highest score,
+    and prints the highest score along with the corresponding name. 
+    It uses a fixed-size array of `Player` objects to store names and scores, implements Merge Sort to sort the array,
+    and includes input validation to handle file reading errors.
+ 
 ---
