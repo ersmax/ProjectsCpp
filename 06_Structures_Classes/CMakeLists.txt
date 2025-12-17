@@ -18,6 +18,7 @@ set(FOLDERS
     "6.09_Money_Portfolio_Improved"
     "6.10_Weight_Conversion"
     "6.11_Highest_Score"
+    "6.12_Mystery_Box"
 )
 
 # Automatically get all .cpp and headers files 
