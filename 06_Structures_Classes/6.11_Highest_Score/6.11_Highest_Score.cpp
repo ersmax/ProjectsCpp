@@ -1,40 +1,3 @@
-/*
-Do Programming Project 5.18 except use only one array as a parameter instead
-of two arrays. The single array should be of type Player where Player is a class
-that you create. The Player class should have a member variable of type string
-to store the player’s name and a member variable of type int to score the player’s
-score. Encapsulate these variables appropriately. Upon return from your function
-the array entry at index 0 should be set to the name and score of the player with the
-best score, the entry at index 1 should be set to the name and score of the player
-with the second best score, etc.
-
-Program 5.18
-This project is an extension of Programming Project 4.16. Consider a text file
-named scores.txt that contains player scores for a game. A possible sample is
-shown next where Ronaldo’s best score is 10400, Didier’s best score is 9800, etc.
-Put at least five names and scores in the file.
-Ronaldo
-10400
-Didier
-9800
-Pele
-12300
-Kaka
-8400
-Cristiano
-8000
-Write a function named getHighScores that takes two array parameters, an array
-of strings and an array of integers. The function should scan through the file and
-set the string array entry at index 0 to the name of the player with the highest score
-and set the integer array entry at index 0 to the score of the player with the highest
-score. The string array entry at index 1 should be set to the name of the player with
-the second highest score and the integer array entry at index 1 should be set to the
-score of the player with the second highest score. Do the same for the entries at
-index 2. Together, these two arrays give you the names and scores of the top three
-players. In your main function, test the getHighScores function by calling it and
-outputting the top three players and scores.
-*/
-
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -49,7 +12,11 @@ class Player
 {
 public:
 	void setName(const std::string& namePlayer);
+	//   Precondition: namePlayer is a valid string
+	//   Postcondition: sets the player's name to namePlayer
 	void setScore(int scorePlayer);
+	//   Precondition: scorePlayer is a valid integer
+	//   Postcondition: sets the player's score to scorePlayer
 	std::string getName() const;
 	int getScore() const;
 private:
@@ -58,13 +25,39 @@ private:
 };
 
 bool processFile(Player players[], int maxSize, int& nPlayers);
+//   Precondition: players is an array of size maxSize
+//   Postcondition: fills players array with data from the file located at PATH.
+
 bool openFile(const std::string& pathFile, std::ifstream& inputStream);
+//   Precondition: pathFile is a valid file path, inputStream is an ifstream object
+//   Postcondition: opens the file located at pathFile for reading.
+
 void closeFile(std::ifstream& inputStream);
+//   Precondition: inputStream is an open file stream
+//   Postcondition: closes the file stream.
+
 void parseFile(std::ifstream& inputStream, Player players[], int maxSize, int& nPlayers);
+//   Precondition: inputStream is an open file stream, players is an array of size maxSize,
+// nPlayers is the current number of players.
+//   Postcondition: reads names and scores from inputStream and fills the players array up to maxSize.
+
 void orderData(Player players[], int nPlayers);
+//   Precondition: players is an array of size at least nPlayers
+//   Postcondition: sorts players array in descending order of scores.
+
 void mergeSort(Player players[], Player buffer[], int size, int start, int end);
+//   Precondition: players is an array of size at least size. buffer is a temporary array 
+// of size at least size, to avoid memory churn (allocation/deallocation during recursion).
+//   Postcondition: sorts players array in descending order of scores using the merge sort algorithm
+// on the subarray defined by [start..end].
+
 void merge(Player players[], Player buffer[], int size, int start, int mid, int end);
+//   Precondition: players is an array of size at least size. buffer is a temporary array
+//   Postcondition: merges two sorted subarrays of players defined by [start..mid] and [mid+1..end]
+
 void showBest(const Player players[], int size, int topPlayers);
+//   Precondition: players is an array of size at least size, topPlayers is a defined constant
+//   Postcondition: displays on console the topPlayers players with highest scores.
 
 int main() 
 {
