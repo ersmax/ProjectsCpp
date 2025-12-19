@@ -1,34 +1,10 @@
-/*
-Your Community Supported Agriculture (CSA) farm delivers a box of fresh fruits
-and vegetables to your house once a week. For this Programming Project, define
-the class BoxOfProduce that contains exactly three bundles of fruits or vegetables.
-You can represent the fruits or vegetables as an array of type string. Add accessor
-and mutator functions to get or set the fruits or vegetables stored in the array. Also
-write an output function that displays the complete contents of the box on the
-console.
-Next, write a main function that creates a BoxOfProduce with three items
-randomly selected from this list:
-Broccoli
-Tomato
-Kiwi
-Kale
-Tomatillo
-This list should be stored in a text file that is read in by your program. For now
-you can assume that the list contains exactly five types of fruits or vegetables.
-Do not worry if your program randomly selects duplicate produce for the three
-items. Next, the main function should display the contents of the box and allow
-the user to substitute any one of the five possible fruits or vegetables for any of the
-fruits or vegetables selected for the box. After the user is done with substitutions
-output the final contents of the box to be delivered.
-*/
-
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <random>
-#include <limits>
-#include <algorithm>
-#include <cctype>
+#include <iostream>		// for std::cout, std::cin, std::cerr
+#include <fstream>		// for std::ifstream
+#include <string>		// for std::string
+#include <random>		// for std::random_device, std::mt19937, std::uniform_int_distribution
+#include <limits>		// for std::numeric_limits
+#include <algorithm>	// for std::max
+#include <cctype>		// for std::tolower
 
 const std::string PATH = "./06_Structures_Classes/6.12_Mystery_Box/Utilities/Produce.txt";
 const std::string SEPARATOR = std::string(20, '-') + "\n";
@@ -58,14 +34,42 @@ private:
 };
 
 bool processFile(FruitsVegetables produceList[], int maxSize, int& sizeList);
+//   Precondition: produceList is an array of FruitsVegetables of size maxSize.
+//   Postcondition: produceList is filled with the data read from the file, 
+// and sizeList contains the number of items read.
+
 bool openFile(const std::string& pathFile, std::ifstream& inputStream);
+//   Precondition: pathFile is the path to the file to be opened.
+//   Postcondition: inputStream is associated with the opened file.
+
 void closeFile(std::ifstream& inputStream);
-void parseFile(std::ifstream& inputStream, FruitsVegetables produceList[], int maxSize, int& sizeList);
+//   Precondition: inputStream is associated with an open file.
+//   Postcondition: inputStream is closed.
+
+void parseFile(std::ifstream& inputStream, 
+			   FruitsVegetables produceList[], int maxSize, int& sizeList);
+//   Precondition: inputStream is associated with an open file, 
+// produceList is an array of FruitsVegetables of size maxSize.
+//   Postcondition: produceList is filled with the data read from the file,
+// and sizeList contains the number of items read.
+
 void randomSelection(const FruitsVegetables produceList[], int sizeList, BoxOfProduce& box);
+//   Precondition: produceList is an array of FruitsVegetables of size sizeList.
+//   Postcondition: box is filled with ITEMS randomly selected items from produceList.
+
 void showProduceList(const FruitsVegetables produceList[], int sizeList);
+//   Precondition: produceList is an array of FruitsVegetables of size sizeList.
+//   Postcondition: The contents of produceList are displayed on the console.
+
 bool substitute(const FruitsVegetables produceList[], int sizeList, BoxOfProduce& box);
+//   Precondition: produceList is an array of FruitsVegetables of size sizeList, box is a BoxOfProduce.
+//   Postcondition: The user is prompted to substitute items in the box.
+
 char inputValidation();
+//   Postcondition: returns a validated character input from the user.
+
 int itemValidation();
+//   Postcondition: returns a validated integer input from the user.
 
 
 int main( )
@@ -213,6 +217,7 @@ bool substitute(const FruitsVegetables produceList[], const int sizeList, BoxOfP
 		std::cout << SEPARATOR;
 		return true;
 	}
+	
 	int listItem;
 	std::cout << "Enter item in the list desired: (1-" << sizeList << ")\n";
 	listItem = itemValidation();
@@ -224,7 +229,7 @@ bool substitute(const FruitsVegetables produceList[], const int sizeList, BoxOfP
 		std::cerr << "Item not present in the list.\n";
 		std::cout << SEPARATOR;		
 	}
-	
+
 	return true;
 }
 
