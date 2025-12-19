@@ -47,7 +47,8 @@ This program simulates a CSA (Community Supported Agriculture) produce box deliv
 - `void setName(const std::string& nameFruitVegetable)` - Sets the name of the produce item
 - `std::string getName() const` - Returns the name of the produce item
 
-**Design Rationale**: Encapsulates produce item data and provides a clean interface for accessing and modifying produce names. This class serves as the building block for both the produce inventory and box contents.
+**Design Rationale**: Encapsulates produce item data and provides a clean interface for accessing and modifying produce names. 
+This class serves as the building block for both the produce inventory and box contents.
 
 ### `BoxOfProduce` Class
 **Purpose**: Represents a box containing exactly 3 produce items
@@ -63,7 +64,8 @@ This program simulates a CSA (Community Supported Agriculture) produce box deliv
 - `void output()` - Displays all items currently in the box (numbered list)
 - `bool isValidIndex(int idx) const` - Validates if an index is within the valid range of items
 
-**Design Rationale**: Manages the collection of produce items with encapsulation. The class ensures data integrity through bounds checking and provides a clear interface for manipulating box contents.
+**Design Rationale**: Manages the collection of produce items with encapsulation. 
+The class ensures data integrity through bounds checking and provides a clear interface for manipulating box contents of class FuitsVegetables.
 
 ## Helper Functions
 
@@ -90,7 +92,7 @@ This program simulates a CSA (Community Supported Agriculture) produce box deliv
 ### Box Management Functions
 
 - **`void randomSelection(const FruitsVegetables produceList[], int sizeList, BoxOfProduce& box)`**
-  - Uses C++ random library (`std::random_device`, `std::mt19937`) for quality randomization
+  - Uses C++ random library (`std::random_device`, `std::mt19937`) for randomization
   - Selects 3 random items from the produce list
   - Fills the box with the randomly selected items
   - Allows duplicate selections as per requirements

@@ -334,5 +334,10 @@ Structures, Classes.
     and prints the highest score along with the corresponding name. 
     It uses a fixed-size array of `Player` objects to store names and scores, implements Merge Sort to sort the array,
     and includes input validation to handle file reading errors.
- 
+12. [Mystery Box](06_Structures_Classes/6.12_Mystery_Box) 
+    \- This program defines a `MysteryBox` class that simulates a mystery box of fruits and vegetables produces.
+    The program read from a file a list of fruits and vegetables, it stores them in an array inside the `MysteryBox` class.
+    Thus, it defines an ADT (i.e. Abstract Data Type) named Box with an array of another ADT named FruitsVegetables. 
+    It then allows the user to view the randomly selected items, change specified items with other in the list, 
+    and view the changed box contents.
 ---
