@@ -19,6 +19,7 @@ set(FOLDERS
     "6.10_Weight_Conversion"
     "6.11_Highest_Score"
     "6.12_Mystery_Box"
+    "6.13_Player_Stats_Class"
 )
 
 # Automatically get all .cpp and headers files 

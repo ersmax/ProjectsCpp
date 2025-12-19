@@ -340,4 +340,11 @@ Structures, Classes.
     Thus, it defines an ADT (i.e. Abstract Data Type) named Box with an array of another ADT named FruitsVegetables. 
     It then allows the user to view the randomly selected items, change specified items with other in the list, 
     and view the changed box contents.
+13. [Player Stas Class](06_Structures_Classes/6.13_Player_Stats_Class) 
+    \- This program defines a `Player` class that stores player names and scores.
+    It allows the user to check the list of players and their scores, remove and add new players, 
+    check if a player exists, and includes input validation to handle file reading errors.
+    It also validates user input by trimming whitespace and ensuring non-empty names.
+    This is done by means of a fixed-size array of `Player` ADT to store player data as improvment over 5.19.
+
 ---
