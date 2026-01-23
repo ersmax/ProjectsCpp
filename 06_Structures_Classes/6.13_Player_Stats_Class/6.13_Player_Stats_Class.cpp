@@ -41,7 +41,7 @@ void addPlayer(Player players[], int maxSize, int& size);
 //   Postcondition: adds a new player and score to players array,
 // if there is space available.
 
-void showPlayers(Player players[], int size);
+void showPlayers(const Player players[], int size);
 //   Precondition: players is an array of Players having size up to size
 //   Postcondition: displays all player names and their scores.
 
@@ -50,12 +50,12 @@ void removePlayer(Player players[], int& size);
 //   Postcondition: prompts the user to enter a player name and
 // removes the player from the list if found.
 
-int findPlayer(Player players[], int size, const std::string& name);
+int findPlayer(const Player players[], int size, const std::string& name);
 //   Precondition: players is an array of Players having size up to size
 //   Postcondition: searches for name in players array and returns the index 
 // of the player in players array of Player ADT if found, -1 otherwise.
 
-void searchPlayer(Player players[], int size);
+void searchPlayer(const Player players[], int size);
 //   Precondition: players is an array of Players having size up to size
 //   Postcondition: prompts the user to enter a player name and 
 // displays the corresponding score or a message if the player is not found.
@@ -157,7 +157,7 @@ void addPlayer(Player players[], const int maxSize, int& size)
 	std::cout << "Max players reached in the rooster\n";
 }
 
-void showPlayers(Player players[], const int size)
+void showPlayers(const Player players[], const int size)
 {
 	std::cout << std::setw(2) << "#"
 			  << std::setw(25) << "Player"
@@ -169,7 +169,7 @@ void showPlayers(Player players[], const int size)
 	std::cout << std::string(37, '-') << "\n";
 }
 
-void searchPlayer(Player players[], const int size)
+void searchPlayer(const Player players[], const int size)
 {
 	if (size == 0) return;
 	const std::string name = nameValidation();
@@ -198,7 +198,7 @@ void removePlayer(Player players[], int& size)
 	}
 }
 
-int findPlayer(Player players[], const int size, const std::string& name) {
+int findPlayer(const Player players[], const int size, const std::string& name) {
 	for (int idx = 0; idx < size; ++idx)
 		if (players[idx].getName() == name)
 			return idx;
