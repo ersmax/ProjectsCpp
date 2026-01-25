@@ -348,3 +348,13 @@ Structures, Classes.
     This is done by means of a fixed-size array of `Player` ADT to store player data as improvment over 5.19.
 
 ---
+
+## 7. Constructors and Other tools
+Constructors, Const parameter modifier, static members, nested and local class, vectors.
+
+1. [Rainbow Class](07_Constructors_Other_Tools/7.01_Rainbow) 
+   \- This program defines an ADT for colors.
+   Two implementations are included: one using **static input functions** (validates before object creation, supports `const` objects)
+   and another using **instance modifier methods** (allows color changes after creation, more OOP-oriented).
+   Demonstrates constructor design patterns, exception handling for invalid arguments, `const` member functions,
+   static member variables for object counting, and the trade-offs between single initialization vs. flexibility.
