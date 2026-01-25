@@ -1,6 +1,6 @@
 /*
-Define a class called RainbowColor that is an abstract data type for a color in the visible spectrum 
-of light. 
+Define a class called RainbowColor that is an abstract data type for a color in the visible spectrum
+of light.
 Your class will have a member variable of type int to represent
 a color. Include all the following member functions: a constructor to set the color
 using the first letter in the name of the color as an argument, a constructor to set the
@@ -17,24 +17,23 @@ class definition in a test program.
 #include <iomanip>		// For std::setw
 #include <cctype>		// For std::tolower
 #include <limits>		// For std::numeric_limits
-#include <stdexcept>	// For std::invalid_argument
 
-const std::vector<int> COLOR_CODE = { 0x9400D3, 0x8B00FF, 
-							     	 0x0000FF, 0x00FF00, 
-									 0xFFFF00, 0xFF7F00, 0xFF0000};
-const std::vector<std::string> COLOR = { "Purple", "Violet", 
-										 "Blue", "Green", 
+const std::vector<int> COLOR_CODE = { 0x9400D3, 0x8B00FF,
+									 0x0000FF, 0x00FF00,
+									 0xFFFF00, 0xFF7F00, 0xFF0000 };
+const std::vector<std::string> COLOR = { "Purple", "Violet",
+										 "Blue", "Green",
 										 "Yellow", "Orange", "Red" };
 
-class RainbowColor 
+class RainbowColor
 {
 public:
-	RainbowColor() { colors++; }
-	RainbowColor(char colorLetter);			
+	RainbowColor() { colorCode = COLOR_CODE[0]; colors++; }
+	RainbowColor(char colorLetter);
 	RainbowColor(int colorNumCode);
-	void readColorCode();
-	//  Postcondition: read a valid integer color and set color code
-	void readColor();
+	static int readColorCode();
+	//  Postcondition: read a valid integer color
+	static char readColor();
 	//  Postcondition: read a valid char for color
 	std::string getColor() const;
 	//  Postcondition: return the name of the color code
@@ -58,30 +57,24 @@ bool validateCode(char colorInitial);
 bool validateCode(int colorCode);
 //  Postcondition: check whether the number is in the menu of colors
 
-int main() 
+int main()
 {
 	showColors();
-	try 
-	{
-		RainbowColor color('Z');
-	} catch (const std::invalid_argument& error) {
-		std::cout << "Error: " << error.what() << '\n';
-	}
-	RainbowColor aColor;
-	RainbowColor anotherColor;
-	aColor.readColorCode();
-	anotherColor.readColor();
-
+	const int codeColor = RainbowColor::readColorCode();
+	const char initialColor = RainbowColor::readColor();
+	const RainbowColor aColor(codeColor);
+	const RainbowColor anotherColor(initialColor);
 	std::cout << "First, you entered: " << aColor.getColor() << '\n'
-			  << "Next color (object created) is: " << aColor.nextColor().getColor() << '\n';
+		<< "Next color (object created) is: " << aColor.nextColor().getColor() << '\n';
 	std::cout << "Then, you entered: " << anotherColor.getColor() << '\n'
-			  << "Next color (object created) created is: " << anotherColor.nextColor().getColor() << '\n';
+		<< "Next color (object created) created is: " << anotherColor.nextColor().getColor() << '\n';
 	std::cout << "The total number of colors added is: " << RainbowColor::getNumberColors() << '\n';
 	std::cout << '\n';
 	return 0;
 }
 
-RainbowColor::RainbowColor(const char colorLetter) 
+
+RainbowColor::RainbowColor(const char colorLetter)
 {
 	if (validateCode(colorLetter))
 	{
@@ -89,7 +82,7 @@ RainbowColor::RainbowColor(const char colorLetter)
 		colors++;
 	}
 	else
-		throw std::invalid_argument("Invalid color letter");
+		std::cout << "Not a valid code. Retry\n";
 }
 
 RainbowColor::RainbowColor(const int colorNumCode)
@@ -100,7 +93,7 @@ RainbowColor::RainbowColor(const int colorNumCode)
 		colors++;
 	}
 	else
-		throw std::invalid_argument("Invalid color code");
+		std::cout << "Not a valid code. Retry\n";
 }
 
 int RainbowColor::getColorCode(const char colorLetter)
@@ -121,7 +114,7 @@ std::string RainbowColor::getColor() const
 	return "Unknown";
 }
 
-void RainbowColor::readColorCode()
+int RainbowColor::readColorCode()
 {
 	int code;
 	while (true)
@@ -137,15 +130,12 @@ void RainbowColor::readColorCode()
 		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		for (const int color : COLOR_CODE)
 			if (code == color)
-			{
-				colorCode = code;
-				return;
-			}
+				return code;
 		std::cout << "Not a valid code\n";
 	}
 }
 
-void RainbowColor::readColor()
+char RainbowColor::readColor()
 {
 	char code;
 	while (true)
@@ -159,12 +149,9 @@ void RainbowColor::readColor()
 			continue;
 		}
 		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-		for (int idx = 0; idx < COLOR.size(); idx++)
-			if (std::tolower(code) == std::tolower(COLOR[idx][0]))
-			{
-				colorCode = COLOR_CODE[idx];
-				return;
-			}
+		for (const std::string& color : COLOR)
+			if (std::tolower(code) == std::tolower(color[0]))
+				return code;
 		std::cout << "Not a valid initial\n";
 	}
 }
@@ -192,7 +179,7 @@ bool validateCode(const char colorInitial)
 	return false;
 }
 
-bool validateCode(const int colorCode) 
+bool validateCode(const int colorCode)
 {
 	for (const int color : COLOR_CODE)
 		if (color == colorCode)
@@ -200,14 +187,13 @@ bool validateCode(const int colorCode)
 	return false;
 }
 
-void showColors() 
+void showColors()
 {
-	std::cout << std::left << std::setw(15) << "Colors" 
-			  << std::setw(10) << "Code" << '\n' 
-			  << std::string(25, '-') << '\n';
-	
+	std::cout << std::left << std::setw(15) << "Colors"
+		<< std::setw(10) << "Code" << '\n'
+		<< std::string(25, '-') << '\n';
+
 	for (int idx = 0; idx < COLOR.size(); idx++)
 		std::cout << std::setw(15) << COLOR[idx]
-				  << std::setw(10) << COLOR_CODE[idx] << '\n';
+		<< std::setw(10) << COLOR_CODE[idx] << '\n';
 }
-
