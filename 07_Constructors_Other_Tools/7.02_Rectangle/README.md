@@ -95,9 +95,9 @@ The implementation follows C++ best practices:
 - **RAII guarantee**: Object construction either succeeds completely or fails completely
 
 **Why not catch exceptions in the constructor?**
-- If exception is caught in constructor, constructor completes and object IS created
+- If exception is caught in constructor, constructor completes and object is created
 - This creates an object in an invalid state with uninitialized members
-- Undefined behavior results when using the object
+- Undefined behavior results when using the object (in particular, `height` or `width` are not defined)
 - By letting exceptions propagate, the object is never created if construction fails
 
 ```cpp
