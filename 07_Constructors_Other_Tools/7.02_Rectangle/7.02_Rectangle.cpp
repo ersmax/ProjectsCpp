@@ -14,43 +14,39 @@ height, and area of the rectangle.
 class Rectangle
 {
 public:
-	Rectangle() : height(5), width(5) {}
-	Rectangle(int widthLength, int heightLength); 
-	int getHeight() const { return height; }
-	int getWidth() const { return width; }
-	void setWidth(int widthLength);
-	void setHeight(int heightLength);
+	Rectangle() : height(5.0), width(5.0) {}
+	Rectangle(double widthLength, double heightLength); 
+	void setWidth(double widthLength);
+	void setHeight(double heightLength);
+	double getHeight() const { return height; }
+	double getWidth() const { return width; }
 private:
-	static bool validate(const int length) { return (length >= 0); }
-	int height;
-	int width;
+	static bool validate(const double length) { return (length >= 0); }
+	double height;
+	double width;
 };
 
-Rectangle::Rectangle(const int widthLength, const int heightLength)
+Rectangle::Rectangle(const double widthLength, 
+					 const double heightLength) : height(0.0), width(0.0)
 {
-	try
-	{
-		setWidth(widthLength);
-		setHeight(heightLength);
-	} catch (const std::invalid_argument& e) {
-		std::cout << "Error: " << e.what() << '\n';
-	}
+	setWidth(widthLength);
+	setHeight(heightLength);
 }
 
-void Rectangle::setWidth(const int widthLength)
+void Rectangle::setWidth(const double widthLength)
 {
 	if (validate(widthLength))
 		width = widthLength;
 	else
-		throw std::invalid_argument("Invalid number");
+		throw std::invalid_argument("Invalid width");
 }
 
-void Rectangle::setHeight(const int heightLength)
+void Rectangle::setHeight(const double heightLength)
 {
 	if (validate(heightLength))
 		height = heightLength;
 	else
-		throw std::invalid_argument("Invalid number");
+		throw std::invalid_argument("Invalid height");
 }
 
 int main( )
@@ -59,9 +55,15 @@ int main( )
 	std::cout << "Height: " << aRectangle.getHeight() << '\n'
 			  << "Width: " << aRectangle.getWidth() << '\n';
 	
-	const Rectangle anotherRectangle(10,2);
-	std::cout << "Height: " << anotherRectangle.getHeight() << '\n'
-			  << "Width: " << anotherRectangle.getWidth() << '\n';
+	try
+	{
+		const Rectangle anotherRectangle(10,2);
+		std::cout << "Height: " << anotherRectangle.getHeight() << '\n'
+			      << "Width: " << anotherRectangle.getWidth() << '\n';
+	} catch (const std::invalid_argument& e)
+	{
+		std::cout << "Error creating rectangle: " << e.what() << '\n';
+	}
 
 	std::cout << '\n';
 	return 0;
