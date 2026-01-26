@@ -358,3 +358,8 @@ Constructors, Const parameter modifier, static members, nested and local class, 
    and another using **instance modifier methods** (allows color changes after creation, more OOP-oriented).
    Demonstrates constructor design patterns, exception handling for invalid arguments, `const` member functions,
    static member variables for object counting, and the trade-offs between single initialization vs. flexibility.
+2. [Rectangle class](07_Constructors_Other_Tools/7.02_Rectangle) 
+   \- This program defines a `Rectangle` class. It includes constructors and ensures **RAII principle**: 
+   constructors let exceptions propagate,  ensuring objects are either fully valid or not created at all
+   (avoiding partially constructed objects with undefined behavior). 
+   Includes exception handling, `const` member functions, and static validation helpers.
