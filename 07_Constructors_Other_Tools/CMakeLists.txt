@@ -8,6 +8,7 @@
 # List all folders
 set(FOLDERS
     "7.01_Rainbow"
+    "7.02_Rectangle"
 )
 
 # Automatically get all .cpp and headers files 
