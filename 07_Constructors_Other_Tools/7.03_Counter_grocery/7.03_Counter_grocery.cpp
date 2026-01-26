@@ -40,18 +40,13 @@ constexpr char CHOICES[] = {'a', 's', 'd', 'f', 'z', 'x', 'c', 'v', 'o'};
 class Counter
 {
 public:
-	Counter() : limit(LIMIT) {};
-	Counter(const int userLimit) { setLimit(userLimit); }
-	void incr1()	{ if (overflow(1)) return; current += 1; }
-	void decr1()	{ if (underflow(1)) current = 0; else current -= 1; }
-	void incr10()	{ if (overflow(10)) return; current += 10; }
-	void decr10()	{ if (underflow(10)) current = 0; else current -= 10; }
-	void incr100()	{ if (overflow(100)) return; current += 100; }
-	void decr100()	{ if (underflow(100)) current = 0; else current -= 100; }
-	void incr1000() { if (overflow(1000)) return; current += 1000; }
-	void decr1000() { if (underflow(1000)) current = 0; else current -= 1000; }
-	void reset()	{ current = 0; }
+	Counter() : limit(LIMIT), current(0) {};
+	Counter(const int userLimit) : current(0) { setLimit(userLimit); }
+	void incr(const int number)	{ if (overflow(number)) return; current += number; }
+	void decr(int number); 
+	void reset() { current = 0; overflowFlag = false; }
 	bool getOverflow() const { return overflowFlag; };
+	int getCurrent() const { return current; }
 private:
 	void setLimit(int userLimit);
 	bool overflow(int addend);
@@ -61,34 +56,79 @@ private:
 	bool overflowFlag = false;
 };
 
+void showMenu();
 char makeChoice();
 int inputValidation();
-void menuSubmission(char choice);
+void menuSubmission(const char& choice, Counter& myCounter);
 
 int main()
 {
+	char answer;
+	Counter aCounter, anotherCounter(4999);
+	do
+	{
+		showMenu();
+		std::cout << "Counter 1 current value: " << aCounter.getCurrent() << '\n';
+		const char choice1 = makeChoice();
+		menuSubmission(choice1, aCounter);
+		std::cout << "Counter 1 new value: " << aCounter.getCurrent() << '\n';
+
+		std::cout << "Counter 2 current value: " << anotherCounter.getCurrent() << '\n';
+		const char choice2 = makeChoice();
+		menuSubmission(choice2, anotherCounter);
+		std::cout << "Counter 2 new value: " << anotherCounter.getCurrent() << '\n';
+
+		std::cout << "Exit? (y/n)\n";
+		std::cin >> answer;
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	} while (answer != 'y');
+
 	std::cout << '\n';
 	return 0;
 }
 
-bool Counter::overflow(const int addend) const
+bool Counter::overflow(const int addend)
 {
 	 if ((current + addend) > limit)
 	 {
 		current = limit;
 		overflowFlag = true;
+		return true;
 	 }
+	 return false;
 }
 
 void Counter::setLimit(const int userLimit)
 {
 	if ((userLimit >= 0) && (userLimit <= 9999))
-	{
 		limit = userLimit;
-		current = 0;
-	}
 	else
 		throw std::invalid_argument("Limit must be between 0 and 9999");
+}
+
+void Counter::decr(const int number)
+{
+	if (number == 0)	return;
+	if (underflow(number)) 
+		current = 0; 
+	else 
+		current -= number;
+	if (current < limit)
+		overflowFlag = false;
+}
+
+void showMenu()
+{
+	std::cout	<< "Menu\n"
+				<< "a) Increment cents\n"
+				<< "s) Increment tens of cents\n"
+				<< "d) Increment dollars\n"
+				<< "f) Increment tens of dollars\n"
+				<< "z) Decrement cents\n"
+				<< "x) Decrement tens of cents\n"
+				<< "c) Decrement dollars\n"
+				<< "v) Decrement tens of dollars\n"
+				<< "o) Show overflow\n";
 }
 
 char makeChoice()
@@ -96,7 +136,7 @@ char makeChoice()
 	char input;
 	while (true)
 	{
-		std::cout << "Enter a choice:\n";
+		std::cout << "Enter a choice: ('e' to exit)\n";
 		if (!(std::cin >> input))
 		{
 			std::cout << "Not a proper choice\n";
@@ -105,11 +145,13 @@ char makeChoice()
 			continue;
 		}
 		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		if (input == 'e') return input;
+		
 		for (const char& choice : CHOICES)
 			if (choice == input)
 				return input;
+		
 		std::cout << "Not a valid choice.\n";
-		break;
 	}
 }
 
@@ -138,15 +180,39 @@ void menuSubmission(const char& choice, Counter& myCounter)
 		switch (choice)
 		{
 			case 'a':
-				myCounter.incr1(inputValidation());
+				myCounter.incr(inputValidation() * 1);
 				break;
 			case 's':
+				myCounter.incr(inputValidation() * 10);
+				break;
 			case 'd':
+				myCounter.incr(inputValidation() * 100);
+				break;
 			case 'f':
+				myCounter.incr(inputValidation() * 1000);
+				break;
 			case 'z':
+				myCounter.decr(inputValidation() * 1);
+				break;
 			case 'x':
+				myCounter.decr(inputValidation() * 10);
+				break;
 			case 'c':
+				myCounter.decr(inputValidation() * 100);
+				break;
 			case 'v':
+				myCounter.decr(inputValidation() * 1000);
+				break;
 			case 'o':
+				{
+				if (myCounter.getOverflow())
+					std::cout << "Overflow\n";
+				else
+					std::cout << "No overflow\n";
+				break;
+				}
+			default:
+				std::cout << "No choice\n";
+				break;
 		}
 	}
