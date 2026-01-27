@@ -363,3 +363,7 @@ Constructors, Const parameter modifier, static members, nested and local class, 
    constructors let exceptions propagate,  ensuring objects are either fully valid or not created at all
    (avoiding partially constructed objects with undefined behavior). 
    Includes exception handling, `const` member functions, and static validation helpers.
+3. [Counter Grocery](07_Constructors_Other_Tools/7.03_Counter_grocery) 
+   \- This program defines a `Counter` class that simulates a grocery store tally counter with configurable limits.
+   Implements a digital counter with overflow detection, overflow/underflow handling, exceptions for invalid limits 
+   ensuring objects are fully valid or not created and menu-driven interface with input validation.
