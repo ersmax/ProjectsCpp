@@ -1,38 +1,7 @@
-
-	//My mother always took a little red counter to the grocery store. The counter was
-	//used to keep tally of the amount of money she would have spent so far on that visit
-	//to the store if she bought everything in the basket. The counter had a four-digit
-	//display, increment buttons for each digit, and a reset button. An overflow indicator
-	//came up red if more money was entered than the $99.99 it would register. (This
-	//was a long time ago.)
-
-	//Write and implement the member functions of a class Counter that simulates and
-	//slightly generalizes the behavior of this grocery store counter. The constructor should
-	//create a Counter object that can count up to the constructor’s argument. That is,
-	//Counter(9999) should provide a counter that can count up to 9999.
-	//A newly constructed counter displays a reading of 0. The member function void reset( );
-	//sets the counter’s number to 0. The member function void incr1( ); increments
-	//the units digits by 1, void incr10( ); increments the tens digit by 1, and void
-	//incr100( ); and void incr1000( ); increment the next two digits, respectively.
-	//Accounting for any carrying when you increment should require no further action than
-	//adding an appropriate number to the private data member. A member function bool
-	//overflow( ); detects overflow. (Overflow is the result of incrementing the counter’s
-	//private data member beyond the maximum entered at counter construction.)
-
-	//Use this class to provide a simulation of my mother’s little red clicker. Even though
-	//the display is an integer, in the simulation, the rightmost (lower order) two digits
-	//are always thought of as cents and tens of cents, the next digit is dollars, and the
-	//fourth digit is tens of dollars.
-
-	//Provide keys for cents, dimes, dollars, and tens of dollars. Unfortunately, no choice of
-	//keys seems particularly mnemonic. One choice is to use the keys asdfo: a for cents,
-	//followed by a digit 1 to 9; s for dimes, followed by a digit 1 to 9; d for dollars, followed
-	//by a digit 1 to 9; and f for tens of dollars, again followed by a digit 1 to 9. Each entry
-	//(one of asdf followed by 1 to 9) is followed by pressing the Return key. Any overflow
-	//is reported after each operation. Overflow can be requested by pressing the o key.
-
-
+// define NDEBUG        // uncomment this line to disable assertions
 #include <iostream>
+#include <limits>
+#include <cassert>
 
 constexpr int LIMIT = 9999;
 constexpr char CHOICES[] = {'a', 's', 'd', 'f', 'z', 'x', 'c', 'v', 'o'};
@@ -40,16 +9,27 @@ constexpr char CHOICES[] = {'a', 's', 'd', 'f', 'z', 'x', 'c', 'v', 'o'};
 class Counter
 {
 public:
+
 	Counter() : limit(LIMIT), current(0) {};
 	Counter(const int userLimit) : current(0) { setLimit(userLimit); }
-	void incr(const int number)	{ if (overflow(number)) return; current += number; }
+	void incr(int number);
+	//  Precondition: number >= 0 and <= 9
+	//  Postcondition: increment current by number, unless that would cause an underflow
+	// Overflow sets current to limit and set the overflowFlag to true
+	
 	void decr(int number); 
+	//  Precondition: number >= 0 and <= 9
+	//  Postcondition: decrement current by number, unless that would cause an underflow.
+	// Underflow sets current to 0
+
 	void reset() { current = 0; overflowFlag = false; }
 	bool getOverflow() const { return overflowFlag; };
 	int getCurrent() const { return current; }
 private:
 	void setLimit(int userLimit);
+	//  Postcondition: sets limit to userLimit if userLimit is between 0 and 9999
 	bool overflow(int addend);
+	//  Postcondition: returns true if adding addend to current would exceed limit
 	bool underflow(const int subtrahend) const { return ((current - subtrahend) < 0); }
 	int limit;
 	int current;
@@ -57,9 +37,14 @@ private:
 };
 
 void showMenu();
+//  Postcondition: displays the menu options to the user
 char makeChoice();
+//  Postcondition: prompts the user to enter a choice and returns the choice
 int inputValidation();
+//  Postcondition: prompts the user to enter a number between 0 and 9 and returns the number
 void menuSubmission(const char& choice, Counter& myCounter);
+//  Precondition: choice is a valid menu option, myCounter is a Counter object
+//  Postcondition: performs the action corresponding to choice on myCounter
 
 int main()
 {
@@ -87,6 +72,13 @@ int main()
 	return 0;
 }
 
+void Counter::incr(const int number)
+{
+	assert(number >= 0 && number <= 9);
+	if (overflow(number)) return; 
+	current += number;
+}
+
 bool Counter::overflow(const int addend)
 {
 	 if ((current + addend) > limit)
@@ -108,13 +100,10 @@ void Counter::setLimit(const int userLimit)
 
 void Counter::decr(const int number)
 {
-	if (number == 0)	return;
-	if (underflow(number)) 
-		current = 0; 
-	else 
-		current -= number;
-	if (current < limit)
-		overflowFlag = false;
+	if (number == 0)		return;
+	if (underflow(number))	current = 0; 
+	else					current -= number;
+	if (current < limit)	overflowFlag = false;
 }
 
 void showMenu()
