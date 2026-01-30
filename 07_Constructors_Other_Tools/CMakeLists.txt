@@ -10,6 +10,7 @@ set(FOLDERS
     "7.01_Rainbow"
     "7.02_Rectangle"
     "7.03_Counter_grocery"
+    "7.04_Hotdog_parlour"
 )
 
 # Automatically get all .cpp and headers files 
