@@ -367,3 +367,9 @@ Constructors, Const parameter modifier, static members, nested and local class, 
    \- This program defines a `Counter` class that simulates a grocery store tally counter with configurable limits.
    Implements a digital counter with overflow detection, overflow/underflow handling, exceptions for invalid limits 
    ensuring objects are fully valid or not created and menu-driven interface with input validation.
+4. [Hot Dog Parlour](07_Constructors_Other_Tools/7.04_Hotdog_parlour) 
+   \- This program defines a `HotDogStand` class that tracks hot dog sales across multiple stands.
+   It includes static variables to track total sales across all stands and auto-generate unique IDs.
+   Features ID validation that reserves patterns for auto-generation, exception handling
+   for invalid IDs or negative sales, and static member functions, and proper RAII principles 
+   where constructor exceptions prevent object creation.
