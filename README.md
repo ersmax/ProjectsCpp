@@ -373,3 +373,7 @@ Constructors, Const parameter modifier, static members, nested and local class, 
    Features ID validation that reserves patterns for auto-generation, exception handling
    for invalid IDs or negative sales, and static member functions, and proper RAII principles 
    where constructor exceptions prevent object creation.
+5. [Iterator](07_Constructors_Other_Tools/7.05_Iterator) 
+   \- This program solves the **Josephus Problem** variant (Princess Eve's suitor elimination).
+   Uses `std::vector` with iterators to eliminate every 3rd suitor in a circular fashion until one winner remains.
+   Demonstrates use of iterator concepts: `.end()`, `.erase()` invalidation and checking iterator validity after operations.
