@@ -1,30 +1,3 @@
-/*
-Define a class called Pizza that has member variables to track the type of pizza
-(either deep dish, hand tossed, or pan) along with the size (either small, medium,
-or large) and the number of pepperoni or cheese toppings. You can use constants to
-represent the type and size. Include mutator and accessor functions for your class.
-Create a void function, outputDescription( ), that outputs a textual description
-of the pizza object. Also include a function, computePrice( ), that computes the
-cost of the pizza and returns it as a double according to the following rules:
-Small pizza = $10 + $2 per topping
-Medium pizza = $14 + $2 per topping
-Large pizza = $17 + $2 per topping
-Write a suitable test program that creates and outputs a description and price of
-various pizza objects.
-/*
-
-/*
-  This Programming Project requires you to first complete Programming Project 6.7
-from Chapter 6, which is an implementation of a Pizza class. Add an Order class
-that contains a private vector of type Pizza. This class represents a customer’s
-entire order, where the order may consist of multiple pizzas. Include appropriate
-functions so that a user of the Order class can add pizzas to the order (type is deep
-dish, hand tossed, or pan; size is small, medium, or large; number of pepperoni or
-cheese toppings). You can use constants to represent the type and size. Also write
-a function that outputs everything in the order along with the total price. Write a
-suitable test program that adds multiple pizzas to an order(s).
-*/
-
 // define NDEBUG        // uncomment this line to disable assertions
 #include <iostream>
 #include <string>
