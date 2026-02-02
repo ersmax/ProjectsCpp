@@ -30,6 +30,7 @@ suitable test program that adds multiple pizzas to an order(s).
 #include <string>
 #include <limits>
 #include <cassert>
+#include <vector>
 
 const std::string PIZZA_TYPE[] = { "Deep Dish", "Hand Tossed", "Pan" };
 constexpr int N_TYPES = 3;
@@ -46,21 +47,21 @@ public:
 	//   Postcondition: The size of pizza is set.
 	void setTopping();
 	//   Postcondition: set the number of pepperoni and cheese toppings.
-	void outputDescription();
+	void outputDescription() const;
 	//   Postcondition: A description of the pizza is output.
+	int computePrice() const;
+	//  Postcondition: The price of the pizza is computed and returned.
 private:
 	std::string type = PIZZA_TYPE[0];
 	std::string size = PIZZA_SIZE[0];
 	int pepperoni = 0;
 	int cheese = 0;
-	std::string getType();
-	std::string getSize();
+	std::string getType() const;
+	std::string getSize() const;
 	int getPepperoni() const;
 	//  Postcondition: The number of pepperoni toppings is returned.
 	int getCheese() const;
 	//  Postcondition: The number of cheese toppings is returned.
-	int computePrice();
-	//  Postcondition: The price of the pizza is computed and returned.
 	int inputValidation(int min, int max);
 	//  Precondition: min <= max
 	//  Postcondition: returns a validated integer input between min and max
@@ -69,14 +70,39 @@ private:
 class Order
 {
 public:
+	Order() { setName("Order " + std::to_string(orderId++)); }
+	Order(const std::string& fullName) { setName(fullName); }
+	void addPizza() { const Pizza aPizza; anOrder.push_back(aPizza); totalPrice += aPizza.computePrice(); }
+	//   Postcondition: Adds a pizza to the order and updates the total price.
+	void showOrder() const {for (const auto& pizza : anOrder) pizza.outputDescription();}
+	double getTotalPrice() const { return totalPrice; }
+	std::string getId() { return nameOrder; }
 private:
-
+	void setName(const std::string& fullName) { nameOrder = fullName; }
+	std::string nameOrder;
+	std::vector<Pizza> anOrder;
+	double totalPrice = 0.0;
+	static int orderId;
 };
+
+int Order::orderId = 1;
 
 int main()
 {
-	Pizza aPizza;
-	aPizza.outputDescription();
+	Order anOrder, anotherOrder;
+	anOrder.addPizza();
+	anOrder.addPizza();
+	anotherOrder.addPizza();
+	anotherOrder.addPizza();
+	anotherOrder.addPizza();
+	
+	std::cout << anOrder.getId() << " price: " 
+			  << anOrder.getTotalPrice() << '\n';
+	anOrder.showOrder();
+
+	std::cout << anotherOrder.getId() << " price: "
+		<< anotherOrder.getTotalPrice() << '\n';
+	anotherOrder.showOrder();
 
 	std::cout << "\n";
 	return 0;
@@ -142,7 +168,7 @@ int Pizza::inputValidation(const int min, const int max)
 	}
 }
 
-void Pizza::outputDescription()
+void Pizza::outputDescription() const
 {
 	std::cout << getSize() << " Pizza " << getType()
 		<< " with " << getPepperoni() << " pepperoni"
@@ -150,12 +176,12 @@ void Pizza::outputDescription()
 	std::cout << "Total price: $" << computePrice() << "\n";
 }
 
-std::string Pizza::getSize()
+std::string Pizza::getSize() const
 {
 	return size;
 }
 
-std::string Pizza::getType()
+std::string Pizza::getType() const
 {
 	return type;
 }
@@ -170,7 +196,7 @@ int Pizza::getCheese() const
 	return cheese;
 }
 
-int Pizza::computePrice()
+int Pizza::computePrice() const
 {
 	int total = 0;
 	if (getSize() == PIZZA_SIZE[0]) total += 10;
