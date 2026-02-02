@@ -377,3 +377,9 @@ Constructors, Const parameter modifier, static members, nested and local class, 
    \- This program solves the **Josephus Problem** variant (Princess Eve's suitor elimination).
    Uses `std::vector` with iterators to eliminate every 3rd suitor in a circular fashion until one winner remains.
    Demonstrates use of iterator concepts: `.end()`, `.erase()` invalidation and checking iterator validity after operations.
+6. [Pizza Order](07_Constructors_Other_Tools/7.06_Pizza_Order) 
+   \- This program defines a `Pizza` class and includes an `Order` class that manages multiple pizzas.
+   Demonstrates patterns, namely **static vs instance variables**, **composition** (Order has-a collection of Pizzas), 
+   **encapsulation** (private members with public interface), and **RAII principles** with interactive object creation 
+   through the Pizza constructor. Each Order tracks its own pizzas and cumulative total independently, 
+   with auto-generated unique IDs and methods to add pizzas, display order contents, and retrieve totals.
