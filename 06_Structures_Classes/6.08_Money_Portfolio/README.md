@@ -4,7 +4,6 @@ store the number of cents. Add accessor and mutator functions to read and set bo
 member variables. Add another function that returns the monetary amount as a
 double. Write a program that tests all of your functions with at least two different
 Money objects.
-Comments on the provided implementation (`6.08_Money_Portfolio.cpp`):
 
 ---
 
