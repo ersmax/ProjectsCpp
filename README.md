@@ -383,3 +383,10 @@ Constructors, Const parameter modifier, static members, nested and local class, 
    **encapsulation** (private members with public interface), and **RAII principles** with interactive object creation 
    through the Pizza constructor. Each Order tracks its own pizzas and cumulative total independently, 
    with auto-generated unique IDs and methods to add pizzas, display order contents, and retrieve totals.
+7. [Money constructor](07_Constructors_Other_Tools/7.07_Money_Constructor) 
+   \- This program adds three constructors; a default constructor (initializes to $0.00), a single-parameter constructor (accepts dollars only, sets cents to 0),
+   and a two-parameter constructor (accepts both dollars and cents). Demonstrates **RAII principles** where constructors
+   call validation methods (`setDollars`, `setCents`) that throw `std::invalid_argument` for negative values,
+   ensuring objects are either fully valid or not created. Features exception handling with try-catch blocks,
+   robust input validation that rejects non-numeric and negative values, and a `convertMoney()` method that correctly
+   handles cents >= 100 by computing quotient and remainder.
