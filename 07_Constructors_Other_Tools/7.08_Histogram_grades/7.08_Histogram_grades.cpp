@@ -37,17 +37,84 @@ void input(std::vector<int>& grades);
 
 void mergeSort(std::vector<int>& numbers, int start, int end);
 void sort(std::vector<int>& numbers, int start, int mid, int end);
+void count(std::vector<int>& numbers, std::vector<int>& frequencies);
+//   Precondition: the vector numbers is ordered by ascending order
+
 
 
 int main( )
 {
 	std::vector<int> grades;
+	std::vector<int> frequencies;
+
 	input(grades);
 	mergeSort(grades, 0, grades.size() - 1);
-	for (int grade : grades)
+	count(grades, frequencies);
+
+	for (const int grade : grades)
 		std::cout << grade << ' ';
+
+	std::cout << '\n';
+
+	for (const int frequency : frequencies)
+		std::cout << frequency << ' ';
+
 	std::cout << '\n';
 	return 0;
+}
+
+void count(std::vector<int>& numbers, std::vector<int>& frequencies)
+{
+	// .erase takes O(n) and doing that for n numbers raise quadratic complexity
+
+}
+
+
+void count2(std::vector<int>& numbers, std::vector<int>& frequencies)
+{
+	if (numbers.empty())	return;
+	std::vector<int>::iterator current = numbers.begin();
+	frequencies.push_back(1);
+
+	while (current + 1 != numbers.end())
+	{
+		//   If current value equals next,
+		// erase the next value, and increment current freq
+		if (*(current) == *(current + 1))
+		{
+			numbers.erase(current + 1);
+			frequencies.back()++;	
+		}
+		else
+		{
+			++current;
+			frequencies.push_back(1);
+		}
+	}
+}
+
+void count3(std::vector<int>& numbers, std::vector<int>& frequencies)
+{
+	if (numbers.empty())	return;
+	std::vector<int>::iterator current = numbers.begin();
+	frequencies.push_back(1);
+	int idx = 1;
+
+	while (current + 1 != numbers.end())
+	{
+		if (numbers[idx] == numbers[idx - 1])
+		{
+			// better logic: numbers.erase(current + 1);
+			current = numbers.erase(current);
+			frequencies[idx - 1]++;
+		}
+		else
+		{
+			frequencies.push_back(1);
+			++idx;
+			++current;
+		}
+	}
 }
 
 void input(std::vector<int>& grades)
@@ -79,7 +146,6 @@ void mergeSort(std::vector<int>& numbers, const int start, const int end)
 	mergeSort(numbers, mid + 1, end);
 	sort(numbers, start, mid, end);
 }
-
 
 void sort(std::vector<int>& numbers, const int start, const int mid, const int end)
 {
