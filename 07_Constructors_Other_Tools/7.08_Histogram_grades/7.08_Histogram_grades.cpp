@@ -34,41 +34,80 @@ to compute a histogram.
 #include <vector>
 
 void input(std::vector<int>& grades);
+//   Postcondition: the vector grades contains the grades entered by the user, 
+// and -1 is used to end the input.
 
 void mergeSort(std::vector<int>& numbers, int start, int end);
-void sort(std::vector<int>& numbers, int start, int mid, int end);
-void count(std::vector<int>& numbers, std::vector<int>& frequencies);
-//   Precondition: the vector numbers is ordered by ascending order
+//   Postcondition: the vector numbers is sorted in ascending order.
+// This is a recursive implementation of merge sort, which is a divide and conquer algorithm.
 
+void sort(std::vector<int>& numbers, int start, int mid, int end);
+//   Postcondition: the vector numbers is sorted in ascending order from index start to end.
+// There is a comparison between the left half of the array, start to mid, 
+// and the right half of the array, mid + 1 to end.
+// The sorted result is stored in a supporting vector, which is then copied back to numbers.
+
+void count(const std::vector<int>& numbers, std::vector<int>& uniqueNumbers, 
+		   std::vector<int>& frequencies);
+//   Precondition: the vector numbers is ordered by ascending order
+//   Postcondition: uniqueNumbers contains the unique numbers in numbers, and frequencies
+// contains the frequency of each unique number in numbers. The size of uniqueNumbers
+// and frequencies are the same, and the frequency of uniqueNumbers[idx] is frequencies[idx].
+
+void print(const std::vector<int>& uniqueNumbers, const std::vector<int>& frequencies);
+//   Postcondition: the histogram is printed to the console, where each line contains the frequency
+
+void count2(std::vector<int>& numbers, std::vector<int>& frequencies);
+//   Precondition: the vector numbers is ordered by ascending order
+//   Postcondition: the vector numbers contains only unique numbers in the original vector, and frequencies
+// contains the frequency of each unique number in the original vector.
+// 	 A side note: erase takes O(n) and doing that for n numbers raise quadratic complexity
+// This version reasons only with iterators, and does not use any index. 
+// It is more efficient than count3, but less efficient than count.
+
+void count3(std::vector<int>& numbers, std::vector<int>& frequencies);
+//   Precondition: the vector numbers is ordered by ascending order
+//   Postcondition: the vector numbers contains only unique numbers in the original vector, and frequencies
+// contains the frequency of each unique number in the original vector.
+// This version reasons with both iterators and indices, which is not a good practice.
 
 
 int main( )
 {
 	std::vector<int> grades;
 	std::vector<int> frequencies;
+	std::vector<int> uniqueNumbers;
 
 	input(grades);
 	mergeSort(grades, 0, grades.size() - 1);
-	count(grades, frequencies);
-
-	for (const int grade : grades)
-		std::cout << grade << ' ';
-
-	std::cout << '\n';
-
-	for (const int frequency : frequencies)
-		std::cout << frequency << ' ';
+	count(grades, uniqueNumbers, frequencies);
+	// count2(grades, frequencies);	// implementation with iterators, which modifies grades
+	// count3(grades, frequencies);	// implementation with iterators and indices, which modifies grades
+	print(uniqueNumbers, frequencies);
 
 	std::cout << '\n';
 	return 0;
 }
 
-void count(std::vector<int>& numbers, std::vector<int>& frequencies)
+void count(const std::vector<int>& numbers, 
+		   std::vector<int>& uniqueNumbers, 
+		   std::vector<int>& frequencies)
 {
-	// .erase takes O(n) and doing that for n numbers raise quadratic complexity
+	if (numbers.empty())	return;
+	uniqueNumbers.push_back(numbers[0]);
+	frequencies.push_back(1);
 
+	for (int idx = 1; idx < numbers.size(); ++idx)
+	{
+		if (numbers[idx] == uniqueNumbers.back())
+			frequencies.back()++;
+		else
+		{
+			uniqueNumbers.push_back(numbers[idx]);
+			frequencies.push_back(1);
+		}
+	}
 }
-
 
 void count2(std::vector<int>& numbers, std::vector<int>& frequencies)
 {
@@ -83,7 +122,7 @@ void count2(std::vector<int>& numbers, std::vector<int>& frequencies)
 		if (*(current) == *(current + 1))
 		{
 			numbers.erase(current + 1);
-			frequencies.back()++;	
+			frequencies.back()++;
 		}
 		else
 		{
@@ -117,12 +156,19 @@ void count3(std::vector<int>& numbers, std::vector<int>& frequencies)
 	}
 }
 
+void print(const std::vector<int>& uniqueNumbers, const std::vector<int>& frequencies)
+{
+	for (size_t idx = 0; idx < uniqueNumbers.size(); idx++)
+		std::cout << frequencies[idx] << " grade(s) of " 
+			      << uniqueNumbers[idx] << '\n';
+}
+
 void input(std::vector<int>& grades)
 {
 	int number;
+	std::cout << "Enter a number of grades (-1 to exit)\n";
 	while(true)
 	{
-		std::cout << "Enter a number of grades (-1 to exit)\n";
 		if (!(std::cin >> number))
 		{
 			std::cout << "Not a valid number\n";
