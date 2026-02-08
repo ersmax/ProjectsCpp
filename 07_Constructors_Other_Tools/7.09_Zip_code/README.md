@@ -2,7 +2,7 @@ Prior to 2009 the bar code on an envelope used by the U.S. Postal Service repres
 code consists of long and short bars as shown here:
 
 <p align="center">
-  <img src="./Figures/Bar_code" alt="Bar code" width="48%" />
+  <img src="./Figures/Bar_code.png" alt="Bar code" width="48%" />
 </p>
 
 For this program, we will represent the bar code as a string of digits. The digit 1
