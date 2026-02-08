@@ -377,20 +377,20 @@ Constructors, Const parameter modifier, static members, nested and local class, 
    \- This program solves the **Josephus Problem** variant (Princess Eve's suitor elimination).
    Uses `std::vector` with iterators to eliminate every 3rd suitor in a circular fashion until one winner remains.
    Demonstrates use of iterator concepts: `.end()`, `.erase()` invalidation and checking iterator validity after operations.
-6. [Pizza Order](07_Constructors_Other_Tools/7.06_Pizza_Order) 
+6. [Pizza Order](07_Constructors_Other_Tools/7.06_Pizza_order) 
    \- This program defines a `Pizza` class and includes an `Order` class that manages multiple pizzas.
    Demonstrates patterns, namely **static vs instance variables**, **composition** (Order has-a collection of Pizzas), 
    **encapsulation** (private members with public interface), and **RAII principles** with interactive object creation 
    through the Pizza constructor. Each Order tracks its own pizzas and cumulative total independently, 
    with auto-generated unique IDs and methods to add pizzas, display order contents, and retrieve totals.
-7. [Money constructor](07_Constructors_Other_Tools/7.07_Money_Constructor) 
+7. [Money constructor](07_Constructors_Other_Tools/7.07_Money_constructor) 
    \- This program adds three constructors; a default constructor (initializes to $0.00), a single-parameter constructor (accepts dollars only, sets cents to 0),
    and a two-parameter constructor (accepts both dollars and cents). Demonstrates **RAII principles** where constructors
    call validation methods (`setDollars`, `setCents`) that throw `std::invalid_argument` for negative values,
    ensuring objects are either fully valid or not created. Features exception handling with try-catch blocks,
    robust input validation that rejects non-numeric and negative values, and a `convertMoney()` method that correctly
    handles cents >= 100 by computing quotient and remainder.
-8. [Histogram grades](07_Constructors_Other_Tools/7.08_Histogram_Grades) 
+8. [Histogram grades](07_Constructors_Other_Tools/7.08_Histogram_grades) 
    \- This program computes a grade histogram using a **sort-then-count** approach with three different counting implementations for educational comparison.
    Uses **merge sort** (O(n log n)) to make duplicates adjacent, then provides three counting strategies: 
    with copying vectors and O(n) time complexity, iterator-only with `erase` and O(n²) time complexity, and mixed iterator/index as non-standard practice.
