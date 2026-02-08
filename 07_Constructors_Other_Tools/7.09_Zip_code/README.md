@@ -34,4 +34,15 @@ possible to represent zero). The zip code for the sample bar code decodes to 995
 While the POSTNET scheme may seem unnecessarily complex, its design allows
 machines to detect whether errors have been made in scanning the zip code.
 
+Write a zip code class that encodes and decodes five-digit bar codes used by the
+U.S. Postal Service on envelopes. The class should have two constructors. The first
+constructor should input the zip code as an integer, and the second constructor
+should input the zip code as a bar code string consisting of 0’s and 1’s as described
+above. Although you have two ways to input the zip code, internally, the class
+should only store the zip code using one format. (You may choose to store it as a
+bar code string or as a zip code number.) The class also should have at least two
+public member functions: one to return the zip code as an integer and the other
+to return the zip code in bar code format as a string. All helper functions should be
+declared private. Embed your class definition in a suitable test program.
+
 ---
