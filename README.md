@@ -390,3 +390,9 @@ Constructors, Const parameter modifier, static members, nested and local class, 
    ensuring objects are either fully valid or not created. Features exception handling with try-catch blocks,
    robust input validation that rejects non-numeric and negative values, and a `convertMoney()` method that correctly
    handles cents >= 100 by computing quotient and remainder.
+8. [Histogram grades](07_Constructors_Other_Tools/7.08_Histogram_Grades) 
+   \- This program computes a grade histogram using a **sort-then-count** approach with three different counting implementations for educational comparison.
+   Uses **merge sort** (O(n log n)) to make duplicates adjacent, then provides three counting strategies: 
+   with copying vectors and O(n) time complexity, iterator-only with `erase` and O(n²) time complexity, and mixed iterator/index as non-standard practice.
+   Demonstrates iterator manipulation, vector operations, `erase()` invalidation handling, and algorithm complexity trade-offs.
+   
