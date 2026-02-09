@@ -31,6 +31,7 @@ flyers are gone.
 
 const std::string PATH = "../../../../07_Constructors_Other_Tools/7.10_Mystery_Box/Utilities/Produce.txt";
 const std::string SEPARATOR = std::string(20, '-') + "\n";
+const std::string TOMATILLO = "tomatillo";
 constexpr int ITEMS = 3;
 constexpr int MAX = 1000;
 
@@ -48,16 +49,45 @@ class BoxOfProduce
 public:
 	BoxOfProduce() { nBox++; }
 	void addContent(int idx, const FruitsVegetables& produce);
-	bool changeContent(int idx, const FruitsVegetables& produce);
+	//   Precondition: idx is a valid index between 0 and ITEMS - 1, produce is a FruitsVegetables object.
+	//   Postcondition: adds produce to the box at index idx, and updates the number of items in the box.
+
+	void changeContent(int idx, const FruitsVegetables& produce);
+	//   Precondition: idx is a valid index between 0 and items - 1, produce is a FruitsVegetables object.
+	//   Postcondition: changes the content of the box at index idx to produce
+
 	const FruitsVegetables& getItem(int idx) const;
-	void output();
+	//   Precondition: idx is a valid index between 0 and items - 1.
+	//   Postcondition: returns the item in the box at index idx.
+
+	void output() const;
+	//   Postcondition: outputs the contents of the box, 
+	// and if the box contains a recipe flyer, also outputs "salsa verde recipe".
+
 	bool isValidIndex(int idx) const;
+	//	 Postcondition: returns true if idx is a valid index between 0 and items - 1, false otherwise.
+
 	static int getNumberBox() { return nBox; }
+	static int getFlyersLeft() { return tomatilloFlyer; }
 private:
 	FruitsVegetables box[ITEMS];
 	int items = 0;
+	bool hasFlyer = false;
 	static int nBox;
 	static int tomatilloFlyer;
+	static bool isTomatillo(const FruitsVegetables& produce);
+	//   Postcondition: returns true if the name of produce is "tomatillo" (case-insensitive), false otherwise.
+
+	bool hasTomatillo() const;
+	//   Postcondition: returns true if the box contains at least one order of tomatillos, false otherwise.
+
+	void giveFlyer();
+	//   Postcondition: if the box does not already have a flyer and there are flyers left, 
+	// gives the box a flyer and decrements the number of flyers left.
+
+	void removeFlyer();
+	//   Postcondition: if the box has a flyer, removes the flyer from the box 
+	// and increments the number of flyers left.
 };
 
 int BoxOfProduce::nBox = 0;
@@ -135,8 +165,103 @@ int main()
 	return 0;
 }
 
-void fillBoxes(FruitsVegetables produceList[], const int sizeList, 
-			   std::vector<BoxOfProduce>& boxes, int& nBoxes)
+void FruitsVegetables::setName(const std::string& nameFruitVegetable)
+{
+	name = nameFruitVegetable;
+}
+
+std::string FruitsVegetables::getName() const
+{
+	return name;
+}
+
+void BoxOfProduce::giveFlyer()
+{
+	hasFlyer = true;
+	tomatilloFlyer--;
+}
+
+void BoxOfProduce::removeFlyer()
+{
+	hasFlyer = false;
+	tomatilloFlyer++;
+}
+
+bool BoxOfProduce::isTomatillo(const FruitsVegetables& produce)
+{
+	std::string name = produce.getName();
+	std::transform(name.begin(), name.end(), name.begin(),
+				  [](const unsigned char c) {return std::tolower(c); });
+	if (name == TOMATILLO)
+		return true;
+	
+	return false;
+}
+
+bool BoxOfProduce::hasTomatillo() const
+{
+	for (int idx = 0; idx < ITEMS; idx++)
+	{
+		if (isTomatillo(box[idx]))
+			return true;
+	}
+	return false;
+}
+
+void BoxOfProduce::addContent(const int idx, const FruitsVegetables& produce)
+{
+	if (idx < 0 || idx >= ITEMS) {
+		std::cerr << "Index out of bounds when adding to box\n";
+		return;
+	}
+	box[idx] = produce;
+	items = std::max(items, idx + 1);
+
+	if (!hasFlyer && tomatilloFlyer > 0 && isTomatillo(produce))
+		giveFlyer();
+}
+
+void BoxOfProduce::changeContent(const int idx, const FruitsVegetables& produce)
+{
+	if (idx >= 0 && idx < items)
+	{
+		box[idx] = produce;
+		if (hasTomatillo() && !hasFlyer && tomatilloFlyer > 0)
+			giveFlyer();
+		if (hasFlyer && !hasTomatillo())
+			removeFlyer();
+	}
+	std::cerr << "Element not in the box.\n";
+}
+
+const FruitsVegetables& BoxOfProduce::getItem(const int idx) const
+{
+	if (idx < 0 || idx >= items) {
+		static FruitsVegetables empty;
+		return empty;
+	}
+	return box[idx];
+}
+
+void BoxOfProduce::output() const
+{
+	for (int idx = 0; idx < items; ++idx)
+		std::cout << idx + 1 << ". " << getItem(idx).getName() << "\n";
+	if (hasFlyer)
+	{
+		std::cout << "salsa verde recipe\n"
+				  << "Flyers left: " << tomatilloFlyer << '\n';
+	}
+}
+
+bool BoxOfProduce::isValidIndex(const int idx) const
+{
+	return (idx >= 0 && idx < items);
+}
+
+
+void fillBoxes(FruitsVegetables produceList[], const int sizeList,
+	std::vector<BoxOfProduce>& boxes, int& nBoxes)
 {
 	BoxOfProduce aBox;
 	randomSelection(produceList, sizeList, aBox);
@@ -151,6 +276,7 @@ void fillBoxes(FruitsVegetables produceList[], const int sizeList,
 	}
 	boxes.push_back(aBox);
 	nBoxes--;
+
 }
 
 int addBoxes()
@@ -163,58 +289,6 @@ int addBoxes()
 
 	std::cout << "How many boxes to add?\n";
 	return itemValidation();
-}
-
-
-void FruitsVegetables::setName(const std::string& nameFruitVegetable)
-{
-	name = nameFruitVegetable;
-}
-
-std::string FruitsVegetables::getName() const
-{
-	return name;
-}
-
-void BoxOfProduce::addContent(const int idx, const FruitsVegetables& produce)
-{
-	if (idx < 0 || idx >= ITEMS) {
-		std::cerr << "Index out of bounds when adding to box\n";
-		return;
-	}
-	box[idx] = produce;
-	items = std::max(items, idx + 1);
-}
-
-bool BoxOfProduce::changeContent(const int idx, const FruitsVegetables& produce)
-{
-	if (idx >= 0 && idx < items)
-	{
-		box[idx] = produce;
-		return true;
-	}
-	std::cerr << "Element not in the box\n";
-	return false;
-}
-
-const FruitsVegetables& BoxOfProduce::getItem(const int idx) const
-{
-	if (idx < 0 || idx >= items) {
-		static FruitsVegetables empty;
-		return empty;
-	}
-	return box[idx];
-}
-
-void BoxOfProduce::output()
-{
-	for (int idx = 0; idx < items; ++idx)
-		std::cout << idx + 1 << ". " << getItem(idx).getName() << "\n";
-}
-
-bool BoxOfProduce::isValidIndex(int idx) const
-{
-	return (idx >= 0 && idx < items);
 }
 
 bool processFile(FruitsVegetables produceList[], const int maxSize, int& sizeList)
