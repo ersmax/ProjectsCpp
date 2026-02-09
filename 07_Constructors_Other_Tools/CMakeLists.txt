@@ -15,6 +15,7 @@ set(FOLDERS
     "7.06_Pizza_order"
     "7.07_Money_constructor"
     "7.08_Histogram_grades"
+    "7.09_Zip_code"
 )
 
 # Automatically get all .cpp and headers files 

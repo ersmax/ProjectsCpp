@@ -57,8 +57,8 @@ public:
 	Zip() : zip(00000) {};
 	Zip(const std::string& zipCode) { setZip(zipCode); }
 	Zip(const int zipCode) { setZip(zipCode); }
-	std::string getZip() const { return conversion(zip); }
 	int getZip() const { return zip; }
+	std::string convertZip() const { return conversion(zip); }
 private:
 	int zip;
 	void setZip(const std::string& zipCode);
@@ -72,6 +72,21 @@ private:
 
 int main( )
 {
+	try
+	{
+		const Zip anAddress("110100101000101011000010011");
+		const Zip anotherAddress(99504);
+		std::cout << "First zip Address: " 
+				  << anAddress.getZip() << '\n';
+		std::cout << "Second zip Address: " 
+				  << anotherAddress.getZip() << '\n';
+		std::cout << "Second zip is equivalent to: " 
+				  << anotherAddress.convertZip() << '\n';
+
+	} catch (const std::invalid_argument& e) {
+		std::cout << "Error: " << e.what() << '\n';
+	}
+	
 	std::cout << '\n';
 	return 0;
 }
@@ -135,37 +150,32 @@ int Zip::conversion(const std::string& myString)
 
 std::string Zip::conversion(int zipCode)
 {
-	std::string zip = "1";
+	// Separate each group digit 
 	int digits[GROUP_SIZE];
 	for (int idx = 4; idx >= 0; idx--)
 	{
 		digits[idx] = zipCode % 10;
 		zipCode /= 10;
 	}
-
+	// Group digit conversion
+	std::string zip = "1";
 	for (size_t idx = 0; idx < GROUP_SIZE; idx++)
 	{
+		std::string groupCode = "00000";
 		const int target = (digits[idx] == 0) ? 11 : digits[idx];
-		std::string groupZip = "00000";
-	
-		// Find 2 positions in POSTNET that sums to target
+		
 		bool found = false;
 		for (size_t p1 = 0; p1 < GROUP_SIZE - 1 && !found; p1++)
-		{
 			for (size_t p2 = p1 + 1; p2 < GROUP_SIZE; p2++)
-			{
 				if (POSTNET[p1] + POSTNET[p2] == target)
 				{
-					groupZip[p1] = '1';
-					groupZip[p2] = '1';
 					found = true;
+					groupCode[p1] = '1';
+					groupCode[p2] = '1';
 					break;
 				}
-			}
-		}
-		zip += groupZip;
+		zip += groupCode;
 	}
-
 	zip += "1";
 	return zip;
 }
