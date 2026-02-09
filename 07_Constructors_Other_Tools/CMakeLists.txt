@@ -17,6 +17,7 @@ set(FOLDERS
     "7.08_Histogram_grades"
     "7.09_Zip_code"
     "7.10_Mystery_Box"
+    "7.11_Player_Stats"
 )
 
 # Automatically get all .cpp and headers files 
