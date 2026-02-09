@@ -45,8 +45,11 @@ declared private. Embed your class definition in a suitable test program.
 */
 
 #include <iostream>
+#include <string>
+#include <vector>
 
 constexpr int GROUP_SIZE = 5;
+constexpr int POSTNET[5] = {7, 4, 2, 1, 0};
 
 class Zip
 {
@@ -61,9 +64,10 @@ private:
 	void setZip(const std::string& zipCode);
 	void setZip(int zipCode);
 	static bool isValid(const std::string& zipCode);
+	static bool isValid(int zipCode);
+	static int conversion(const std::string& myString);
+	static std::string conversion(int zipCode);
 };
-
-
 
 int main( )
 {
@@ -75,8 +79,14 @@ void Zip::setZip(const std::string& zipCode)
 {
 	if (!isValid(zipCode))
 		throw std::invalid_argument("Invalid zip Code");
+	zip = conversion(zipCode);
+}
 
-	// TODO
+void Zip::setZip(const int zipCode)
+{
+	if (!isValid(zipCode))
+		throw std::invalid_argument("Invalid zip Code");
+	zip = zipCode;
 }
 
 bool Zip::isValid(const std::string& zipCode)
@@ -99,6 +109,37 @@ bool Zip::isValid(const std::string& zipCode)
 		if (count != 2)
 			return false;
 	}
-
 	return true;
 }
+
+bool Zip::isValid(const int zipCode)
+{
+	// TODO
+}
+
+int Zip::conversion(const std::string& myString)
+{
+	// remove leading and trailing `1`
+	const std::string code = myString.substr(1, myString.length() - 2);
+	
+	int zip = 0;
+	for (size_t idx = 0; idx < code.length(); idx += GROUP_SIZE)
+	{
+		int zipDigit = 0;
+		for (size_t jdx = 0; jdx < GROUP_SIZE; jdx++)
+			// convert each digit to 0/1, then multiply by POSTNET code
+			zipDigit += (code[idx + jdx] - '0') * POSTNET[jdx];
+
+		if (zipDigit == 11)	zipDigit = 0;
+
+		zip = zip * 10 + zipDigit;
+	}
+	return zip;
+}
+
+std::string Zip::conversion(const int zipCode)
+{
+	// TODO
+}
+
+
