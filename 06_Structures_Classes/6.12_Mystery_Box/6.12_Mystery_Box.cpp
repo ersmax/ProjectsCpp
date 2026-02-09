@@ -5,8 +5,9 @@
 #include <limits>		// for std::numeric_limits
 #include <algorithm>	// for std::max
 #include <cctype>		// for std::tolower
+#include <filesystem>
 
-const std::string PATH = "./06_Structures_Classes/6.12_Mystery_Box/Utilities/Produce.txt";
+const std::string PATH = "../../../../06_Structures_Classes/6.12_Mystery_Box/Utilities/Produce.txt";
 const std::string SEPARATOR = std::string(20, '-') + "\n";
 constexpr int ITEMS = 3;
 constexpr int MAX = 1000;
@@ -147,7 +148,8 @@ bool processFile(FruitsVegetables produceList[], const int maxSize, int& sizeLis
 {
 	std::ifstream inputStream;
 	if (!openFile(PATH, inputStream)) {
-		std::cerr << "Error opening the file\n";
+		std::cerr << "Error opening the file: " << PATH << "\n";
+		std::cerr << "Current working directory: " << std::filesystem::current_path() << "\n";
 		return false;
 	}
 	parseFile(inputStream, produceList, maxSize, sizeList);
