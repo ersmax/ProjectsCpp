@@ -406,4 +406,10 @@ Constructors, Const parameter modifier, static members, nested and local class, 
    <p align="center">
       <img src="07_Constructors_Other_Tools/7.09_Zip_code/Figures/Bar_code.png" alt="Bar code" width="48%" />
    </p>
+10. [Mystery Box](07_Constructors_Other_Tools/7.10_Mystery_Box) 
+    \- Extension of Project 6.12 that creates multiple box objects with 3 random items.
+    Implements a **constructor with static counter**, and a **recipe flyer**: boxes with tomatillos 
+    automatically receive flyers via private methods. Flyers are removed when tomatillos are substituted away. 
+    Other changes relate to static/instance members for tracking. Demonstrates **RAII**, **static vs instance members**, 
+    **automatic resource management**, and **const correctness**.
    
