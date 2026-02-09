@@ -71,6 +71,7 @@ void menu(char& choice) {
             choice = '0';
             return;
         }
+        // handle space in front
         std::size_t first = 0;
         while (first < line.size() && std::isspace(line[first]))    ++first;
         char letter = static_cast<char>(std::tolower(line[first]));
