@@ -27,7 +27,7 @@ public:
 	void addContent(int idx, const FruitsVegetables& produce);
 	bool changeContent(int idx, const FruitsVegetables& produce);
     const FruitsVegetables& getItem(int idx) const;
-	void output();
+	void output() const;
 	bool isValidIndex(int idx) const;
 private:
 	FruitsVegetables box[ITEMS];
@@ -133,7 +133,7 @@ const FruitsVegetables& BoxOfProduce::getItem(const int idx) const
     return box[idx];
 }
 
-void BoxOfProduce::output()
+void BoxOfProduce::output() const
 {
 	for (int idx = 0; idx < items; ++idx)
 		std::cout << idx + 1 << ". " << getItem(idx).getName() << "\n";
