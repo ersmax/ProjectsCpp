@@ -395,4 +395,15 @@ Constructors, Const parameter modifier, static members, nested and local class, 
    Uses **merge sort** (O(n log n)) to make duplicates adjacent, then provides three counting strategies: 
    with copying vectors and O(n) time complexity, iterator-only with `erase` and O(n²) time complexity, and mixed iterator/index as non-standard practice.
    Demonstrates iterator manipulation, vector operations, `erase()` invalidation handling, and algorithm complexity trade-offs.
+9. [Zip code](07_Constructors_Other_Tools/7.09_Zip_code) 
+   \- This program implements the **POSTNET bar code system** for encoding and decoding 5-digit zip codes.
+   The `Zip` class stores zip codes internally as integers and provides bidirectional conversion with 27-character bar code strings. 
+   Uses **POSTNET encoding values** [7, 4, 2, 1, 0] to decode bar codes and an **algorithmic approach** for encoding 
+   that finds two positions summing to each target digit.
+   Features **two constructors** (accepts bar code string or integer), comprehensive **validation** 
+   (27-char length, frame bars, exactly two '1's per 5-digit group, range 0-99999),
+   **exception handling** for invalid inputs, and demonstrates **RAII principles** ensuring only valid objects are created.
+   <p align="center">
+      <img src="07_Constructors_Other_Tools/7.09_Zip_code/Figures/Bar_code.png" alt="Bar code" width="48%" />
+   </p>
    
