@@ -46,3 +46,65 @@ to return the zip code in bar code format as a string. All helper functions shou
 declared private. Embed your class definition in a suitable test program.
 
 ---
+
+## Implementation Logic
+
+### Class Design
+The `Zip` class stores the zip code internally as an **integer** and provides conversion methods 
+to/from bar code strings.
+
+**Key Components:**
+- **Storage**: `int zip` - stores zip code as 5-digit number (0-99999)
+- **Constructors**: Accept either bar code string or integer
+- **Getters**: Return zip code as integer or bar code string
+- **Validation**: Ensures data integrity for both formats
+
+### Decoding Algorithm (Bar Code → Integer)
+
+**Function**: `conversion(const std::string& myString)`
+
+1. **Strip Frame Bars**: Remove leading and trailing '1' characters, leaving 25 digits
+2. **Process Each Group**: Iterate through 5 groups of 5 digits each
+3. **Apply POSTNET Values**: For each group, multiply each bar (0 or 1) by its position value:
+   - Position 0: value = 7
+   - Position 1: value = 4
+   - Position 2: value = 2
+   - Position 3: value = 1
+   - Position 4: value = 0
+4. **Sum Products**: Add all products to get the digit value
+5. **Handle Special Case**: If sum equals 11, the digit is 0 (since 7+4=11, the only way to represent 0)
+6. **Build Integer**: Multiply previous result by 10 and add new digit
+
+**Example**: `10100` → (1×7)+(0×4)+(1×2)+(0×1)+(0×0) = 9
+
+### Encoding Algorithm (Integer → Bar Code)
+
+**Function**: `conversion(int zipCode)`
+
+1. **Extract Digits**: Use modulo and division to extract each digit right-to-left, store left-to-right in array
+2. **For Each Digit**:
+   - Convert 0 to target sum of 11, others keep their value
+   - Find two positions in POSTNET array [7,4,2,1,0] that sum to target
+   - Set those two positions to '1', rest remain '0'
+   - This creates a 5-character bar code group
+3. **Concatenate**: Combine all groups with leading and trailing '1' frame bars
+
+**Example**: Digit 9 → target=9 → find 7+2=9 → positions 0,2 → bar code `10100`
+
+### Validation Logic
+
+**Bar Code String Validation** (`isValid(const std::string&)`):
+- Length must be exactly 27 characters
+- First and last characters must be '1' (frame bars)
+- All characters must be '0' or '1'
+- Each of the 5 middle groups must have exactly two '1's
+
+**Integer Validation** (`isValid(const int)`):
+- Must be between 0 and 99999 (valid 5-digit zip code range)
+
+### Error Handling
+- Invalid inputs throw `std::invalid_argument` exception
+- Validation occurs in constructors, preventing creation of invalid objects
+- Try-catch block in main demonstrates proper exception handling
+
+---
