@@ -32,7 +32,6 @@ constexpr int MAX_PLAYERS = 10;
 class Player
 {
 public:
-	Player();
 	Player(const std::string& fullName) : score(0) { setName(fullName); }
 	Player(const std::string& fullName, const int score) { setName(fullName); setScore(score); }
 	std::string getName() const { return name; }
@@ -51,6 +50,9 @@ std::string inputName();
 int inputScore();
 void addPlayer(std::vector<Player>& rooster);
 void showPlayers(const std::vector<Player>& rooster);
+void scorePlayer(const std::vector<Player>& rooster);
+int findPlayer(const std::vector<Player>& rooster, const std::string& aPlayer);
+void deletePlayer(std::vector<Player>& rooster);
 
 int main( )
 {
@@ -113,10 +115,10 @@ bool handleChoice(const char& letter, std::vector<Player>& rooster)
 			showPlayers(rooster);
 			break;
 		case 'c':
-			// TODO
+			scorePlayer(rooster);
 			break;
 		case 'd':
-			// TODO
+			deletePlayer(rooster);
 			break;
 		default: 
 			break;
@@ -126,7 +128,7 @@ bool handleChoice(const char& letter, std::vector<Player>& rooster)
 
 void addPlayer(std::vector<Player>& rooster)
 {
-	if (rooster.size() > MAX_PLAYERS)
+	if (rooster.size() >= MAX_PLAYERS)
 	{
 		std::cerr << "Max capacity reached\n";
 		return;
@@ -184,7 +186,7 @@ int inputScore()
 	int score;
 	while (true)
 	{
-		std::cout << "Enter a score (greater than 0)\n";
+		std::cout << "Enter a score (at least 0)\n";
 		if (!(std::cin >> score))
 		{
 			std::cin.clear();
@@ -196,4 +198,49 @@ int inputScore()
 			return score;
 		std::cout << "Score cannot be less than 0\n";
 	}
+}
+
+void scorePlayer(const std::vector<Player>& rooster)
+{
+	if (rooster.empty())
+	{
+		std::cout << "No players in the rooster\n";
+		return;
+	}
+	const std::string myPlayer = inputName();
+	const int scorePlayer = findPlayer(rooster, myPlayer);
+	if (scorePlayer == -1)
+		std::cout << "No player found\n";
+	else
+		std::cout << myPlayer << "'s score: " << scorePlayer << '\n';
+}
+
+void deletePlayer(std::vector<Player>& rooster)
+{
+	if (rooster.empty())
+	{
+		std::cout << "No players in the rooster\n";
+		return;
+	}
+	
+	const std::string myPlayer = inputName();
+	for (std::vector<Player>::iterator iterator = rooster.begin(); iterator != rooster.end(); ++iterator)
+	{
+		if (iterator->getName() == myPlayer)
+		{
+			iterator = rooster.erase(iterator);
+			return;
+		}
+	}
+	std::cout << "No player found\n";
+}
+
+int findPlayer(const std::vector<Player>& rooster, const std::string& aPlayer)
+{
+	for (const Player& player : rooster)
+	{
+		if (player.getName() == aPlayer)
+			return player.getScore();
+	}
+	return -1;
 }
