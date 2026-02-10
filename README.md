@@ -412,4 +412,10 @@ Constructors, Const parameter modifier, static members, nested and local class, 
     automatically receive flyers via private methods. Flyers are removed when tomatillos are substituted away. 
     Other changes relate to static/instance members for tracking. Demonstrates **RAII**, **static vs instance members**, 
     **automatic resource management**, and **const correctness**.
+11. [Player stats class](07_Constructors_Other_Tools/7.11_Player_Stats) 
+    \- This program manages a player roster using a `Player` class with **three constructors** (including **constructor delegation**) 
+    and **private setters** for strong encapsulation. Stores players in `std::vector<Player>` for dynamic sizing. Features menu-driven interface 
+    to add players, display all in formatted table,  search by name, and delete by name. 
+    Demonstrates range-based for loops with const references, auto type deduction, constexpr constants, and iterator-based deletion. 
+    Includes input validation (trimming whitespace, rejecting empty names, non-negative scores).
    
