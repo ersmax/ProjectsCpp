@@ -21,17 +21,18 @@ player’s name and score.Be sure to include a constructor with this class that 
 the name and score.Then use a vector of the Player class to store the ten players.
 */
 
-#include <iomanip>
-#include <iostream>
-#include <vector>
-#include <string>
-#include <limits>
+#include <iomanip>		// for std::setw
+#include <iostream>		// for std::cout, std::cin, std::getline
+#include <vector>	
+#include <string>		
+#include <limits>		// for std::numeric_limits
 
 constexpr int MAX_PLAYERS = 10;
 
 class Player
 {
 public:
+	Player() : Player("no name", 0) {};
 	Player(const std::string& fullName) : score(0) { setName(fullName); }
 	Player(const std::string& fullName, const int score) { setName(fullName); setScore(score); }
 	std::string getName() const { return name; }
@@ -44,15 +45,44 @@ private:
 };
 
 void menu();
+//   Postcondition: displays the menu to the user.
+
 char makeChoice();
+//   Postcondition: prompts the user to enter a choice and returns a valid menu option.
+
 bool handleChoice(const char& letter, std::vector<Player>& rooster);
+//   Precondition: letter is a valid menu option, rooster is a vector of Player objects.
+//   Postcondition: handles the choice selected by the user. 
+// Returns false if the user chose to exit the program, true otherwise.
+
 std::string inputName();
+//   Postcondition: prompts the user to enter a name and returns it.
+
 int inputScore();
+//   Postcondition: prompts the user to enter a score and returns it.
+
 void addPlayer(std::vector<Player>& rooster);
+//   Precondition: rooster is a vector of Player objects.
+// MAX_PLAYERS is the maximum number of players allowed in the rooster.
+//	 Postcondition: adds a new player and score to rooster vector, if there is space available.
+
 void showPlayers(const std::vector<Player>& rooster);
+//   Postcondition: displays all player names and their scores.
+
 void scorePlayer(const std::vector<Player>& rooster);
+//   Postcondition: prompts the user to enter a player name 
+// and displays the corresponding score or a message if the player is not found.
+
 int findPlayer(const std::vector<Player>& rooster, const std::string& aPlayer);
+//   Precondition: rooster is a vector of Player objects, 
+// aPlayer is the name of the player to search for.
+//   Postcondition: searches for aPlayer in rooster vector 
+// and returns the score of the player if found, -1 otherwise, which signals error.
+
 void deletePlayer(std::vector<Player>& rooster);
+//   Postcondition: prompts the user to enter a player name
+// and removes the player from the rooster vector if found.
+
 
 int main( )
 {
