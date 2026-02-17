@@ -418,4 +418,3 @@ Constructors, Const parameter modifier, static members, nested and local class, 
     to add players, display all in formatted table,  search by name, and delete by name. 
     Demonstrates range-based for loops with const references, auto type deduction, constexpr constants, and iterator-based deletion. 
     Includes input validation (trimming whitespace, rejecting empty names, non-negative scores).
-12. 
