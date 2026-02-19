@@ -8,6 +8,7 @@
 # List all folders
 set(FOLDERS
     "8.01_Money_class"
+    "8.02_Rational"
 )
 
 # Automatically get all .cpp and headers files 
