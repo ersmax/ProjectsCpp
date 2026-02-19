@@ -37,7 +37,10 @@ public:
 	Complex(const double realPart) : real(realPart), imaginary(0) {};
 	friend std::ostream& operator <<(std::ostream& outputStream, const Complex& number);
 	friend std::istream& operator >>(std::istream& inputStream, Complex& number);
-	bool operator ==(const Complex& number);
+	bool operator ==(const Complex& anotherNumber) const;
+	const friend Complex operator +(const Complex& firstNumber, const Complex& secondNumber);
+	const friend Complex operator -(const Complex& firstNumber, const Complex& secondNumber);
+	const friend Complex operator *(const Complex& firstNumber, const Complex& secondNumber);
 private:
 	double real;
 	double imaginary;
@@ -53,15 +56,58 @@ int main( )
 	Complex aComplex = inputComplex();
 	std::cout << "Your complex number is: " << aComplex << '\n';
 
+	std::cout << "Enter another complex number (format: a+b):\n";
+	Complex anotherComplex;
+	std::cin >> anotherComplex;
+	std::cout << "Your second complex number is: " << anotherComplex << '\n';
+
+	if (aComplex == anotherComplex)
+		std::cout << aComplex << " = " << anotherComplex << '\n';
+	else
+		std::cout << aComplex << " <> " << anotherComplex << '\n';
+
+	std::cout << aComplex << " + " << anotherComplex << " = " << aComplex + anotherComplex << '\n';
+	std::cout << aComplex << " - " << anotherComplex << " = " << aComplex - anotherComplex << '\n';
+	std::cout << aComplex << " * " << anotherComplex << " = " << aComplex * anotherComplex << '\n';
+
 	std::cout << '\n';
 	return 0;
 }
 
+const Complex operator +(const Complex& firstNumber, const Complex& secondNumber)
+{
+	double realPart = firstNumber.real + secondNumber.real;
+	double imaginaryPart = firstNumber.imaginary + secondNumber.imaginary;
+	return Complex(realPart, imaginaryPart);
+}
+
+const Complex operator -(const Complex& firstNumber, const Complex& secondNumber)
+{
+	double realPart = firstNumber.real - secondNumber.real;
+	double imaginaryPart = firstNumber.imaginary - secondNumber.imaginary;
+	return Complex(realPart, imaginaryPart);
+}
+
+const Complex operator *(const Complex& firstNumber, const Complex& secondNumber)
+{
+	double realPart = firstNumber.real * secondNumber.real -
+					  firstNumber.imaginary * secondNumber.imaginary;
+	double imaginaryPart = firstNumber.real * secondNumber.imaginary +
+						   firstNumber.imaginary * secondNumber.real;
+	return Complex(realPart, imaginaryPart);
+}
+
+bool Complex::operator ==(const Complex& anotherNumber) const
+{
+	return (real == anotherNumber.real && imaginary == anotherNumber.imaginary);
+}
+
 std::ostream& operator <<(std::ostream& outputStream, const Complex& number)
 {
-	std::string sign = " + ";
-	if (number.imaginary < 0) sign = " - ";
-	outputStream << number.real << sign << number.imaginary << "*i";
+	if (number.imaginary >= 0)
+		outputStream << number.real << " + " << number.imaginary << "*i";
+	else
+		outputStream << number.real << " - " << -number.imaginary << "*i";
 	return outputStream;
 }
 
