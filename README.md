@@ -442,4 +442,17 @@ Basic operator overloading, Friend functions and automatic type conversion, Refe
    Demonstrates **Euclidean GCD algorithm**, **LCM calculation**, **operator chaining** (`>>` and `<<`),
    **friend functions** for symmetric operators, and the separation of stream operators (silent) from user-facing input functions (with prompts).
    Uses **RAII principles** where constructors validate and normalize, ensuring only valid rational objects exist.
+3. [Complex Numbers](08_Operator_overloading_Friends_References/8.03_Complex_number) 
+   \- This program defines a `Complex` class that represents complex numbers in the form `a + b*i` where `a` and `b` are doubles.
+   Implements **all arithmetic operators** (`+`, `-`, `*`) as friend functions,
+   **equality operator** (`==`) as a member function comparing both real and imaginary parts,
+   and **stream I/O operators** (`<<`, `>>`) as friends with sign-aware formatting and input validation.
+   A **global constant `i`** representing the imaginary unit `(0, 1)` enables natural expressions like `5 * i`,
+   while helper function `inputComplex()` helps with robust user input.
+   The **single-parameter constructor enables implicit conversion** from `double`, allowing mixed arithmetic such as `aComplex + 3.5` or `3.5 * i`.
+   **Stream extraction** parses format `a+b` or `a-b`, validates the sign character, and sets `failbit` for invalid input.
+   **Stream insertion** formats output based on imaginary sign (`a + b*i` for positive, `a - b*i` for negative).
+   Demonstrates **friend functions for symmetric operators** (both operands can be `Complex` or implicitly converted from `double`),
+   **forward declaration pattern** (class and constant `i` declared before class definition, defined after),
+   and **mathematical operator implementation** following standard complex number arithmetic rules.
 

@@ -66,6 +66,8 @@ Complex inputComplex();
 
 int main( )
 {
+	std::cout << "5 * i = " << 5 * i << '\n';
+
 	std::cout << "Enter complex number (format: a+b):\n";
 	Complex aComplex = inputComplex();
 	std::cout << "Your complex number is: " << aComplex << '\n';
@@ -83,6 +85,8 @@ int main( )
 	std::cout << aComplex << " + " << anotherComplex << " = " << aComplex + anotherComplex << '\n';
 	std::cout << aComplex << " - " << anotherComplex << " = " << aComplex - anotherComplex << '\n';
 	std::cout << aComplex << " * " << anotherComplex << " = " << aComplex * anotherComplex << '\n';
+
+
 
 	std::cout << '\n';
 	return 0;
