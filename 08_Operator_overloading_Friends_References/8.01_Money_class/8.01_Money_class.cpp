@@ -1,23 +1,3 @@
-/*
-Modify the definition of the class Money shown in Playground Display 8.0.5 so that the following
-are added:
-a. The operators <, <=, >, and >= have each been overloaded to apply to the type
-Money. (Hint: See Self-Test Exercise 8.)
-b. The following member function has been added to the class definition. (We
-show the function declaration as it should appear in the class definition. The
-definition of the function itself will include the qualifier Money::.)
-const Money percent(int percentFigure) const;
-//Returns a percentage of the money amount in the calling
-//object. For example, if percentFigure is 10, then the value
-//returned is 10% of the amount of money represented by the
-//calling object.
-For example, if purse is an object of type Money whose value represents the
-amount $100.10, then the call
-purse.percent(10);
-returns 10% of $100.10; that is, it returns a value of type Money that represents
-the amount $10.01.
-*/
-
 #include <iostream>
 #include <cstdlib>
 #include <cmath>
@@ -33,25 +13,53 @@ public:
 	int getDollars() const { return dollars; }
 	int getCents() const { return cents; }
 	const Money percent(int percentFigure) const;
+	//   Precondition: percentFigure is between 0 and 100
+	//	 Postcondition: returns a percentage of the money amount in the calling object. 
+	// For example, if percentFigure is 10, then the value returned is 10% of the amount 
+	// of money represented by the calling object.
+
 	friend const Money operator +(const Money& amount1,
 								  const Money& amount2);
+	//   Precondition: amount1 and amount2 are valid Money objects
+	//   Postcondition: returns the sum of amount1 and amount2
+
 	friend const Money operator -(const Money& amount1,
 								  const Money& amount2);
+	//   Postcondition: returns the difference of amount1 and amount2
+
 	friend bool operator ==(const Money& amount1,
 							const Money& amount2);
+	//   Postcondition: returns true if amount1 and amount2 are equal amounts of money
+
 	friend bool operator <(const Money& amount1,
 						   const Money& amount2);
+	//   Postcondition: returns true if amount1 is less than amount2
+
 	friend bool operator <=(const Money& amount1,
 							const Money& amount2);
+	//   Postcondition: returns true if amount1 is less than or equal to amount2
+
 	friend bool operator >(const Money& amount1,
 						  const Money& amount2);
+	//   Postcondition: returns true if amount1 is greater than amount2
+
 	friend bool operator >=(const Money& amount1,
 							const Money& amount2);
+	//   Postcondition: returns true if amount1 is greater than or equal to amount2
+
 	friend const Money operator -(const Money& amount);
+	//   Postcondition: returns the negative of amount
+
 	friend std::ostream& operator <<(std::ostream& outputStream,
 									 const Money& amount);
+	//   Precondition: outputStream is cout, amount is a valid Money object
+	//   Postcondition: amount is sent to the output stream in the form $dollars.cents (e.g. $3.45).
+
 	friend std::istream& operator >>(std::istream& inputStream,
 									 Money& amount);
+	//   Precondition: inputStream is cin, amount is a valid Money object
+	//   Postcondition: amount is set to the value read from the input stream. 
+	// The input should be in the form $dollars.cents (e.g. $3.45).
 
 private:
 	//   A negative amount is represented as negative dollars

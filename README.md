@@ -418,3 +418,16 @@ Constructors, Const parameter modifier, static members, nested and local class, 
     to add players, display all in formatted table,  search by name, and delete by name. 
     Demonstrates range-based for loops with const references, auto type deduction, constexpr constants, and iterator-based deletion. 
     Includes input validation (trimming whitespace, rejecting empty names, non-negative scores).
+
+---
+
+## 8. Operator Overloading, Friends, and References
+Basic operator overloading, Friend functions and automatic type conversion, References and more overloaded operators.
+
+1. [Money Class](08_Operator_overloading_Friends_References/8.01_Money_class) 
+   \- This program defines a `Money` class that stores monetary amounts using dollars and cents as integers.
+   Implements **comparison operators** (`<`, `<=`, `>`, `>=`) as friend functions that work also with negative amounts,
+   and includes a **percent function** that calculates a percentage of the amount given in the class.
+   Demonstrates **friend functions** for operator overloading (arithmetic and I/O operators),
+   **const correctness** in member functions, and **RAII principles** with validation in constructors.
+
