@@ -32,8 +32,18 @@ public:
 	Rational(const int wholeNumber) : numerator(wholeNumber), denominator(1) { };
 	Rational(const int number1, const int number2) : numerator(number1) { setDenominator(number2); normalize(); }
 	const Rational operator +(const Rational& secondOperand) const;
+	const Rational operator -(const Rational& secondOperand) const;
+	const Rational operator *(const Rational& secondOperand) const;
+	const Rational operator /(const Rational& secondOperand) const;
+	bool operator ==(const Rational& secondOperand) const;
+	bool operator <(const Rational& secondOperand) const;
+	bool operator <=(const Rational& secondOperand) const;
+	bool operator >(const Rational& secondOperand) const;
+	bool operator >=(const Rational& secondOperand) const;
 	int getNumerator() const { return numerator; }
 	int getDenominator() const { return denominator; }
+	friend std::ostream& operator <<(std::ostream& outputStream, const Rational& rational);
+	friend std::istream& operator >>(std::istream& inputStream, Rational& rational);
 private:
 	int numerator;
 	int denominator;
@@ -42,6 +52,8 @@ private:
 };
 
 int findGcd(int number1, int number2);
+int findLcm(int number1, int number2);
+int inputValidation();
 
 int main( )
 {
@@ -59,6 +71,49 @@ int main( )
 	std::cout << '\n';
 	return 0;
 }
+
+std::ostream& operator <<(std::ostream& outputStream, const Rational& rational)
+{
+	outputStream << rational.numerator << '/' << rational.denominator;
+	return outputStream;
+}
+
+std::istream& operator >>(std::istream& inputStream, Rational& rational)
+{
+	int newNumerator = inputValidation();
+	int newDenominator = inputValidation();
+	char sign;
+	if (newDenominator == 0)
+		throw std::invalid_argument("Denominator cannot be 0.\n");
+
+	inputStream >> newNumerator >> sign >> newDenominator;
+	if (sign != '/')
+		throw std::invalid_argument("Not a valid fraction.\n");
+
+	rational.numerator = newNumerator;
+	rational.denominator = newDenominator;
+
+	return inputStream;
+}
+
+int inputValidation()
+{
+	int number;
+	while (true)
+	{
+		std::cout << "Enter a number:\n";
+		if (!(std::cin >> number))
+		{
+			std::cout << "Not a valid number\n";
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			continue;
+		}
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		return number;
+	}
+}
+
 
 int findGcd(const int number1, const int number2)
 {
@@ -88,6 +143,59 @@ const Rational Rational::operator +(const Rational& secondOperand) const
 							 (lcm / secondOperand.denominator) * secondOperand.numerator;
 
 	return Rational(newNumerator, lcm);
+}
+
+const Rational Rational::operator -(const Rational& secondOperand) const
+{	
+	const int newDenominator = denominator * secondOperand.denominator;
+	const int newNumerator = numerator * secondOperand.denominator -
+							 secondOperand.numerator * denominator;
+	return Rational(newNumerator, newDenominator);
+}
+
+const Rational Rational::operator *(const Rational& secondOperand) const
+{
+	const int newNumerator = numerator * secondOperand.numerator;
+	const int newDenominator = denominator * secondOperand.denominator;
+	return Rational(newNumerator, newDenominator);
+}
+
+const Rational Rational::operator /(const Rational& secondOperand) const
+{
+	if (secondOperand.numerator == 0)
+		throw std::invalid_argument("Cannot divide by zero\n");
+
+	const int newNumerator = numerator * secondOperand.denominator;
+	const int newDenominator = denominator * secondOperand.numerator;
+	return Rational(newNumerator, newDenominator);
+}
+
+bool Rational::operator ==(const Rational& secondOperand) const
+{
+	if (denominator == secondOperand.denominator)
+		return (numerator == secondOperand.numerator);
+	
+	return (numerator * secondOperand.denominator == denominator * secondOperand.numerator);
+}
+
+bool Rational::operator <(const Rational& secondOperand) const
+{
+	return (numerator * secondOperand.denominator < denominator * secondOperand.numerator);
+}
+
+bool Rational::operator <=(const Rational& secondOperand) const
+{
+	return (numerator * secondOperand.denominator <= denominator * secondOperand.numerator);
+}
+
+bool Rational::operator >(const Rational& secondOperand) const
+{
+	return secondOperand < *this;
+}
+
+bool Rational::operator >=(const Rational& secondOperand) const
+{
+	return secondOperand <= *this;
 }
 
 void Rational::setDenominator(const int number)
