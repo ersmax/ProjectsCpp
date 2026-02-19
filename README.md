@@ -430,4 +430,16 @@ Basic operator overloading, Friend functions and automatic type conversion, Refe
    and includes a **percent function** that calculates a percentage of the amount given in the class.
    Demonstrates **friend functions** for operator overloading (arithmetic and I/O operators),
    **const correctness** in member functions, and **RAII principles** with validation in constructors.
+2. [Rational Numbers](08_Operator_overloading_Friends_References/8.02_Rational) 
+   \- This program defines a `Rational` class that represents fractions (rational numbers) as pairs of integers (numerator/denominator).
+   Implements **all arithmetic operators** (`+`, `-`, `*`, `/`) using LCM for addition and cross-multiplication for other operations,
+   **all comparison operators** (`==`, `!=`, `<`, `<=`, `>`, `>=`) using cross-multiplication,
+   and **stream I/O operators** (`<<`, `>>`) as friend functions with comprehensive input validation.
+   Features automatic **normalization** (reduces to lowest terms using GCD, ensures positive denominator),
+   **exception handling** for zero denominators and division by zero,
+   **stream state management** with `failbit` for invalid input formats,
+   and a helper function `inputRational()` that provides retry logic for robust user input.
+   Demonstrates **Euclidean GCD algorithm**, **LCM calculation**, **operator chaining** (`>>` and `<<`),
+   **friend functions** for symmetric operators, and the separation of stream operators (silent) from user-facing input functions (with prompts).
+   Uses **RAII principles** where constructors validate and normalize, ensuring only valid rational objects exist.
 
