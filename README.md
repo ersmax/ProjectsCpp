@@ -4,7 +4,7 @@
 # Practical C++ Problems
 
 This repository contains practical, real-life programming problems solved in C++20 and above.
-This README lists the documentation files for the collections: `01-Basics` - `06-OOP`
+This README lists the documentation files for the collections: `01-Basics` - `08-Operator Overloading, Friends`
 (much more to come related to memory management, pointers, etc. for a total of 20 sections). 
 Check also my [Other projects](https://github.com/ersmax)
 
