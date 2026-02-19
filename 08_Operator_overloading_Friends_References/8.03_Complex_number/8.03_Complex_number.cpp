@@ -21,6 +21,8 @@ const Complex i(0, 1);
 */
 
 #include <iostream> 
+#include <limits>
+#include <string>
 
 // forward declare the class and declare but don't define yet the constant
 class Complex;			
@@ -35,6 +37,7 @@ public:
 	Complex(const double realPart) : real(realPart), imaginary(0) {};
 	friend std::ostream& operator <<(std::ostream& outputStream, const Complex& number);
 	friend std::istream& operator >>(std::istream& inputStream, Complex& number);
+	bool operator ==(const Complex& number);
 private:
 	double real;
 	double imaginary;
@@ -46,7 +49,7 @@ Complex inputComplex();
 
 int main( )
 {
-	std::cout << "Enter a complex number:\n";
+	std::cout << "Enter complex number (format: a+b):\n";
 	Complex aComplex = inputComplex();
 	std::cout << "Your complex number is: " << aComplex << '\n';
 
@@ -56,23 +59,25 @@ int main( )
 
 std::ostream& operator <<(std::ostream& outputStream, const Complex& number)
 {
-	outputStream << number.real << " + " << number.imaginary << "*" << i;
+	std::string sign = " + ";
+	if (number.imaginary < 0) sign = " - ";
+	outputStream << number.real << sign << number.imaginary << "*i";
 	return outputStream;
 }
 
 std::istream& operator >>(std::istream& inputStream, Complex& number)
 {
-	char plus;
+	char sign;
 	double realPart, imaginaryPart;
-	inputStream >> realPart >> plus >> imaginaryPart;
-	if (plus != '+')
+	inputStream >> realPart >> sign >> imaginaryPart;
+	if (sign != '+' && sign != '-')
 	{
 		// manually mark the stream as failed
 		inputStream.setstate(std::ios::failbit);
 		return inputStream;
 	}
 	number.real = realPart;
-	number.imaginary = imaginaryPart;
+	number.imaginary = (sign == '-') ? -imaginaryPart : imaginaryPart;
 	return inputStream;
 }
 
@@ -81,7 +86,6 @@ Complex inputComplex()
 	Complex complexNumber;
 	while (true)
 	{
-		std::cout << "Enter complex number (format: a+b):\n";
 		if (!(std::cin >> complexNumber))
 		{
 			std::cout << "Not a complex number\n";
