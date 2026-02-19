@@ -36,11 +36,25 @@ public:
 	Complex(const double realPart, const double imaginaryPart) : real(realPart), imaginary(imaginaryPart) {};
 	Complex(const double realPart) : real(realPart), imaginary(0) {};
 	friend std::ostream& operator <<(std::ostream& outputStream, const Complex& number);
+	//   Postcondition: number is sent to the output stream in the form a + b*i (e.g. 3 + 4*i).
+
 	friend std::istream& operator >>(std::istream& inputStream, Complex& number);
+	//   Postcondition: number is set to the value read from the input stream.
+
 	bool operator ==(const Complex& anotherNumber) const;
+	//   Postcondition: returns true if the calling object is equal to anotherNumber; otherwise, returns false
+
 	const friend Complex operator +(const Complex& firstNumber, const Complex& secondNumber);
+	//   Postcondition: returns the sum of firstNumber and secondNumber. 
+	// A friend function is used, since it allows automatic type conversion, in case one of the operands 
+	// is a double (which would be converted to a Complex object with 0 imaginary part).
+	// This allows expressions such as `3.5 + aComplex` or `aComplex + 3.5` to work correctly.
+
 	const friend Complex operator -(const Complex& firstNumber, const Complex& secondNumber);
+	//   Postcondition: returns the difference of firstNumber and secondNumber.
+
 	const friend Complex operator *(const Complex& firstNumber, const Complex& secondNumber);
+	//   Postcondition: returns the product of firstNumber and secondNumber.
 private:
 	double real;
 	double imaginary;
