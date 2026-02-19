@@ -15,19 +15,20 @@ public:
 	bool operator ==(const Rational& secondOperand) const;
 	bool operator !=(const Rational& secondOperand) const;
 	bool operator <(const Rational& secondOperand) const;
-	//   Precondition: the calling object denominator and secondOperand object denominator are both positive
+	//   Precondition: the calling object denominator and secondOperand object denominator are both positive.
+	// This is possible through normalize() function.
 	//   Postcondition: returns true if the calling object is less than secondOperand; otherwise, returns false
 
 	bool operator <=(const Rational& secondOperand) const;
-	//   Precondition: the calling object denominator and secondOperand object denominator are both positive
+	//   Precondition: same of operator <
 	//   Postcondition: returns true if the calling object is less than or equal to secondOperand; otherwise, returns false
 
 	bool operator >(const Rational& secondOperand) const;
-	//   Precondition: the calling object denominator and secondOperand object denominator are both positive
+	//   Precondition: same of operator <
 	//   Postcondition: returns true if the calling object is greater than secondOperand; otherwise, returns false
 
 	bool operator >=(const Rational& secondOperand) const;
-	//   Precondition: the calling object denominator and secondOperand object denominator are both positive
+	//   Precondition: same of operator <
 	//   Postcondition: returns true if the calling object is greater than or equal to secondOperand; otherwise, returns false
 
 	int getNumerator() const { return numerator; }

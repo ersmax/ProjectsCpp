@@ -449,9 +449,9 @@ Basic operator overloading, Friend functions and automatic type conversion, Refe
    and **stream I/O operators** (`<<`, `>>`) as friends with sign-aware formatting and input validation.
    A **global constant `i`** representing the imaginary unit `(0, 1)` enables natural expressions like `5 * i`,
    while helper function `inputComplex()` helps with robust user input.
-   The **single-parameter constructor enables implicit conversion** from `double`, allowing mixed arithmetic such as `aComplex + 3.5` or `3.5 * i`.
-   **Stream extraction** parses format `a+b` or `a-b`, validates the sign character, and sets `failbit` for invalid input.
-   **Stream insertion** formats output based on imaginary sign (`a + b*i` for positive, `a - b*i` for negative).
+   The **single-parameter constructor enables implicit conversion** from `double`, allowing mixed arithmetic such as `aComplex + 3.5` or `5 * i`.
+   **Stream extraction >>** parses format `a+b` or `a-b`, validates the sign character, and sets `failbit` for invalid input.
+   **Stream insertion <<** formats output based on imaginary sign (`a + b*i` for positive, `a - b*i` for negative).
    Demonstrates **friend functions for symmetric operators** (both operands can be `Complex` or implicitly converted from `double`),
    **forward declaration pattern** (class and constant `i` declared before class definition, defined after),
    and **mathematical operator implementation** following standard complex number arithmetic rules.
