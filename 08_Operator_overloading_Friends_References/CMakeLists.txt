@@ -10,6 +10,7 @@ set(FOLDERS
     "8.01_Money_class"
     "8.02_Rational"
     "8.03_Complex_number"
+    "8.04_Char_class"
 )
 
 # Automatically get all .cpp and headers files 
