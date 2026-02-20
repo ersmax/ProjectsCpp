@@ -101,20 +101,15 @@ int numberValidation()
 
 char& Char::operator [](int idx)
 {
-	// 0-normalize the index in the array
 	// ask idx again if original idx is out of bounds
-	idx--;
 	while (idx < 0 || idx >= size)
-	{
 		idx = askPosition();
-		idx--;
-	}
+	
 	return characters[idx];
 }
 
-const char& Char::operator [](int idx) const
+const char& Char::operator [](const int idx) const
 {
-	idx--;
 	if (idx < 0 || idx >= size)
 	{
 		std::cerr << "Error: Index out of bounds\n";
@@ -127,11 +122,11 @@ const char& Char::operator [](int idx) const
 int Char::askPosition() const
 {
 	int idx;
-	std::cout << "Enter idx you want to access between 1 and " << size << ":\n";
+	std::cout << "Enter idx you want to access between 0 and " << size - 1 << ":\n";
 	do
 	{
 		idx = numberValidation();
-	} while (idx <= 0 || idx > size);
+	} while (idx < 0 || idx >= size);
 	return idx;
 }
 
