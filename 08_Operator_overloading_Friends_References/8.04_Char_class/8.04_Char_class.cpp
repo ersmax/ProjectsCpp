@@ -32,6 +32,8 @@ class Char
 {
 public:
 	Char() : size(10) { setMembers(); }
+	Char(const int sz) { setMembers(sz); }
+	Char(const char myArray[], const int sz) { setMembers(myArray, sz); }
 	int getSize() const { return size; }
 	void output();
 	char& operator [](int idx);
@@ -41,10 +43,17 @@ private:
 	char characters[MAX];
 	int size;
 	void setMembers();
+	void setMembers(int chosenSize);
+	void setMembers(const char myArray[], int sizeArray);
 };
 
 char inputValidation();
 int numberValidation();
+bool validSize(int number);
+bool validSize(const Char& myChar, int index);
+int chooseSize();
+void buildArray(char myArray[], int size);
+void testOperator(Char& myChar);
 
 int main( )
 {
@@ -57,11 +66,69 @@ int main( )
 	const int position = aCharacter.askPosition();
 	aCharacter[position] = inputValidation();
 	std::cout << "Changed character: " << constRef[position] << '\n';
-	
 	aCharacter.output();
+
+	Char anotherCharacter(chooseSize());
+	anotherCharacter.output();
+
+	char charArray[MAX];
+	const int size = chooseSize();
+	buildArray(charArray, size);
+	Char anotherCharacter3(charArray, size);
+	anotherCharacter3.output();
+	
+	testOperator(anotherCharacter3);
+	anotherCharacter3.output();
 
 	std::cout << '\n';
 	return 0;
+}
+
+void testOperator(Char& myChar)
+{
+	std::cout << "Modifying an index element using operator[].\n";
+	std::cout << "Current size: " << myChar.getSize() << '\n';
+	if (myChar.getSize() <= 0)
+	{
+		std::cout << "Not sufficient items to test. Ending\n";
+		return;
+	}
+	std::cout << "Enter a valid index to replace\n";
+	int idx;
+	do
+		idx = numberValidation();
+	while (!validSize(myChar, idx));
+
+	std::cout << "Old item at index " << idx << ": " << myChar[idx] << '\n';
+	myChar[idx] = inputValidation();
+	std::cout << "New item at index " << idx << ": " << myChar[idx] << '\n';
+}
+
+int chooseSize()
+{
+	int size;
+	do
+	{
+		std::cout << "Choose a valid size (0-" << MAX << ")\n";
+		size = numberValidation();
+	} while (!validSize(size));
+	return size;
+}
+
+bool validSize(const int number)
+{
+	return (number >= 0 && number <= MAX);
+}
+
+bool validSize(const Char& myChar, const int index)
+{
+	return (index >= 0 && index < myChar.getSize());
+}
+
+void buildArray(char myArray[], const int size)
+{
+	for (int idx = 0; idx < size; idx++)
+		myArray[idx] = inputValidation();
 }
 
 char inputValidation()
@@ -113,9 +180,9 @@ const char& Char::operator [](const int idx) const
 	if (idx < 0 || idx >= size)
 	{
 		std::cerr << "Error: Index out of bounds\n";
-		std::exit(-1);
+		std::exit(1);
 	}
-	std::cout << "Debug message\n";
+	std::cout << "Debug message: calling R-Value\n";
 	return characters[idx];
 }
 
@@ -134,6 +201,23 @@ void Char::setMembers()
 {
 	for (int idx = 0; idx < size; idx++)
 		characters[idx] = '#';
+}
+
+void Char::setMembers(const int chosenSize)
+{
+	if (chosenSize < 0 || chosenSize > MAX)
+		throw std::invalid_argument("The chosen size is not valid\n");
+	size = chosenSize;
+	setMembers();
+}
+
+void Char::setMembers(const char myArray[], const int sizeArray)
+{
+	if (sizeArray < 0 || sizeArray > MAX)
+		throw std::invalid_argument("The chosen size is not valid\n");
+	size = sizeArray;
+	for (int idx = 0; idx < sizeArray; idx++)
+		characters[idx] = myArray[idx];
 }
 
 void Char::output()
