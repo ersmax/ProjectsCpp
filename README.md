@@ -467,5 +467,16 @@ Basic operator overloading, Friend functions and automatic type conversion, Refe
    Uses **const correctness** (const member functions, const references), **encapsulation** (private array and size with public interface),
    and **input validation** with retry loops for all user inputs (numeric and character).
    The program showcases the distinction between **l-value and r-value contexts** in operator overloading and the importance of matching error handling strategies to object constness.
+5. [Vector 2D](08_Operator_overloading_Friends_References/8.05_Vector_2D) 
+   \- This program defines a `Vector2D` class that represents a mathematical 2D vector with integer x and y components.
+   Implements **operator* overload** for computing the **dot product** of two vectors using the formula `(Ax * Bx) + (Ay * By)`,
+   returning a scalar integer result.
+   Features **friend stream I/O operators** (`<<`, `>>`) that handle vectors in format `[x, y]` with comprehensive **input validation**
+   (checks for correct brackets, comma separator, and sets `failbit` for malformed input).
+   Includes **three constructors** (default, single-parameter, two-parameter), **getters and setters** for components,
+   and helper functions `vectorValidation()` and `inputValidation()` that provide **robust user input** with retry loops.
+   Demonstrates **friend functions** for accessing private members in I/O operators, **const correctness** (const member function for `operator*`),
+   **stream state management** with format validation, and the difference between **silent stream operators** (no prompts) versus **interactive helper functions** (with prompts and retry logic).
+   Uses **RAII principles** where constructors initialize objects to valid states and showcases operator overloading for mathematical operations on custom types.
 
 
