@@ -13,6 +13,7 @@ set(FOLDERS
     "8.04_Char_class"
     "8.05_Vector_2D"
     "8.06_Integer_class"
+    "8.07_Prime"
 )
 
 # Automatically get all .cpp and headers files 
