@@ -36,24 +36,57 @@ public:
 	Char(const char myArray[], const int sz) { setMembers(myArray, sz); }
 	int getSize() const { return size; }
 	void output();
+	//   Postcondition: Returns the characters in the array.
+
 	char& operator [](int idx);
+	//   Precondition: idx is a non-negative integer less than size.
+	//   Postcondition: Returns a reference to the character at position idx in the array.
+
 	const char& operator [](int idx) const;
+	//   Precondition: idx is a non-negative integer less than size.
+	//   Postcondition: Returns a const reference to the character at position idx in the array.
+
 	int askPosition() const;
+	//   Postcondition: Asks the user for a valid index position and returns it.
 private:
 	char characters[MAX];
 	int size;
 	void setMembers();
+	//   Postcondition: Sets the first size members of the array to '#'.
+
 	void setMembers(int chosenSize);
+	//   Precondition: chosenSize is a non-negative integer less than or equal to MAX.
+	//   Postcondition: Sets size to chosenSize and sets the first size members of the array to '#'.
+
 	void setMembers(const char myArray[], int sizeArray);
+	//   Precondition: sizeArray is a non-negative integer less than or equal to MAX.
+	// myArray is an array of char of size sizeArray.
+	//   Postcondition: Sets size to sizeArray and sets the first size members of the array to the first size members of myArray.
 };
 
 char inputValidation();
+//   Postcondition: Asks the user for a valid character and returns it.
+
 int numberValidation();
+//   Postcondition: Asks the user for a valid integer and returns it.
+
 bool validSize(int number);
+//   Postcondition: Returns true if number is a valid size (0 to MAX), otherwise returns false.
+
 bool validSize(const Char& myChar, int index);
+//	 Postcondition: Returns true if index is a valid index for the Char object (0 to myChar.getSize() - 1), 
+// otherwise returns false.
+
 int chooseSize();
+//   Postcondition: Asks the user to choose a valid size and returns it.
+
 void buildArray(char myArray[], int size);
+//   Precondition: size is a non-negative integer less than or equal to MAX.
+//   Postcondition: Fills the first size members of myArray with valid characters entered by the user.
+
 void testOperator(Char& myChar);
+//   Postcondition: Tests the operator[] by allowing the user to modify an element of the Char object,
+// and displays the old and new values.
 
 int main( )
 {
