@@ -12,6 +12,7 @@ set(FOLDERS
     "8.03_Complex_number"
     "8.04_Char_class"
     "8.05_Vector_2D"
+    "8.06_Integer_class"
 )
 
 # Automatically get all .cpp and headers files 
