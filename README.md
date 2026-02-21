@@ -455,4 +455,17 @@ Basic operator overloading, Friend functions and automatic type conversion, Refe
    Demonstrates **friend functions for symmetric operators** (both operands can be `Complex` or implicitly converted from `double`),
    **forward declaration pattern** (class and constant `i` declared before class definition, defined after),
    and **mathematical operator implementation** following standard complex number arithmetic rules.
+4. [Char Class](08_Operator_overloading_Friends_References/8.04_Char_class) 
+   \- This program defines a `Char` class that manages a dynamic character array with a fixed capacity.
+   Implements **dual operator[] overloads**: a **non-const version** returning `char&` for reading and writing with interactive error recovery,
+   and a **const version** returning `const char&` for read-only access that terminates on invalid index.
+   Features **three constructors**: default, size-based, and array-based (copies user-provided array),
+   all following **RAII principles** with validation via `setMembers()` helper overloads that throw `std::invalid_argument` for out-of-range sizes.
+   Demonstrates **three error handling strategies**: **interactive recovery** (non-const `operator[]` re-prompts user), **termination** (const `operator[]` calls `exit(1)`),
+   and **exceptions** (constructors throw for invalid sizes).
+   Includes **comprehensive testing** for all requirements: default initialization, size-based initialization, array-based initialization, and operator[] modification with boundary testing.
+   Uses **const correctness** (const member functions, const references), **encapsulation** (private array and size with public interface),
+   and **input validation** with retry loops for all user inputs (numeric and character).
+   The program showcases the distinction between **l-value and r-value contexts** in operator overloading and the importance of matching error handling strategies to object constness.
+
 
