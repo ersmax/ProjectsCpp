@@ -478,5 +478,16 @@ Basic operator overloading, Friend functions and automatic type conversion, Refe
    Demonstrates **friend functions** for accessing private members in I/O operators, **const correctness** (const member function for `operator*`),
    **stream state management** with format validation, and the difference between **silent stream operators** (no prompts) versus **interactive helper functions** (with prompts and retry logic).
    Uses **RAII principles** where constructors initialize objects to valid states and showcases operator overloading for mathematical operations on custom types.
+6. [Integer Class](08_Operator_overloading_Friends_References/8.06_Integer_class) 
+   \- This program defines a `MyInteger` class that stores an integer value and provides digit extraction via **operator[] overload**.
+   (e.g., for 418: `[0]` returns 8, `[1]` returns 1, `[2]` returns 4, `[3]` returns -1 for invalid position).
+   Uses an **algorithmic approach** for digit extraction: takes absolute value for negative number handling, divides by 10 iteratively to shift digits,
+   and returns remainder modulo 10 for the target digit.
+   Features **friend stream I/O operators** (`<<`, `>>`) for input/output.
+   Includes helper function that provides **robust integer input** with comprehensive error handling:
+   checks for valid numeric input, clears error flags,
+   ignores invalid input, and loops until valid input is received.
+   Demonstrates **encapsulation** (private integer with public interface), **const correctness** (const member functions for read-only operations),
+   **operator overloading** for intuitive digit access syntax, and **negative number handling** via absolute value in the subscript operator.
 
 
