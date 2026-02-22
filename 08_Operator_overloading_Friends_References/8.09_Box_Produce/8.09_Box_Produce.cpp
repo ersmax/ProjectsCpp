@@ -45,6 +45,13 @@ the BoxOfProduce class.
 
 const std::string PATH = "../../../../08_Operator_overloading_Friends_References/8.09_Box_Produce/Utilities/Produce.txt";
 const std::string SEPARATOR = std::string(20, '-') + "\n";
+constexpr int BOX_ITEMS = 3;
+
+struct RepeatedString
+{
+	std::string aString;
+	int count;
+};
 
 class FruitsVegetables
 {
@@ -60,21 +67,92 @@ class BoxOfProduce
 {
 	public:
 		BoxOfProduce() {};
+		void addNewItem(const FruitsVegetables& item) { aBox.push_back(item); }
+		void changeContent(const int index, const FruitsVegetables& itemSwapped) { aBox[index] = itemSwapped; }
+		int getSize() const { return (static_cast<int>(aBox.size())); }
+		friend std::ostream& operator <<(std::ostream& outputStream, const BoxOfProduce& box);
 	private:
 		std::vector<FruitsVegetables> aBox;
 		
 };
 
+const RepeatedString operator *(const std::string& myString, const int countTimes);
+std::ostream& operator <<(std::ostream& outputStream, const RepeatedString& myString);
+
 void processFile(const std::string& filePath, std::vector<FruitsVegetables>& shopList);
-void randomSelection(const std::vector<FruitsVegetables>& shopList, BoxOfProduce& aBox);
+BoxOfProduce randomSelection(const std::vector<FruitsVegetables>& shopList);
+void showList(const std::vector<FruitsVegetables>& shopList);
+bool userWishChange();
+void changeItem(const std::vector<FruitsVegetables>& shopList, BoxOfProduce& aBox);
+int itemValidation();
+char inputValidation();
+
 
 int main( )
 {
 	std::vector<FruitsVegetables> shopList;
 	processFile(PATH, shopList);
 	
+	BoxOfProduce box1 = randomSelection(shopList);
+	
+	showList(shopList);
+	std::cout << "Initial box:\n" << box1 << SEPARATOR;
+	
+	bool userChange = userWishChange();
+	while (userChange)
+	{
+		changeItem(shopList, box1);
+		std::cout << SEPARATOR << "Updated box:\n" << box1 << SEPARATOR;
+		userChange = userWishChange();
+		if (userChange)
+		{
+			showList(shopList);
+			std::cout << box1 << SEPARATOR;
+		}
+	}
+	
 	std::cout << '\n';
 	return 0;
+}
+
+
+void changeItem(const std::vector<FruitsVegetables>& shopList, BoxOfProduce& aBox)
+{
+	std::cout << "Enter item in the box to change (1-" << aBox.getSize() << "):\n";
+	int boxIndex = itemValidation();
+	--boxIndex; // convert to zero index
+	if (boxIndex < 0 || boxIndex >= aBox.getSize())
+	{
+		std::cerr << "Invalid item\n";
+		std::cout << SEPARATOR;
+		return;
+	}
+	std::cout << "Enter item in the list to change (1-" << shopList.size() << "):\n";
+	int listIndex = itemValidation();
+	--listIndex; // convert to zero index
+	if (listIndex < 0 || listIndex >= shopList.size())
+	{
+		std::cerr << "Invalid item\n";
+		std::cout << SEPARATOR;
+		return;
+	}
+	aBox.changeContent(boxIndex, shopList[listIndex]);
+}
+
+BoxOfProduce randomSelection(const std::vector<FruitsVegetables>& shopList)
+{
+	BoxOfProduce aNewBox;
+	
+	std::random_device rd;
+	static std::mt19937 engine(rd());
+	std::uniform_int_distribution<size_t>distribution(0, shopList.size() - 1);
+	for (int idx = 0; idx < BOX_ITEMS; idx++)
+	{
+		const size_t randomIdx = distribution(engine);
+		const FruitsVegetables& newProduce = shopList[randomIdx];
+		aNewBox.addNewItem(newProduce);	// push_back make a copy
+	}
+	return aNewBox;
 }
 
 void processFile(const std::string& filePath, std::vector<FruitsVegetables>& shopList)
@@ -102,6 +180,65 @@ void processFile(const std::string& filePath, std::vector<FruitsVegetables>& sho
 
 std::ostream& operator <<(std::ostream& outputStream, const FruitsVegetables& item)
 {
-	outputStream << item.name;
+	outputStream <<  item.name;
 	return outputStream;
+}
+
+std::ostream& operator <<(std::ostream& outputStream, const BoxOfProduce& box)
+{
+	for (int idx = 0; idx < box.aBox.size(); idx++)
+		outputStream << idx + 1 << ". "<< box.aBox[idx] << '\n';
+	return outputStream;
+}
+
+char inputValidation()
+{
+	char answer;
+	while (true)
+	{
+		if (!(std::cin >> answer))
+		{
+			std::cout << "Invalid input\n";
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			continue;
+		}
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		break;
+	}
+	return answer;
+}
+
+int itemValidation()
+{
+	int value;
+	while (true)
+	{
+		if (!(std::cin >> value))
+		{
+			std::cout << "Invalid input\n";
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			continue;
+		}
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		break;
+	}
+	return value;
+}
+
+bool userWishChange()
+{
+	std::cout << "Change selection? (y/n)\n";
+	char answer = static_cast<char>(std::tolower(inputValidation()));
+	if (answer == 'y') return true;
+	return false;
+}
+
+void showList(const std::vector<FruitsVegetables>& shopList)
+{
+	std::cout << "Shop List:\n";
+	for (int idx = 0; idx < shopList.size(); idx++)
+		std::cout << idx + 1 << ". " << shopList[idx] << "\n";
+	std::cout << SEPARATOR;
 }
