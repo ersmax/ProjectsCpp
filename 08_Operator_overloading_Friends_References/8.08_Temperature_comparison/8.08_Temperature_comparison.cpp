@@ -1,14 +1,7 @@
-/*
-Do Programming Project 6.10 in Playground, the definition of a Temperature class, 
-except overload ==, << and >> as member operators. The == operator should return true if the
-two temperature values are identical, while << should output the temperature in
-Fahrenheit and >> should input the temperature in Fahrenheit. Create appropriate
-tests for the overloaded operators.
-Fahrenheit = (9/5)*Celsius + 32
-*/
-
+// define NDEBUG        // uncomment this line to disable assertions
 #include <iostream>
 #include <limits>
+#include <cassert>
 
 constexpr double EPSILON = 1e-6;
 
@@ -18,17 +11,30 @@ public:
 	Temperature() : degrees(0), scale('C') {};
 	Temperature(const double degreeValue, const char scaleValue) {set(degreeValue, scaleValue); }
 	bool operator ==(const Temperature& anotherTemperature) const;
+	//   Precondition: anotherTemperature is a valid Temperature object.
+	//   Postcondition: Returns true if the two temperatures have same degrees in Celsius or Fahrenheit
+
 	friend std::istream& operator >>(std::istream& inputStream, Temperature& temperature);
+	//   Precondition: inputStream is a valid input stream and temperature is a valid Temperature object.
+	//   Postcondition: Reads the temperature value and scale from the input stream and stores them in the temperature object.
+
 	friend std::ostream& operator <<(std::ostream& outputStream, const Temperature& temperature);
+	//   Precondition: outputStream is a valid output stream and temperature is a valid Temperature object.
+	//   Postcondition: Writes the temperature value in Fahrenheit to the output stream.
+
 private:
 	double degrees;
 	char scale;
 	//   'F' for Fahrenheit or 'C' for Celsius
 	void set(double newDegrees, char newScale);
-	//   Postcondition: sets the member variables to the values given
-	// as arguments;
+	//   Postcondition: sets the member variables to the values given as arguments;
 	const Temperature fahrenheitToCelsius() const;
+	//   Precondition: scale is 'F'.
+	//   Postcondition: Returns a new Temperature object with the degrees converted to Celsius and scale set to 'C'.
+
 	const Temperature celsiusToFahrenheit() const;
+	//   Precondition: scale is 'C'.
+	//   Postcondition: Returns a new Temperature object with the degrees converted to Fahrenheit and scale set to 'F'.
 };
 
 
@@ -94,6 +100,8 @@ std::ostream& operator <<(std::ostream& outputStream, const Temperature& tempera
 bool Temperature::operator ==(const Temperature& anotherTemperature) const
 {
 	// Preliminary check if two objects have different scale
+	assert(this->scale == 'C' || this->scale == 'F');
+	assert(anotherTemperature.scale == 'C' || anotherTemperature.scale == 'F');
 	const double temp1 = (this->scale == 'F') ? this->degrees : this->celsiusToFahrenheit().degrees;
 	const double temp2 = (anotherTemperature.scale == 'F') ? anotherTemperature.degrees : anotherTemperature.celsiusToFahrenheit().degrees;
 

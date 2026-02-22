@@ -502,5 +502,15 @@ Basic operator overloading, Friend functions and automatic type conversion, Refe
    **const correctness** throughout member functions, and the **trade-offs between iterative and recursive algorithms** 
    (stack depth ~√n/2 frames for recursive makes overflow unlikely even for n=1,000,000,000).
    Uses **RAII principles** where constructor delegates to `setPrime()` which calls recursive `isPrimeRecursive()` and auto-corrects non-primes to nearest prime.
+8. [Temperature Comparison](08_Operator_overloading_Friends_References/8.08_Temperature_comparison) 
+   \- This program defines a `Temperature` class that stores temperatures in either Fahrenheit ('F') or Celsius ('C') and provides temperature comparison with automatic scale conversion.
+   Implements **operator==** as a member function that converts both temperatures to Fahrenheit for comparison,
+   correctly identifying equal temperatures regardless of storage scale (e.g., 0°C equals 32°F).
+   Features **friend stream I/O operators overloading** (`<<`, `>>`).
+   Includes **conversion methods** `celsiusToFahrenheit()` and `fahrenheitToCelsius()`, **robust input validation** via helper.
+   Demonstrates **friend functions vs. member operators** (stream operators must be non-member for natural syntax `std::cin >> temp`, but equality works as member),
+   **const correctness** throughout (const member functions, const references),
+   and **RAII principles** where constructor calls `set()` which validates scale and throws for invalid values.
+   Uses **epsilon comparison** to avoid floating-point equality issues and showcases the standard C++ idiom that stream operators are friends to access private members efficiently.
 
 
