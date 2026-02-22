@@ -17,57 +17,154 @@ class PrimeNumber
 public:
 	PrimeNumber() : prime(1) {};
 	PrimeNumber(const int number) { setPrime(number); }
+	const PrimeNumber operator --();	// prefix notation
+	const PrimeNumber operator --(int);	// postfix notation
+	const PrimeNumber operator ++();	// prefix notation
+	const PrimeNumber operator ++(int);	// postfix notation
+	friend std::istream& operator >>(std::istream& inputStream, PrimeNumber& number);
+	friend std::ostream& operator <<(std::ostream& outputStream, const PrimeNumber& number);
 private:
 	int prime;
 	void setPrime(int number);
 };
 
-bool isPrime(int number, std::vector<int>& primeNumbers);
-void setPrime(int number, std::vector<int>& primeNumbers);
+bool isPrime(int number);
+bool isPrimeRecursive(int number, int divisor);
+int findPreviousPrime(int number);
+int findNextPrime(int number);
+int findCloserPrime(int number);
+const PrimeNumber numberValidation();
 
 int main( )
 {
-	std::vector<int> primeNumbers;
-	primeNumbers.push_back(2);
+	std::cout << "Enter a number:\n";
+	const PrimeNumber aPrime = numberValidation();
+	std::cout << "The prime number is: " << aPrime << '\n';
 
-	std::cout << 'n';
+
+	std::cout << '\n';
 	return 0;
 }
 
-bool isPrime(const int number, std::vector<int>& primeNumbers)
+void PrimeNumber::setPrime(const int number)
 {
-	if (number <= 1)		return false;
-	if (number == 2)		return true;
-	if (number % 2 == 0)	return false;
+	if (isPrime(number))
+		prime = number;
+	else
+		prime = findCloserPrime(number);
+}
 
-	// First pass: check if prime is cached
-	for (const int prime : primeNumbers)
-		if (number == prime)
-			return true;
-	//   Second pass: check if the remainder up to sqrt(number) is 0
-	// For instance, we have only 2 in primeNumbers, and `number` is 3
-	for (const int prime : primeNumbers)
+std::istream& operator >>(std::istream& inputStream, PrimeNumber& number)
+{
+	int inputNumber;
+	inputStream >> inputNumber;
+	if (!(isPrime(inputNumber)))
 	{
-		if (prime * prime > number)	break;	// e.g. 3
-		if (number % prime == 0)	return false;
+		// mark the stream as failed
+		inputStream.setstate(std::ios::failbit);
+		return inputStream;
 	}
+	number.setPrime(inputNumber);
+	return inputStream;
+}
 
-	// Check the remaining numbers up to sqrt(number). 
-	// Skip even numbers with += 2, unless, the last prime is 2
+std::ostream& operator <<(std::ostream& outputStream, const PrimeNumber& number)
+{
+	outputStream << number.prime;
+	return outputStream;
+}
+
+int findCloserPrime(const int number)
+{
+	const int previous = findPreviousPrime(number);
+	const int next = findNextPrime(number);
+
+	const int previousDifference = std::abs(previous - number);
+	const int nextDifference = std::abs(next - number);
+	const int closest = (previousDifference <= nextDifference) ? previous : next;
+
+	std::cout << "Previous prime to " << number << ": " << previous << '\n';
+	std::cout << "Next prime to " << number << ": " << next << '\n';
+	std::cout << "Closest prime to " << number << ": " << closest << '\n';
+
+	return closest;	
+}
+
+int findPreviousPrime(const int number)
+{
+	if (number <= 3)	return 2;
+
+	int previous = (number % 2 == 0) ? (number - 1) : (number - 2);
+	while (previous > 3)
+	{
+		if (isPrime(previous)) 
+			break;
+		previous -= 2;			// skip even numbers
+	}
+	return previous;
+}
+
+int findNextPrime(const int number)
+{
+	if (number < 2)		return 2;
+	if (number == 2)	return 3;
+
+	bool found = false;
+	int next = (number % 2 == 0) ? (number + 1) : (number + 2);
+	while (!found)
+	{
+		if (isPrime(next))
+			found = true;
+		else
+			next += 2;
+	}
+	return next;
+}
+
+bool isPrime(const int number)
+{
+	if (number <= 2)
+		return (number == 2);
+	if (number % 2 == 0)	return false;
+	
+	// Check divisibility by all odd numbers up to sqrt(number)
 	const int limit = static_cast<int>(std::sqrt(number));
-	const int lastPrime = primeNumbers.back();
-	const int nextNumber = (lastPrime == 2) ? 3 : lastPrime + 2;
-
-	for (int next = nextNumber; next <= limit; next += 2)
+	for (int next = 3; next <= limit; next += 2)
 		if (number % next == 0)		
 			return false;
-	
-	setPrime(number, primeNumbers);
+
 	return true;
 }
 
-void setPrime(const int number, std::vector<int>& primeNumbers)
+bool isPrime(const int number, const int divisor = 3)
 {
-	primeNumbers.push_back(number);
+	if (number <= 3)		
+		return (number == 2 || number == 3);
+	if (number % 2 == 0)		// even number
+		return false;
+	if (number % divisor == 0)	// multiple
+		return false;
+	
+	// Check divisibility by all odd numbers up to sqrt(number)
+	if (divisor * divisor > number)
+		return true;
+	else
+		return isPrime(number, divisor + 2);
 }
 
+const PrimeNumber numberValidation()
+{
+	int number;
+	while (true)
+	{
+		if (!(std::cin >> number))
+		{
+			std::cout << "Error in the input\n";
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			continue;
+		}
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		return number;
+	}
+}

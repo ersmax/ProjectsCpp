@@ -40,7 +40,7 @@ void showMenu();
 //  Postcondition: displays the menu options to the user
 char makeChoice();
 //  Postcondition: prompts the user to enter a choice and returns the choice
-int inputValidation();
+int numberValidation();
 //  Postcondition: prompts the user to enter a number between 0 and 9 and returns the number
 void menuSubmission(const char& choice, Counter& myCounter);
 //  Precondition: choice is a valid menu option, myCounter is a Counter object
@@ -144,7 +144,7 @@ char makeChoice()
 	}
 }
 
-int inputValidation()
+int numberValidation()
 {
 	int input;
 	while (true)
@@ -169,28 +169,28 @@ void menuSubmission(const char& choice, Counter& myCounter)
 		switch (choice)
 		{
 			case 'a':
-				myCounter.incr(inputValidation() * 1);
+				myCounter.incr(numberValidation() * 1);
 				break;
 			case 's':
-				myCounter.incr(inputValidation() * 10);
+				myCounter.incr(numberValidation() * 10);
 				break;
 			case 'd':
-				myCounter.incr(inputValidation() * 100);
+				myCounter.incr(numberValidation() * 100);
 				break;
 			case 'f':
-				myCounter.incr(inputValidation() * 1000);
+				myCounter.incr(numberValidation() * 1000);
 				break;
 			case 'z':
-				myCounter.decr(inputValidation() * 1);
+				myCounter.decr(numberValidation() * 1);
 				break;
 			case 'x':
-				myCounter.decr(inputValidation() * 10);
+				myCounter.decr(numberValidation() * 10);
 				break;
 			case 'c':
-				myCounter.decr(inputValidation() * 100);
+				myCounter.decr(numberValidation() * 100);
 				break;
 			case 'v':
-				myCounter.decr(inputValidation() * 1000);
+				myCounter.decr(numberValidation() * 1000);
 				break;
 			case 'o':
 				{

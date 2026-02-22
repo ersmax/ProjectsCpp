@@ -1,7 +1,7 @@
 #include <iostream>
 #include <limits>
 
-int inputValidation();
+int numberValidation();
 
 class Vector2D
 {
@@ -9,8 +9,8 @@ public:
 	Vector2D() : x(0), y(0) {};
 	Vector2D(const int num1) : x(num1), y(0) {};
 	Vector2D(const int num1, const int num2) : x(num1), y(num2) {};
-	void setX() { x = inputValidation(); }
-	void setY() { y = inputValidation(); }
+	void setX() { x = numberValidation(); }
+	void setY() { y = numberValidation(); }
 	int getX() const { return x; }
 	int getY() const { return y; }
 	int operator *(const Vector2D& secondVector) const 
@@ -28,7 +28,7 @@ private:
 	int y;
 };
 
-int inputValidation();
+int numberValidation();
 //   Postcondition: Asks the user for a valid integer and returns it.
 
 Vector2D vectorValidation();
@@ -89,7 +89,7 @@ Vector2D vectorValidation()
 	}
 }
 
-int inputValidation()
+int numberValidation()
 {
 	int number;
 	while (true)

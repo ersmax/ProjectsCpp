@@ -34,14 +34,14 @@ private:
 	int cents = 0;
 };
 
-int inputValidation();
+int numberValidation();
 
 int main()
 {
 	std::cout << "Enter dollars:\n";
-	const int dollars = inputValidation();
+	const int dollars = numberValidation();
 	std::cout << "Enter cents:\n";
-	const int cents = inputValidation();
+	const int cents = numberValidation();
 	try
 	{
 		const Money aTransaction(dollars,cents);
@@ -70,7 +70,7 @@ void Money::setCents(const int money)
 		throw std::invalid_argument("Invalid amount of cents\n");
 }
 
-int inputValidation()
+int numberValidation()
 {
 	int input;
 	while (true)

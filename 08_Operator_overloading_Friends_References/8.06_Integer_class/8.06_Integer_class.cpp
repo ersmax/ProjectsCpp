@@ -1,7 +1,7 @@
 #include <iostream>
 #include <limits>
 
-int inputValidation();
+int numberValidation();
 //   Postcondition: Asks the user for a valid integer and returns it.
 
 class MyInteger
@@ -9,7 +9,7 @@ class MyInteger
 public:
 	MyInteger() : number(0) {};
 	MyInteger(const int num) : number(num) {};
-	void setNumber() { number = inputValidation(); }
+	void setNumber() { number = numberValidation(); }
 	int getNumber() const{ return number; }
 	int operator [](int position) const;
 	//   Precondition: position is a non-negative integer.
@@ -38,7 +38,7 @@ int main( )
 	int digit;
 	do
 	{
-		const int position = inputValidation();
+		const int position = numberValidation();
 		digit = anInteger[position];
 		if (digit == -1)
 			std::cout << "Not a valid position. Retry\n";
@@ -65,7 +65,7 @@ std::ostream& operator <<(std::ostream& outputStream, const MyInteger& number)
 	return outputStream;
 }
 
-int inputValidation()
+int numberValidation()
 {
 	int number;
 	while (true)

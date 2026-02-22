@@ -20,7 +20,7 @@ private:
 	// by means of the binary GCD algorithm
 };
 
-int inputValidation();
+int numberValidation();
 //  Postcondition: return a valid integer input from user
 
 bool isEven(int number);
@@ -44,12 +44,12 @@ int main( )
 
 void Fraction::setNumerator()
 {
-	numerator = inputValidation();
+	numerator = numberValidation();
 }
 
 void Fraction::setDenominator()
 {
-	denominator = inputValidation();
+	denominator = numberValidation();
 }
 
 int Fraction::getNumerator() const
@@ -110,7 +110,7 @@ bool isEven(const int number)
 	return (number % 2 == 0);
 }
 
-int inputValidation()
+int numberValidation()
 {
 	int number;
 	while (true)
