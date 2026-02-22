@@ -247,8 +247,9 @@ void showList(const std::vector<FruitsVegetables>& shopList)
 
 const RepeatedString operator *(const std::string& myString, const int countTimes)
 {
-	//return {myString,countTimes};
-	return RepeatedString(myString, countTimes);
+	RepeatedString aString = {myString, countTimes};
+	return aString;
+	return RepeatedString(myString, countTimes); // similar
 }
 
 std::ostream& operator <<(std::ostream& outputStream, const RepeatedString& myString)
