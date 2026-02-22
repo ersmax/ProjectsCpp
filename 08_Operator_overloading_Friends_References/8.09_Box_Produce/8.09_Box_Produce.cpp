@@ -23,7 +23,7 @@ output the final contents of the box to be delivered.
 
 Programming Project 6.12 asked you to write a BoxOfProduce class that stored
 three bundles of fruits or vegetables (stored in an array of strings of size 3) to ship
-to a customer. Rewrite this class to use a vector instead of an array 
+to a customer. Rewrite this class to use a vector instead of an array
 and add appropriate constructors, mutators, and accessors. The class should have a function
 to add additional fruits or vegetables to the box so there could be more than three
 bundles in one box. The output function should output all items in the box.
@@ -49,6 +49,8 @@ constexpr int BOX_ITEMS = 3;
 
 struct RepeatedString
 {
+	RepeatedString() = default;
+	RepeatedString(const std::string& myString, const int counter) : aString(myString), count(counter) {}
 	std::string aString;
 	int count;
 };
@@ -76,7 +78,7 @@ class BoxOfProduce
 		
 };
 
-const RepeatedString operator *(const std::string& myString, const int countTimes);
+const RepeatedString operator *(const std::string& myString, int countTimes);
 std::ostream& operator <<(std::ostream& outputStream, const RepeatedString& myString);
 
 void processFile(const std::string& filePath, std::vector<FruitsVegetables>& shopList);
@@ -102,7 +104,7 @@ int main( )
 	while (userChange)
 	{
 		changeItem(shopList, box1);
-		std::cout << SEPARATOR << "Updated box:\n" << box1 << SEPARATOR;
+		std::cout << SEPARATOR * 2 << "Updated box:\n" << box1 << SEPARATOR * 2;
 		userChange = userWishChange();
 		if (userChange)
 		{
@@ -241,4 +243,17 @@ void showList(const std::vector<FruitsVegetables>& shopList)
 	for (int idx = 0; idx < shopList.size(); idx++)
 		std::cout << idx + 1 << ". " << shopList[idx] << "\n";
 	std::cout << SEPARATOR;
+}
+
+const RepeatedString operator *(const std::string& myString, const int countTimes)
+{
+	//return {myString,countTimes};
+	return RepeatedString(myString, countTimes);
+}
+
+std::ostream& operator <<(std::ostream& outputStream, const RepeatedString& myString)
+{
+	for (int idx = 0; idx < myString.count; idx++)
+		outputStream << myString.aString;
+	return outputStream;
 }
