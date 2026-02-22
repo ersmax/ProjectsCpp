@@ -14,6 +14,7 @@ set(FOLDERS
     "8.05_Vector_2D"
     "8.06_Integer_class"
     "8.07_Prime"
+    "8.08_Temperature_comparison"
 )
 
 # Automatically get all .cpp and headers files 
