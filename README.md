@@ -489,5 +489,18 @@ Basic operator overloading, Friend functions and automatic type conversion, Refe
    ignores invalid input, and loops until valid input is received.
    Demonstrates **encapsulation** (private integer with public interface), **const correctness** (const member functions for read-only operations),
    **operator overloading** for intuitive digit access syntax, and **negative number handling** via absolute value in the subscript operator.
+7. [Prime Number](08_Operator_overloading_Friends_References/8.07_Prime) 
+   \- This program defines a `PrimeNumber` class that stores a prime number and navigates to adjacent primes via **prefix and postfix increment/decrement operators**.
+   Implements **operator++ and operator--** in both prefix (returns reference, allows chaining like `++(++obj)`) and postfix forms (returns const value by copy to prevent chaining `(obj++)++`).
+   Features **two prime-checking algorithms**: an **iterative trial division** (O(√n) time, O(1) space) checking odd divisors up to √n,
+   and a **recursive version** (O(√n) time, O(√n) space due to call stack) demonstrating tail recursion with divisor parameter.
+   Includes **helper functions** `findNextPrime()` and `findPreviousPrime()` that efficiently skip even numbers,
+   `findCloserPrime()` that selects nearest prime when input is non-prime (with tie-breaking favoring smaller),
+   and `numberValidation()` providing robust integer input with error recovery.
+   Demonstrates **operator overloading design patterns** (prefix returns `PrimeNumber&`, postfix returns `const PrimeNumber` following Scott Meyers' recommendation),
+   **friend stream I/O operators** (`<<`, `>>`) with input validation that marks stream as failed for non-prime input,
+   **const correctness** throughout member functions, and the **trade-offs between iterative and recursive algorithms** 
+   (stack depth ~√n/2 frames for recursive makes overflow unlikely even for n=1,000,000,000).
+   Uses **RAII principles** where constructor delegates to `setPrime()` which calls recursive `isPrimeRecursive()` and auto-corrects non-primes to nearest prime.
 
 
