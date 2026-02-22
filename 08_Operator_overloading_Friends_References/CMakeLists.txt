@@ -15,6 +15,7 @@ set(FOLDERS
     "8.06_Integer_class"
     "8.07_Prime"
     "8.08_Temperature_comparison"
+    "8.09_Box_Produce"
 )
 
 # Automatically get all .cpp and headers files 
