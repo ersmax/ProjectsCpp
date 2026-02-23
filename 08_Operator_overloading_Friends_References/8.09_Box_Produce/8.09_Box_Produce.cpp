@@ -34,8 +34,6 @@ of Programming Project 6.12 for this Programming Project, only the changes to
 the BoxOfProduce class.
 */
 
-// TODO : implement overload + in class BoxOfProduce and addNewItem.
-
 #include <iostream>		// for std::cout, std::cin, std::cerr
 #include <fstream>		// for std::ifstream
 #include <string>		// for std::string
@@ -71,9 +69,11 @@ class BoxOfProduce
 {
 	public:
 		BoxOfProduce() {};
+		BoxOfProduce(const std::vector<FruitsVegetables>& newBox) : aBox(newBox) {};
 		void addNewItem(const FruitsVegetables& item) { aBox.push_back(item); }
 		int getSize() const { return (static_cast<int>(aBox.size())); }
 		FruitsVegetables& operator[](const int index) { return aBox[index]; };
+		const BoxOfProduce operator +(const BoxOfProduce& secondBox) const;
 		friend std::ostream& operator <<(std::ostream& outputStream, const BoxOfProduce& box);
 	private:
 		std::vector<FruitsVegetables> aBox;
@@ -100,25 +100,37 @@ int main( )
 	processFile(PATH, shopList);
 	
 	BoxOfProduce box1 = randomSelection(shopList);
-	
-	showList(shopList);
 	std::cout << "Initial box:\n" << box1 << SEPARATOR;
-	
-	bool userChange = userWishChange();
-	while (userChange)
+	while (userWishChange())
 	{
+		showList(shopList);
 		handleChange(shopList, box1);
 		std::cout << SEPARATOR * 2 << "Updated box:\n" << box1 << SEPARATOR * 2;
-		userChange = userWishChange();
-		if (userChange)
-		{
-			showList(shopList);
-			std::cout << box1 << SEPARATOR;
-		}
 	}
-	
+	BoxOfProduce box2 = randomSelection(shopList);
+	std::cout << "Initial box:\n" << box2 << SEPARATOR;
+	while (userWishChange())
+	{
+		showList(shopList);
+		handleChange(shopList, box2);
+		std::cout << SEPARATOR * 2 << "Updated box:\n" << box2 << SEPARATOR * 2;
+	}
+	BoxOfProduce aNewBox = box1 + box2;
+	// handleChange(shopList, aNewBox);		// can be changed: object is copied to a variable
+	// handleChange(shopList, box1 + box2); // cannot be changed: object is not copied to a variable
+	std::cout << "The two boxes together are:\n" << box1 + box2 << SEPARATOR * 2 << '\n';
+
 	std::cout << '\n';
 	return 0;
+}
+
+const BoxOfProduce BoxOfProduce::operator +(const BoxOfProduce& secondBox) const
+{
+	std::vector<FruitsVegetables> newBox = aBox;
+	newBox.insert(newBox.end(), secondBox.aBox.begin(), secondBox.aBox.end());
+	return BoxOfProduce(newBox);
+	//for (const FruitsVegetables& item : secondBox.aBox)
+	//	newBox.push_back(item);
 }
 
 void handleChange(const std::vector<FruitsVegetables>& shopList, BoxOfProduce& aBox)
