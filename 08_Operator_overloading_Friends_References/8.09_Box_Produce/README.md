@@ -94,3 +94,65 @@ The function is also marked as const to prevent modification of the calling obje
 The function creates a new vector that combines the contents of both boxes and returns a new `BoxOfProduce` object initialized with this combined vector.
 
 
+### Notes from the literature (Absolute C++, Savitch, 6th ed.) on Returning by const value
+```cpp
+Money m3;
+m3 = (m1 + m2);
+m3.input();
+```
+The values of m3 and (m1 + m2) are two different objects. The assignment operator
+does not make m3 the same as the object (m1 + m2). Instead, it copies the values of the
+member variables of (m1 + m2) into the member variables of m3. With objects of a class,
+the default assignment operator does not make the two objects the same object, it only copies
+values of member variables from one object to another object.
+
+This distinction is subtle but important. It may help you understand the details if
+you recall that a variable of a class type and an object of a class type are not the same
+thing. An object is a value of a class type and may be stored in a variable of a class type,
+but the variable and the object are not the same thing. In the code
+m3 = (m1 + m2);
+the variable m3 and its value (m1 + m2) are different things, just as n and 5 are different
+things in
+int n = 5;
+or in
+int n = (2 + 3);
+
+It may take you a while to become comfortable with this notion of return by const
+value. In the meantime, a good rule of thumb is to always return class types by const
+value unless you have an explicit reason not to do so. For most simple programs this will
+have no effect on your program other than to flag some subtle errors.
+
+Note that although it is legal, it is pointless to return basic types, such as int, by
+const value. The const has no effect in the case of basic types. When a function or
+operator returns a value of one of the basic types, such as int, double, or char, it
+returns the value, such as 5, 5.5, or 'A'. It does not return a variable or anything like
+a variable. Unlike a variable, the value cannot be changed—you cannot change 5.
+Values of a basic type cannot be changed whether there is a const before the returned
+type or not. On the other hand, values of a class type — that is, objects— can be changed,
+since they have member variables, and so the const modifier has an effect on the
+object returned.
+
+In other words, (m1 + m2) is a temporary object or a rvalue, or value of a class type that is not stored in a variable. 
+It is a value that can be used but cannot be changed (or used as lvalue).
+The const modifier on the return type of the operator+ function prevents you from changing the value of (m1 + m2) by using the returned object as an lvalue. 
+For example, if you try to write (m1 + m2) = m3; then the compiler will give you an error because (m1 + m2) is a temporary object and cannot be assigned to another object.
+
+In the program, the code below would be legal if the operator+ function did not return a const value, but it is not legal because the operator+ function returns a const value.
+```cpp
+class BoxOfProduce
+{
+	public:
+		// ...
+		const BoxOfProduce operator +(const BoxOfProduce& secondBox) const;
+		// ...
+	private:
+		// ...
+}
+
+int main() {
+	// ...
+	std::cout << "The two boxes together are:\n" << ((box1 + box2) = box1) << SEPARATOR * 2 << '\n'; 
+	// ...
+}
+```
+

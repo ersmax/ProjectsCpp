@@ -115,6 +115,7 @@ int main( )
 	BoxOfProduce aNewBox = box1 + box2;
 	// handleChange(shopList, aNewBox);		// can be changed: object is copied to a variable
 	// handleChange(shopList, box1 + box2); // cannot be changed: object is not copied to a variable
+	// std::cout << "The two boxes together are:\n" << ((box1 + box2) = box1) << SEPARATOR * 2 << '\n'; // this would be legal if operator+ returned a const value
 	std::cout << "The two boxes together are:\n" << box1 + box2 << SEPARATOR * 2 << '\n';
 
 	std::cout << '\n';
