@@ -137,7 +137,9 @@ It is a value that can be used but cannot be changed (or used as lvalue).
 The const modifier on the return type of the operator+ function prevents you from changing the value of (m1 + m2) by using the returned object as an lvalue. 
 For example, if you try to write (m1 + m2) = m3; then the compiler will give you an error because (m1 + m2) is a temporary object and cannot be assigned to another object.
 
-In the program, the code below would be legal if the operator+ function did not return a const value, but it is not legal because the operator+ function returns a const value.
+In the program, the code below would be legal if the operator+ function did not return a const value (i.e. the first const), 
+but it is not legal because the operator+ function returns a const value.
+The second const signals that the operator+ function does not modify the calling object (i.e. the first box in the expression).
 ```cpp
 class BoxOfProduce
 {
