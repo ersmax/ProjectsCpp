@@ -34,6 +34,8 @@ of Programming Project 6.12 for this Programming Project, only the changes to
 the BoxOfProduce class.
 */
 
+// TODO : implement overload + in class BoxOfProduce and addNewItem.
+
 #include <iostream>		// for std::cout, std::cin, std::cerr
 #include <fstream>		// for std::ifstream
 #include <string>		// for std::string
@@ -70,8 +72,8 @@ class BoxOfProduce
 	public:
 		BoxOfProduce() {};
 		void addNewItem(const FruitsVegetables& item) { aBox.push_back(item); }
-		void changeContent(const int index, const FruitsVegetables& itemSwapped) { aBox[index] = itemSwapped; }
 		int getSize() const { return (static_cast<int>(aBox.size())); }
+		FruitsVegetables& operator[](const int index) { return aBox[index]; };
 		friend std::ostream& operator <<(std::ostream& outputStream, const BoxOfProduce& box);
 	private:
 		std::vector<FruitsVegetables> aBox;
@@ -85,7 +87,9 @@ void processFile(const std::string& filePath, std::vector<FruitsVegetables>& sho
 BoxOfProduce randomSelection(const std::vector<FruitsVegetables>& shopList);
 void showList(const std::vector<FruitsVegetables>& shopList);
 bool userWishChange();
+void handleChange(const std::vector<FruitsVegetables>& shopList, BoxOfProduce& aBox);
 void changeItem(const std::vector<FruitsVegetables>& shopList, BoxOfProduce& aBox);
+void addItem(const std::vector<FruitsVegetables>& shopList, BoxOfProduce& aBox);
 int itemValidation();
 char inputValidation();
 
@@ -103,7 +107,7 @@ int main( )
 	bool userChange = userWishChange();
 	while (userChange)
 	{
-		changeItem(shopList, box1);
+		handleChange(shopList, box1);
 		std::cout << SEPARATOR * 2 << "Updated box:\n" << box1 << SEPARATOR * 2;
 		userChange = userWishChange();
 		if (userChange)
@@ -117,6 +121,26 @@ int main( )
 	return 0;
 }
 
+void handleChange(const std::vector<FruitsVegetables>& shopList, BoxOfProduce& aBox)
+{
+	std::cout << "Change list or add items?\n"
+			  << "1. Change box list\n"
+			  << "2. Add item\n"
+			  << "Enter choice:\n";
+
+	switch (itemValidation())
+	{
+		case 1: 
+			changeItem(shopList, aBox);
+			break;
+		case 2:
+			addItem(shopList, aBox);
+			break;
+		default:
+			std::cout << "Choice not valid\n";
+			break;
+	}
+}
 
 void changeItem(const std::vector<FruitsVegetables>& shopList, BoxOfProduce& aBox)
 {
@@ -138,7 +162,21 @@ void changeItem(const std::vector<FruitsVegetables>& shopList, BoxOfProduce& aBo
 		std::cout << SEPARATOR;
 		return;
 	}
-	aBox.changeContent(boxIndex, shopList[listIndex]);
+	aBox[boxIndex] = shopList[listIndex];
+}
+
+void addItem(const std::vector<FruitsVegetables>& shopList, BoxOfProduce& aBox)
+{
+	std::cout << "Enter item in the list to add (1-" << shopList.size() << "):\n";
+	int listIndex = itemValidation();
+	--listIndex; // convert to zero index
+	if (listIndex < 0 || listIndex >= shopList.size())
+	{
+		std::cerr << "Invalid item\n";
+		std::cout << SEPARATOR;
+		return;
+	}
+	aBox.addNewItem(shopList[listIndex]);
 }
 
 BoxOfProduce randomSelection(const std::vector<FruitsVegetables>& shopList)
