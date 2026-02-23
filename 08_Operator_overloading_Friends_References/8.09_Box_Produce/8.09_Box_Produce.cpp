@@ -1,39 +1,3 @@
-/*
-Your Community Supported Agriculture (CSA) farm delivers a box of fresh fruits
-and vegetables to your house once a week. For this Programming Project, define
-the class BoxOfProduce that contains exactly three bundles of fruits or vegetables.
-You can represent the fruits or vegetables as an array of type string. Add accessor
-and mutator functions to get or set the fruits or vegetables stored in the array. Also
-write an output function that displays the complete contents of the box on the
-console.
-Next, write a main function that creates a BoxOfProduce with three items
-randomly selected from this list:
-Broccoli
-Tomato
-Kiwi
-Kale
-Tomatillo
-This list should be stored in a text file that is read in by your program. For now
-you can assume that the list contains exactly five types of fruits or vegetables.
-Do not worry if your program randomly selects duplicate produce for the three
-items. Next, the main function should display the contents of the box and allow
-the user to substitute any one of the five possible fruits or vegetables for any of the
-fruits or vegetables selected for the box. After the user is done with substitutions
-output the final contents of the box to be delivered.
-
-Programming Project 6.12 asked you to write a BoxOfProduce class that stored
-three bundles of fruits or vegetables (stored in an array of strings of size 3) to ship
-to a customer. Rewrite this class to use a vector instead of an array
-and add appropriate constructors, mutators, and accessors. The class should have a function
-to add additional fruits or vegetables to the box so there could be more than three
-bundles in one box. The output function should output all items in the box.
-Overload the + operator to return a new BoxOfProduce object that combines
-the vector contents of both operand BoxOfProduce objects. Test your functions
-and + operator from the main function. You do not have to implement the rest
-of Programming Project 6.12 for this Programming Project, only the changes to
-the BoxOfProduce class.
-*/
-
 #include <iostream>		// for std::cout, std::cin, std::cerr
 #include <fstream>		// for std::ifstream
 #include <string>		// for std::string
@@ -74,24 +38,57 @@ class BoxOfProduce
 		int getSize() const { return (static_cast<int>(aBox.size())); }
 		FruitsVegetables& operator[](const int index) { return aBox[index]; };
 		const BoxOfProduce operator +(const BoxOfProduce& secondBox) const;
+		//   Postcondition: Returns a new BoxOfProduce object 
+		// that combines the vector contents of both operand BoxOfProduce objects.
+
 		friend std::ostream& operator <<(std::ostream& outputStream, const BoxOfProduce& box);
+		//   Postcondition: Outputs all items in the box to the outputStream.
 	private:
 		std::vector<FruitsVegetables> aBox;
 		
 };
 
 const RepeatedString operator *(const std::string& myString, int countTimes);
+//   Precondition: countTimes is a non-negative integer.
+//   Postcondition: Returns a RepeatedString object that contains the string myString repeated countTimes times.
+
 std::ostream& operator <<(std::ostream& outputStream, const RepeatedString& myString);
+//   Precondition: myString is a RepeatedString object.
+//   Postcondition: Outputs the string myString.aString repeated myString.count times to the outputStream.
 
 void processFile(const std::string& filePath, std::vector<FruitsVegetables>& shopList);
+//   Precondition: filePath is the path to a text file that contains a list of fruits and vegetables, 
+// one per line. shopList is an empty vector of FruitsVegetables objects.
+// Postcondition: shopList is filled with FruitsVegetables objects created from the items in the text file.
+
 BoxOfProduce randomSelection(const std::vector<FruitsVegetables>& shopList);
+//   Precondition: shopList is a vector of FruitsVegetables objects.
+//   Postcondition: Returns a BoxOfProduce object that contains three items randomly selected from shopList.
+
 void showList(const std::vector<FruitsVegetables>& shopList);
+//   Postcondition: Outputs the contents of shopList to the console, 
+// with each item numbered starting from 1.
+
 bool userWishChange();
+//   Postcondition: Prompts the user to enter 'y' or 'n' to indicate whether they wish to change the selection.
+
 void handleChange(const std::vector<FruitsVegetables>& shopList, BoxOfProduce& aBox);
+//   Precondition: shopList is a vector of FruitsVegetables objects, and aBox is a BoxOfProduce object.
+//   Postcondition: Prompts the user to choose whether to change an item in aBox or add a new item from shopList,
+// and updates aBox accordingly.
+
 void changeItem(const std::vector<FruitsVegetables>& shopList, BoxOfProduce& aBox);
+//   Postcondition: Prompts the user to select an item in aBox to change and an item in shopList to replace it with,
+// and updates aBox accordingly.
+
 void addItem(const std::vector<FruitsVegetables>& shopList, BoxOfProduce& aBox);
+//   Postcondition: Prompts the user to select an item in shopList to add to aBox, and updates aBox accordingly.
+
 int itemValidation();
+//   Postcondition: Prompts the user to enter an integer and validates the input, returning the integer value.
+
 char inputValidation();
+//   Postcondition: Prompts the user to enter a character and validates the input, returning the character value.
 
 
 int main( )

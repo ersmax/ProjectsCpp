@@ -512,5 +512,12 @@ Basic operator overloading, Friend functions and automatic type conversion, Refe
    **const correctness** throughout (const member functions, const references),
    and **RAII principles** where constructor calls `set()` which validates scale and throws for invalid values.
    Uses **epsilon comparison** to avoid floating-point equality issues and showcases the standard C++ idiom that stream operators are friends to access private members efficiently.
-
+9. [Box of Produce](08_Operator_overloading_Friends_References/8.09_Box_Produce) 
+   Simulates a CSA (Community Supported Agriculture) produce box delivery system.
+   Uses a `BoxOfProduce` class that stores an arbitrary number of produce items stored in class `FruitsVegetables` using a `std::vector`.
+   Allows random selection, substitution, and addition of produce items.
+   Overloads the `+` operator to combine two boxes into a new box containing all items from both.
+   Overloads the output stream (insertion) operator `<<` to display all items in the box.
+   Demonstrates modern C++ practices (C++23), robust input validation, and extensibility.
+   Highlights the difference from earlier versions by supporting dynamic box sizing, operator overloading, and improved user interaction.
 
