@@ -33,13 +33,22 @@ public:
 	TwoD() : maxRows(MAX), maxCols(MAX) { setGrid(MAX, MAX); }
 	TwoD(const int rows) : maxRows(rows), maxCols(rows) { setGrid(rows, rows); }
 	TwoD(const int rows, const int cols) : maxRows(rows), maxCols(cols) { setGrid(rows, cols); }
+	TwoD(const TwoD& secondGrid);
+	TwoD& operator =(const TwoD& secondGrid);
 	~TwoD();
+	void changeValue();
+	double getValue() const;
 private:
 	DoublePtr *arrayPtr;
 	void setGrid(int rows, int cols);
+	void createGrid();
 	int maxRows;
 	int maxCols;
 };
+
+int validateInput();
+double validateNumber();
+int* getCoordinates(int maxRows, int maxCols);
 
 int main( )
 {
@@ -47,24 +56,130 @@ int main( )
 	return 0;
 }
 
+void TwoD::changeValue()
+{
+	const int *coordinates = getCoordinates(maxRows, maxCols);
+	if (coordinates == nullptr)
+		return;
+
+	std::cout << "Enter the desired value:\n";
+	arrayPtr[coordinates[0]][coordinates[1]] = validateNumber();
+	delete [] coordinates;
+}
+
+int* getCoordinates(const int maxRows, const int maxCols)
+{
+	std::cout << "Enter a valid row to change (1-" << maxRows << "):\n";
+	int idxRow = validateInput();
+	idxRow--;
+	if (idxRow < 0 || idxRow >= maxRows)
+	{
+		std::cout << "Row does not exist\n";
+		return nullptr;
+	}
+	std::cout << "Enter a valid column to change (1-" << maxCols << "):\n";
+	int idxCol = validateInput();
+	idxCol--;
+	if (idxCol < 0 || idxCol >= maxCols)
+	{
+		std::cout << "Columns does not exist\n";
+		return nullptr;
+	}
+	return (new int[2] {idxRow, idxCol});
+}
+
 void TwoD::setGrid(const int rows, const int cols)
 {
 	if (rows <= 0 || cols <= 0)
 		throw std::invalid_argument("Not a valid array\n");
 
-	arrayPtr = new DoublePtr[maxRows];
-	for (int idx = 0; idx < maxRows; idx++)
-		arrayPtr[idx] = new double[maxCols];
+	createGrid();
 
 	// Initialize to 0
-	for (int idx = 0; idx < maxRows; idx++)
-		for (int jdx = 0; jdx < maxCols; jdx++)
-			arrayPtr[idx][jdx] = 0;
+	for (int idxRow = 0; idxRow < maxRows; idxRow++)
+		for (int idxCol = 0; idxCol < maxCols; idxCol++)
+			arrayPtr[idxRow][idxCol] = 0;
+}
+
+void TwoD::createGrid()
+{
+	arrayPtr = new DoublePtr[maxRows];
+	for (int idxRow = 0; idxRow < maxRows; idxRow++)
+		arrayPtr[idxRow] = new double[maxCols];
+}
+
+TwoD& TwoD::operator =(const TwoD& secondGrid)
+{
+	// Check same object
+	if (this == &secondGrid)
+		return *this;
+	
+	// Check same size
+	if (maxRows != secondGrid.maxRows || maxCols != secondGrid.maxCols)
+	{
+		for (int idxRow = 0; idxRow < maxRows; idxRow++)
+			delete [] arrayPtr[idxRow];
+		delete [] arrayPtr;
+		createGrid();
+	}
+	// Assign new values
+	for (int idxRow = 0; idxRow < maxRows; idxRow++)
+		for (int idxCol = 0; idxCol < maxCols; idxCol++)
+			arrayPtr[idxRow][idxCol] = secondGrid.arrayPtr[idxRow][idxCol];
+
+	return *this;
+}
+
+TwoD::TwoD(const TwoD& secondGrid) :	arrayPtr(nullptr), 
+										maxRows(secondGrid.maxRows),
+										maxCols(secondGrid.maxCols)
+{
+	// Deep copy: initialize arrayPtr
+	createGrid();
+
+	// Complete, independent copy in the new 2D variable pointed by (*this).arrayPtr
+	for (int idxRow = 0; idxRow < maxRows; idxRow++)
+		for (int idxCol = 0; idxCol < maxCols; idxCol++)
+			arrayPtr[idxRow][idxCol] = secondGrid.arrayPtr[idxRow][idxCol];
 }
 
 TwoD::~TwoD()
 {
-	for (int idx = 0; idx < maxRows; idx++)
-		delete [] arrayPtr[idx];
+	for (int idxRow = 0; idxRow < maxRows; idxRow++)
+		delete [] arrayPtr[idxRow];
 	delete [] arrayPtr;
+}
+
+int validateInput()
+{
+	int input;
+	while (true)
+	{
+		if (!(std::cin >> input))
+		{
+			std::cout << "Not a valid input\n";
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			continue;
+		}
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		return input;
+	}
+}
+
+double validateNumber()
+{
+	double input;
+	while (true)
+	{
+		if (!(std::cin >> input))
+		{
+			std::cout << "Not a valid input\n";
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			continue;
+		}
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		return input;
+	}
 }
