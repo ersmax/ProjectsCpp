@@ -36,8 +36,14 @@ public:
 	TwoD(const TwoD& secondGrid);
 	TwoD& operator =(const TwoD& secondGrid);
 	~TwoD();
+	friend std::ostream& operator <<(std::ostream& outputStream, const TwoD& myVector);
+	friend std::istream& operator >>(std::istream& inputStream, TwoD& myVector);
+	DoublePtr operator [](const int coordinate) const { return arrayPtr[coordinate]; }
+	friend const TwoD operator +(const TwoD& array1, const TwoD& array2);
 	void changeValue();
 	double getValue() const;
+	int getRows() const { return maxRows; }
+	int getCols() const { return maxCols; }
 private:
 	DoublePtr *arrayPtr;
 	void setGrid(int rows, int cols);
@@ -52,12 +58,101 @@ int* getCoordinates(int maxRows, int maxCols);
 
 int main( )
 {
+	TwoD aVector1(2, 2);
+	TwoD aVector2(2, 2);
+	std::cout << "Enter valid input for the first vector:\n";
+	std::cin >> aVector1;
+	std::cout << "Enter valid input for the second vector:\n";
+	std::cin >> aVector2;
+	std::cout << "First vector:\n";
+	std::cout << aVector1;
+	std::cout << "Second vector:\n";
+	std::cout << aVector2;
+
+	TwoD sumVectors = aVector1 + aVector2;
+	std::cout << "Sum of two grids:\n" << sumVectors << '\n';
+	std::cout << "Last row, las column element: " << sumVectors[sumVectors.getRows() - 1][sumVectors.getCols() - 1] << '\n';
+	std::cout << "Querying the grid\n";
+	std::cout << sumVectors.getValue() << '\n';
+	std::cout << "Changing the value\n";
+	sumVectors.changeValue();
+	std::cout << "New sum of two grids:\n" << sumVectors << '\n';
 	std::cout << '\n';
 	return 0;
 }
 
+std::istream& operator >>(std::istream& inputStream, TwoD& myVector)
+{
+	for (int idxRow = 0; idxRow < myVector.maxRows; idxRow++)
+	{
+		double input;
+		std::cout << "Enter " << idxRow + 1 << " row:\n";
+		int idx = 0;
+		
+		// Use a temporary dynamic array to save the correct row
+		const DoublePtr pointTemp = new double[myVector.maxCols];
+		while (idx < myVector.maxCols)
+		{
+			if (!(inputStream >> input))
+			{
+				std::cout << "Not a valid number. Re-enter the row.\n";
+				inputStream.clear();
+				inputStream.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+				idx = 0;
+				continue;
+			}
+			pointTemp[idx] = input;
+			idx++;
+		}
+		inputStream.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		
+		// Copy Back the temporary dynamic array and deallocate
+		for (int idxCol = 0; idxCol < myVector.maxCols; idxCol++)
+			myVector[idxRow][idxCol] = pointTemp[idxCol];
+		delete [] pointTemp;
+	}
+	return inputStream;
+}
+
+std::ostream& operator <<(std::ostream& outputStream, const TwoD& myVector)
+{
+	for (int idxRow = 0; idxRow < myVector.maxRows; idxRow++)
+	{
+		for (int idxCol = 0; idxCol < myVector.maxCols; idxCol++)
+			outputStream << myVector[idxRow][idxCol] << " ";
+		outputStream << '\n';
+	}
+	return outputStream;
+}
+
+const TwoD operator +(const TwoD& array1, const TwoD& array2)
+{
+	if (array1.maxRows != array2.maxRows ||
+		array1.maxCols != array2.maxCols)
+		throw std::invalid_argument("Cannot add two matrices of different sizes\n");
+
+	TwoD sum(array1.maxRows, array1.maxCols);
+	for (int idxRow = 0; idxRow < array1.maxRows; idxRow++)
+		for (int idxCol = 0; idxCol < array1.maxCols; idxCol++)
+			sum[idxRow][idxCol] = array1[idxRow][idxCol] + array2[idxRow][idxCol];
+	return sum;
+}
+
+double TwoD::getValue() const
+{
+	std::cout << "You wish to view a value\n";
+	const int* coordinates = getCoordinates(maxRows, maxCols);
+	if (coordinates == nullptr)
+		return std::numeric_limits<double>::quiet_NaN();
+
+	const double value = arrayPtr[coordinates[0]][coordinates[1]];
+	delete [] coordinates;
+	return value;
+}
+
 void TwoD::changeValue()
 {
+	std::cout << "You wish to change a value\n";
 	const int *coordinates = getCoordinates(maxRows, maxCols);
 	if (coordinates == nullptr)
 		return;
@@ -69,7 +164,7 @@ void TwoD::changeValue()
 
 int* getCoordinates(const int maxRows, const int maxCols)
 {
-	std::cout << "Enter a valid row to change (1-" << maxRows << "):\n";
+	std::cout << "Enter a valid row (1-" << maxRows << "):\n";
 	int idxRow = validateInput();
 	idxRow--;
 	if (idxRow < 0 || idxRow >= maxRows)
@@ -77,7 +172,7 @@ int* getCoordinates(const int maxRows, const int maxCols)
 		std::cout << "Row does not exist\n";
 		return nullptr;
 	}
-	std::cout << "Enter a valid column to change (1-" << maxCols << "):\n";
+	std::cout << "Enter a valid column (1-" << maxCols << "):\n";
 	int idxCol = validateInput();
 	idxCol--;
 	if (idxCol < 0 || idxCol >= maxCols)
