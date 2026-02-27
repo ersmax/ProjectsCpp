@@ -521,3 +521,17 @@ Basic operator overloading, Friend functions and automatic type conversion, Refe
    Demonstrates modern C++ practices (C++23), robust input validation, and extensibility.
    Highlights the difference from earlier versions by supporting dynamic box sizing, operator overloading, and improved user interaction.
 
+---
+
+## 10. Pointers and Dynamic arrays
+Pointers, Dynamic arrays, Classes, Pointers and dynamic arrays
+
+1. [A class of 2D dynamic arrays](10_Pointers_Dynamic_arrays/10.01_Class_2D_Dynamic_array/README.md)  
+   Implements a robust `TwoD` class for managing a two-dimensional dynamic array of doubles.  
+   It features a Dynamic memory allocation for flexible array sizes, with safe resource management (deep copy, assignment, destructor).
+   It includes intuitive element access using double subscript notation (`array[row][col]`), enabled by operator overloading.
+   It also allows an interactive input and output: users can enter and display the entire array, with validation to ensure only correct rows are accepted.
+   The operatin of matrix addition is included and supports element-wise addition of two arrays of the same size via the overloaded `+` operator.
+   THere are functions for querying and modifying individual elements, with input validation for row and column indices.
+   Exception handling is also included for invalid operations (e.g., mismatched sizes for addition).
+   It demonstrates dynamic memory management, operator overloading, and interactive user input in C++.
