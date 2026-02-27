@@ -34,27 +34,72 @@ public:
 	TwoD(const int rows) : maxRows(rows), maxCols(rows) { setGrid(rows, rows); }
 	TwoD(const int rows, const int cols) : maxRows(rows), maxCols(cols) { setGrid(rows, cols); }
 	TwoD(const TwoD& secondGrid);
+	// Copy constructor
+
 	TwoD& operator =(const TwoD& secondGrid);
 	~TwoD();
 	friend std::ostream& operator <<(std::ostream& outputStream, const TwoD& myVector);
+	//   Precondition: outputStream is a valid output stream and myVector is a valid TwoD object.
+	//   Postcondition: Writes the contents of the 2D array to the output stream, 
+	// with each row on a new line and each element separated by a space.
+
 	friend std::istream& operator >>(std::istream& inputStream, TwoD& myVector);
+	//   Postcondition: Reads the contents of the 2D array from the input stream,
+	// with each row on a new line and each element separated by a space.
+	// If an invalid input is encountered, the function should prompt the user to re-enter 
+	// the whole row until valid input is provided. A dynamic temporary array is used 
+	// to store the valid input for each row before copying it back to the 2D array.
+
 	DoublePtr operator [](const int coordinate) const { return arrayPtr[coordinate]; }
+	//   Precondition: coordinate is a valid row/column index of the 2D array.
+	//   Postcondition: Returns a pointer to the row of the 2D array corresponding 
+	// to the given coordinate, allowing for array-style access to the elements of the 2D array.
+
 	friend const TwoD operator +(const TwoD& array1, const TwoD& array2);
+	//   Precondition: array1 and array2 are valid TwoD objects of the same size 
+	// (i.e., they have the same number of rows and columns).
+	//   Postcondition: Returns a new TwoD object whose ith row, jth column element is 
+	// the sum of the ith row, jth column element of array1 and the ith row, jth column element of array2.
+
 	void changeValue();
+	//   Postcondition: Prompts the user to enter valid row and column indices and a new value,
+	// and updates the corresponding element in the 2D array with the new value.
+
 	double getValue() const;
+	//   Postcondition: Prompts the user to enter valid row and column indices, 
+	// and returns the value of the corresponding element in the 2D array.
+
 	int getRows() const { return maxRows; }
 	int getCols() const { return maxCols; }
 private:
 	DoublePtr *arrayPtr;
 	void setGrid(int rows, int cols);
+	//   Precondition: rows and cols are positive integers representing the number of rows and columns of the 2D array.
+	//   Postcondition: Initializes the 2D array with the given number of rows and columns, 
+	// and sets all elements to 0. If rows or cols are not positive, the function should throw an exception.
+	// Use the helper createGrid() function to allocate memory for the 2D array.
+
 	void createGrid();
+	//   Postcondition: Allocates memory for the 2D array based on the current values of maxRows and maxCols,
+	// and initializes the arrayPtr member variable to point to the newly allocated 2D array.
+
 	int maxRows;
 	int maxCols;
 };
 
 int validateInput();
+//   Postcondition: Prompts the user to enter an integer and validates the input, returning the integer value.
+
 double validateNumber();
+//   Postcondition: Prompts the user to enter a double and validates the input, returning the double value.
+
 int* getCoordinates(int maxRows, int maxCols);
+//   Precondition: maxRows and maxCols are positive integers representing the maximum number of rows and columns of the 2D array.
+//   Postcondition: Prompts the user to enter valid row and column indices, 
+// and returns a pointer to an array of two integers containing the row and column indices (in that order). 
+// If the user enters invalid indices, the function should return nullptr.
+// The function returns a pointer to a dynamically allocated array of two integers, 
+// which should be deallocated by the caller after use.
 
 int main( )
 {
