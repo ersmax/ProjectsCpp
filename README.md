@@ -83,7 +83,7 @@ Predefined functions, Programmer-defined functions, Scope rules.
     \- Simulate the age at which a person will die in the USA using an Actuarial Life table provided by 
     the Social Security Administration for the 2025. 
     Input: starting `age` and `gender` (`M`/`F`). Output: simulated age of death (stops at `MAX_AGE` = 120). 
-    [Data File](03_Function/3.15_Likelihood_death/likelihood_death_2025.txt) available at
+    [Data File](03_Function/3.15_Likelihood_death/Utilities/likelihood_death_2025.txt) available at
     the [Social Security Administration website](https://www.ssa.gov/OACT/STATS/table4c6.html).
 
 ---
@@ -526,7 +526,7 @@ Basic operator overloading, Friend functions and automatic type conversion, Refe
 ## 10. Pointers and Dynamic arrays
 Pointers, Dynamic arrays, Classes, Pointers and dynamic arrays
 
-1. [A class of 2D dynamic arrays](10_Pointers_Dynamic_arrays/10.01_Class_2D_Dynamic_array/README.md)  
+1. [A class of 2D dynamic arrays](10_Pointers_Dynamic_arrays/10.01_Class_2D_Dynamic_array)  
    Implements a robust `TwoD` class for managing a two-dimensional dynamic array of doubles.  
    It features a Dynamic memory allocation for flexible array sizes, with safe resource management (deep copy, assignment, destructor).
    It includes intuitive element access using double subscript notation (`array[row][col]`), enabled by operator overloading.
