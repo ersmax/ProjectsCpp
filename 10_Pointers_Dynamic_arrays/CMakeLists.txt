@@ -8,6 +8,7 @@
 # List all folders
 set(FOLDERS
     "10.01_Class_2D_Dynamic_array"
+    "10.02_Polynomial_class"
 )
 
 # Automatically get all .cpp and headers files 

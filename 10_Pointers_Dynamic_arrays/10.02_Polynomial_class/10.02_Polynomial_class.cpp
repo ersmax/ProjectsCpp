@@ -27,33 +27,61 @@ standalone functions.
 
 #include <iostream>
 #include <string>
+#include <cmath>
 
 typedef double *DoublePtr;
+
+constexpr double EPSILON = 1e-9;
 
 class Polynomial
 {
 public:
 	Polynomial() : coefficients(new double[1]{ 0.0 }), degree(0) {};
-	Polynomial(int polynomial, int degree);
+	Polynomial(double polynomial[], int degree);
 	friend std::istream& operator >>(std::istream& inputStream, Polynomial& myPolynomial); 
+	friend std::ostream& operator <<(std::ostream& outputStream, const Polynomial& myPolynomial);
 private:
 	DoublePtr coefficients;
 	int degree;
 };
 
+int inputValidation();
+
 int main( )
 {
+	Polynomial aPolynomial;
+	std::cout << "Enter a polynomial:\n";
+	std::cin >> aPolynomial;
+	std::cout << aPolynomial << '\n';
 	std::cout << '\n';
 	return 0;
 }
 
-int inputValidation();
 
-Polynomial::Polynomial(int polynomial, const int degree)
+Polynomial::Polynomial(double polynomial[], const int degree)
 {
-	coefficients = new double[degree];
+	coefficients = new double[degree + 1];
 	for (int idx = 0; idx <= degree; idx++)
 		coefficients[idx] = polynomial[idx];
+}
+
+std::ostream& operator <<(std::ostream& outputStream, const Polynomial& myPolynomial)
+{
+	for (int idx = myPolynomial.degree; idx >= 0; idx--)
+	{
+		// if coefficient is 0, skip
+		if (std::abs(myPolynomial.coefficients[idx]) < EPSILON)
+			continue;
+		if (idx != myPolynomial.degree && myPolynomial.coefficients[idx] > 0)
+			outputStream << '+';
+		outputStream << myPolynomial.coefficients[idx];
+
+		if (idx != 0)
+			outputStream << "x";
+		if (idx != 0 && idx != 1)
+			outputStream << '^' << idx;
+	}
+	return outputStream;
 }
 
 std::istream& operator >>(std::istream& inputStream, Polynomial& myPolynomial)
@@ -65,10 +93,24 @@ std::istream& operator >>(std::istream& inputStream, Polynomial& myPolynomial)
 	inputStream >> degree; 
 	
 	// Allocate dynamic array for coefficients
-	DoublePtr temp = new double[degree + 1];
+	const DoublePtr temp = new double[degree + 1];
 	std::cout << "Enter coefficients (from x^" << degree << " to x^0):\n";
-	for (int idx = degree; idx >= 0; --idx)
+	
+	int idx = degree;
+	while (idx >= 0)
+	{
 		inputStream >> temp[idx];
+		// if highest degree coeff. == 0, reset
+		if (idx == degree && temp[idx] < EPSILON)
+		{
+			std::cerr << "Coefficient of highest degree must be different than 0\n";
+			inputStream.clear();
+			inputStream.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			idx = degree;
+		}
+		else
+			--idx;
+	}
 	
 	// Deallocate old dynamic array set up with default constructo
 	delete [] myPolynomial.coefficients;
