@@ -38,6 +38,9 @@ class Polynomial
 public:
 	Polynomial() : coefficients(new double[1]{ 0.0 }), degree(0) {};
 	Polynomial(double polynomial[], int degree);
+	Polynomial(const Polynomial& myPolynomial);
+	Polynomial& operator =(const Polynomial& myPolynomial);
+	~Polynomial() { delete[] coefficients; }
 	friend std::istream& operator >>(std::istream& inputStream, Polynomial& myPolynomial); 
 	friend std::ostream& operator <<(std::ostream& outputStream, const Polynomial& myPolynomial);
 private:
@@ -57,6 +60,27 @@ int main( )
 	return 0;
 }
 
+Polynomial& Polynomial::operator =(const Polynomial& myPolynomial)
+{
+	if (degree != myPolynomial.degree)
+	{
+		delete [] coefficients;
+		coefficients = new double[myPolynomial.degree + 1];
+		degree = myPolynomial.degree;
+	}
+	// coefficients = myPolynomial.coefficients; // wrong shallow copy
+	// correct below: deep copy
+	for (int idx = 0; idx <= degree; idx++)
+		coefficients[idx] = myPolynomial.coefficients[idx];
+	return *this;
+}
+
+Polynomial::Polynomial(const Polynomial& myPolynomial) : degree(myPolynomial.degree)
+{
+	coefficients = new double[degree + 1];
+	for (int idx = 0; idx <= degree; idx++)
+		coefficients[idx] = myPolynomial.coefficients[idx];
+}
 
 Polynomial::Polynomial(double polynomial[], const int degree)
 {
