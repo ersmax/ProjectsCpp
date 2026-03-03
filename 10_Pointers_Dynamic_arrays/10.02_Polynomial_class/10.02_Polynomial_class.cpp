@@ -37,10 +37,13 @@ class Polynomial
 {
 public:
 	Polynomial() : coefficients(new double[1]{ 0.0 }), degree(0) {};
-	Polynomial(double polynomial[], int degree);
+	Polynomial(double polynomial[], int newDegree);
 	Polynomial(const Polynomial& myPolynomial);
 	Polynomial& operator =(const Polynomial& myPolynomial);
 	~Polynomial() { delete[] coefficients; }
+	const Polynomial operator +(const Polynomial& rhs) const;
+	//friend const Polynomial operator +(const Polynomial& myPolynomial, double constant);
+	//friend const Polynomial operator +(double constant, const Polynomial& myPolynomial);
 	friend std::istream& operator >>(std::istream& inputStream, Polynomial& myPolynomial); 
 	friend std::ostream& operator <<(std::ostream& outputStream, const Polynomial& myPolynomial);
 private:
@@ -52,12 +55,37 @@ int inputValidation();
 
 int main( )
 {
-	Polynomial aPolynomial;
+	Polynomial aPolynomial, aPolynomial2;
 	std::cout << "Enter a polynomial:\n";
 	std::cin >> aPolynomial;
-	std::cout << aPolynomial << '\n';
+	std::cout << "Enter another polynomial:\n";
+	std::cin >> aPolynomial2;
+	std::cout << "First Polynomial: " << aPolynomial << '\n';
+	std::cout << "Second Polynomial: " << aPolynomial2 << '\n';
+	Polynomial aPolynomial3 = aPolynomial + aPolynomial2;
+	std::cout << aPolynomial << " + " << aPolynomial2 << " = " << aPolynomial3 << '\n';
 	std::cout << '\n';
 	return 0;
+}
+
+const Polynomial Polynomial::operator +(const Polynomial& rhs) const
+{
+	const int maxDegree = std::max((this)->degree, rhs.degree);
+	DoublePtr sumCoefficients = new double[maxDegree + 1];
+	
+	// Initialization of coefficients
+	for (int idx = 0; idx <= maxDegree; ++idx)
+		sumCoefficients[idx] = 0.0;
+	// Add coefficients from both sides
+	for (int idx = 0; idx <= degree; ++idx)
+		sumCoefficients[idx] += coefficients[idx];
+	for (int idx = 0; idx <= rhs.degree; ++idx)
+		sumCoefficients[idx] += rhs.coefficients[idx];
+
+	// Create new dynamic array with parameterized constructor, then deallocate temp array
+	Polynomial result(sumCoefficients, maxDegree);
+	delete [] sumCoefficients;
+	return result;
 }
 
 Polynomial& Polynomial::operator =(const Polynomial& myPolynomial)
@@ -82,10 +110,10 @@ Polynomial::Polynomial(const Polynomial& myPolynomial) : degree(myPolynomial.deg
 		coefficients[idx] = myPolynomial.coefficients[idx];
 }
 
-Polynomial::Polynomial(double polynomial[], const int degree)
+Polynomial::Polynomial(double polynomial[], const int newDegree) : degree(newDegree)
 {
-	coefficients = new double[degree + 1];
-	for (int idx = 0; idx <= degree; idx++)
+	coefficients = new double[newDegree + 1];
+	for (int idx = 0; idx <= newDegree; idx++)
 		coefficients[idx] = polynomial[idx];
 }
 
@@ -112,35 +140,35 @@ std::istream& operator >>(std::istream& inputStream, Polynomial& myPolynomial)
 {
 	// e.g. Enter degree: 3
 	//		Enter coefficients(from x^3 to x^0) : 3 0 0 -1
-	int degree;
+	int newDegree;
 	std::cout << "Enter degree:\n";
-	inputStream >> degree; 
+	inputStream >> newDegree; 
 	
 	// Allocate dynamic array for coefficients
-	const DoublePtr temp = new double[degree + 1];
-	std::cout << "Enter coefficients (from x^" << degree << " to x^0):\n";
+	const DoublePtr temp = new double[newDegree + 1];
+	std::cout << "Enter coefficients (from x^" << newDegree << " to x^0):\n";
 	
-	int idx = degree;
+	int idx = newDegree;
 	while (idx >= 0)
 	{
 		inputStream >> temp[idx];
 		// if highest degree coeff. == 0, reset
-		if (idx == degree && temp[idx] < EPSILON)
+		if (idx == newDegree && temp[idx] < EPSILON)
 		{
 			std::cerr << "Coefficient of highest degree must be different than 0\n";
 			inputStream.clear();
 			inputStream.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-			idx = degree;
+			idx = newDegree;
 		}
 		else
 			--idx;
 	}
 	
-	// Deallocate old dynamic array set up with default constructo
+	// Deallocate old dynamic array set up with default constructor
 	delete [] myPolynomial.coefficients;
 	// Shallow copy of the pointer temp (point to the same address) 
 	myPolynomial.coefficients = temp;
-	myPolynomial.degree = degree;
+	myPolynomial.degree = newDegree;
 
 	return inputStream;
 }
