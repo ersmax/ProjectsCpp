@@ -57,8 +57,6 @@ private:
 	int degree;
 };
 
-int inputValidation();
-
 int main( )
 {
 	Polynomial aPolynomial, aPolynomial2;
@@ -223,7 +221,8 @@ std::istream& operator >>(std::istream& inputStream, Polynomial& myPolynomial)
 		else
 			--idx;
 	}
-	
+	inputStream.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
 	// Deallocate old dynamic array set up with default constructor
 	delete [] myPolynomial.coefficients;
 	// Shallow copy of the pointer temp (point to the same address) 
