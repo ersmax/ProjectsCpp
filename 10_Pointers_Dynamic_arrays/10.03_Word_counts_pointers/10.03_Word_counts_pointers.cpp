@@ -51,7 +51,8 @@ int countFront(const std::string& aLine)
 	CharPtr frontPtr = aLine.c_str();
 	//   c_str() returns a pointer to a const C-style (no & address of operator needed)
 	// null-terminated string representing the contents of the string. 
-	// If the string is empty, &aLine.front() is undefined behavior.
+	//   The reasons why the method .front() is not used is UB.
+	// In fact, if the string is empty, &aLine.front() has undefined behavior.
 
 	while (*frontPtr != '\0')
 	{
