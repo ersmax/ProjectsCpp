@@ -42,8 +42,14 @@ public:
 	Polynomial& operator =(const Polynomial& myPolynomial);
 	~Polynomial() { delete[] coefficients; }
 	const Polynomial operator +(const Polynomial& rhs) const;
-	//friend const Polynomial operator +(const Polynomial& myPolynomial, double constant);
-	//friend const Polynomial operator +(double constant, const Polynomial& myPolynomial);
+	const Polynomial operator -(const Polynomial& rhs) const;
+	const Polynomial operator *(const Polynomial& rhs) const;
+	// TODO friend const Polynomial operator +(const Polynomial& myPolynomial, double constant);
+	// TODO friend const Polynomial operator +(double constant, const Polynomial& myPolynomial);
+	// TODO friend const Polynomial operator -(const Polynomial& myPolynomial, double constant);
+	// TODO friend const Polynomial operator -(double constant, const Polynomial& myPolynomial);
+	// TODO friend const Polynomial operator *(const Polynomial& myPolynomial, double constant);
+	// TODO friend const Polynomial operator *(double constant, const Polynomial& myPolynomial);
 	friend std::istream& operator >>(std::istream& inputStream, Polynomial& myPolynomial); 
 	friend std::ostream& operator <<(std::ostream& outputStream, const Polynomial& myPolynomial);
 private:
@@ -62,15 +68,21 @@ int main( )
 	std::cin >> aPolynomial2;
 	std::cout << "First Polynomial: " << aPolynomial << '\n';
 	std::cout << "Second Polynomial: " << aPolynomial2 << '\n';
-	Polynomial aPolynomial3 = aPolynomial + aPolynomial2;
-	std::cout << aPolynomial << " + " << aPolynomial2 << " = " << aPolynomial3 << '\n';
+	std::cout << aPolynomial << " + " << aPolynomial2 << " = " << aPolynomial + aPolynomial2 << '\n';
+	std::cout << aPolynomial << " - " << aPolynomial2 << " = " << aPolynomial - aPolynomial2 << '\n';
+	std::cout << aPolynomial << " * " << aPolynomial2 << " = " << aPolynomial * aPolynomial2 << '\n';
+
+	std::cout << "\nTesting the same operand: " << aPolynomial << "\n";
+	std::cout << aPolynomial << " + " << aPolynomial << " = " << aPolynomial + aPolynomial << '\n';
+	std::cout << aPolynomial << " - " << aPolynomial << " = " << aPolynomial - aPolynomial << '\n';
+	std::cout << aPolynomial << " * " << aPolynomial << " = " << aPolynomial * aPolynomial << '\n';
 	std::cout << '\n';
 	return 0;
 }
 
 const Polynomial Polynomial::operator +(const Polynomial& rhs) const
 {
-	const int maxDegree = std::max((this)->degree, rhs.degree);
+	const int maxDegree = std::max(this->degree, rhs.degree);
 	DoublePtr sumCoefficients = new double[maxDegree + 1];
 	
 	// Initialization of coefficients
@@ -85,6 +97,46 @@ const Polynomial Polynomial::operator +(const Polynomial& rhs) const
 	// Create new dynamic array with parameterized constructor, then deallocate temp array
 	Polynomial result(sumCoefficients, maxDegree);
 	delete [] sumCoefficients;
+	return result;
+}
+
+const Polynomial Polynomial::operator -(const Polynomial& rhs) const
+{
+	const int maxDegree = std::max(this->degree, rhs.degree);
+	DoublePtr sumCoefficients = new double[maxDegree + 1];
+
+	// Initialization of coefficients
+	for (int idx = 0; idx <= maxDegree; ++idx)
+		sumCoefficients[idx] = 0.0;
+	// Deduct coefficients from both sides
+	for (int idx = 0; idx <= degree; ++idx)
+		sumCoefficients[idx] += coefficients[idx];
+	for (int idx = 0; idx <= rhs.degree; ++idx)
+		sumCoefficients[idx] -= rhs.coefficients[idx];
+
+	// Create new dynamic array with parameterized constructor, then deallocate temp array
+	Polynomial result(sumCoefficients, maxDegree);
+	delete[] sumCoefficients;
+	return result;
+}
+
+const Polynomial Polynomial::operator *(const Polynomial& rhs) const
+{
+	const int maxDegree = std::max(this->degree, rhs.degree);
+	DoublePtr sumCoefficients = new double[maxDegree + 1];
+
+	// Initialization of coefficients
+	for (int idx = 0; idx <= maxDegree; ++idx)
+		sumCoefficients[idx] = 0.0;
+	// Multiply coefficients from both sides
+	for (int idx = 0; idx <= degree; ++idx)
+		sumCoefficients[idx] += coefficients[idx];
+	for (int idx = 0; idx <= rhs.degree; ++idx)
+		sumCoefficients[idx] *= rhs.coefficients[idx];
+
+	// Create new dynamic array with parameterized constructor, then deallocate temp array
+	Polynomial result(sumCoefficients, maxDegree);
+	delete[] sumCoefficients;
 	return result;
 }
 
@@ -119,6 +171,7 @@ Polynomial::Polynomial(double polynomial[], const int newDegree) : degree(newDeg
 
 std::ostream& operator <<(std::ostream& outputStream, const Polynomial& myPolynomial)
 {
+	bool printed = false;
 	for (int idx = myPolynomial.degree; idx >= 0; idx--)
 	{
 		// if coefficient is 0, skip
@@ -126,13 +179,20 @@ std::ostream& operator <<(std::ostream& outputStream, const Polynomial& myPolyno
 			continue;
 		if (idx != myPolynomial.degree && myPolynomial.coefficients[idx] > 0)
 			outputStream << '+';
-		outputStream << myPolynomial.coefficients[idx];
+		
+		if (idx == myPolynomial.degree && 
+			(std::abs(myPolynomial.coefficients[idx]) - 1.0) < EPSILON)
+			outputStream << "";
+		else
+			outputStream << myPolynomial.coefficients[idx];
+		printed = true;
 
 		if (idx != 0)
 			outputStream << "x";
 		if (idx != 0 && idx != 1)
 			outputStream << '^' << idx;
 	}
+	if (!printed)	outputStream << '0';
 	return outputStream;
 }
 
