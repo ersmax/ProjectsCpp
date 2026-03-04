@@ -27,7 +27,7 @@ standalone functions.
 
 #include <iostream>
 #include <string>
-#include <cmath>
+//#include <cmath>
 
 typedef double *DoublePtr;
 
@@ -42,6 +42,7 @@ public:
 	Polynomial& operator =(const Polynomial& myPolynomial);
 	~Polynomial() { delete[] coefficients; }
 	int getDegree() const { return degree; }
+	double evaluate(double unknownVar) const;
 	const Polynomial operator +(const Polynomial& rhs) const;
 	const Polynomial operator -(const Polynomial& rhs) const;
 	const Polynomial operator *(const Polynomial& rhs) const;
@@ -92,8 +93,25 @@ int main( )
 	std::cout << "\nTesting extractor function: " << aPolynomial << "\n";
 	std::cout << "aPolynomial[degree] = " << aPolynomial[aPolynomial.getDegree()] << "\n";
 
+	std::cout << "\nTesting evaluation function: " << aPolynomial << "\n";
+	std::cout << aPolynomial.evaluate(2) << '\n';
+
 	std::cout << '\n';
 	return 0;
+}
+
+double Polynomial::evaluate(const double unknownVar) const
+// Horner's Method
+{
+	double result = 0.0;
+	for (int idx = degree; idx >= 0; --idx)
+		result = result * unknownVar + coefficients[idx];
+	return result;
+	
+	//double sum = coefficients[0];
+	//for (int idx = 1; idx <= degree; idx++)
+	//	sum += coefficients[idx] * std::pow(unknownVar, idx);
+	//return sum;
 }
 
 double& Polynomial::operator [](const int index)
@@ -102,6 +120,7 @@ double& Polynomial::operator [](const int index)
 		throw std::out_of_range("Polynomial index out of range\n");
 	return coefficients[index];
 }
+
 
 double Polynomial::operator [](const int index) const
 {
