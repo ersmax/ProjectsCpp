@@ -9,6 +9,7 @@
 set(FOLDERS
     "10.01_Class_2D_Dynamic_array"
     "10.02_Polynomial_class"
+    "10.03_Word_counts_pointers"
 )
 
 # Automatically get all .cpp and headers files 
