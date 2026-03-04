@@ -41,15 +41,18 @@ public:
 	Polynomial(const Polynomial& myPolynomial);
 	Polynomial& operator =(const Polynomial& myPolynomial);
 	~Polynomial() { delete[] coefficients; }
+	int getDegree() const { return degree; }
 	const Polynomial operator +(const Polynomial& rhs) const;
 	const Polynomial operator -(const Polynomial& rhs) const;
 	const Polynomial operator *(const Polynomial& rhs) const;
-	// TODO friend const Polynomial operator +(const Polynomial& myPolynomial, double constant);
-	// TODO friend const Polynomial operator +(double constant, const Polynomial& myPolynomial);
-	// TODO friend const Polynomial operator -(const Polynomial& myPolynomial, double constant);
-	// TODO friend const Polynomial operator -(double constant, const Polynomial& myPolynomial);
-	// TODO friend const Polynomial operator *(const Polynomial& myPolynomial, double constant);
-	// TODO friend const Polynomial operator *(double constant, const Polynomial& myPolynomial);
+	double& operator [](int index);
+	double operator [](int index) const;
+	friend const Polynomial operator +(const Polynomial& myPolynomial, double constant);
+	friend const Polynomial operator +(double constant, const Polynomial& myPolynomial);
+	friend const Polynomial operator -(const Polynomial& myPolynomial, double constant);
+	friend const Polynomial operator -(double constant, const Polynomial& myPolynomial);
+	friend const Polynomial operator *(const Polynomial& myPolynomial, double constant);
+	friend const Polynomial operator *(double constant, const Polynomial& myPolynomial);
 	friend std::istream& operator >>(std::istream& inputStream, Polynomial& myPolynomial); 
 	friend std::ostream& operator <<(std::ostream& outputStream, const Polynomial& myPolynomial);
 private:
@@ -67,21 +70,133 @@ int main( )
 	std::cout << "First Polynomial: " << aPolynomial << '\n';
 	std::cout << "Second Polynomial: " << aPolynomial2 << '\n';
 	std::cout << aPolynomial << " + " << aPolynomial2 << " = " << aPolynomial + aPolynomial2 << '\n';
+	std::cout << aPolynomial << " + " << 5 << " = " << aPolynomial + 5 << '\n';
+	std::cout << 6 << " + " << aPolynomial << " = " << 6 + aPolynomial << '\n';
 	std::cout << aPolynomial << " - " << aPolynomial2 << " = " << aPolynomial - aPolynomial2 << '\n';
+	std::cout << aPolynomial << " - " << 5 << " = " << aPolynomial - 5 << '\n';
+	std::cout << 6 << " - " << aPolynomial << " = " << 6 - aPolynomial << '\n';
 	std::cout << aPolynomial << " * " << aPolynomial2 << " = " << aPolynomial * aPolynomial2 << '\n';
+	std::cout << aPolynomial << " * " << 5 << " = " << aPolynomial * 5 << '\n';
+	std::cout << 6 << " * " << aPolynomial << " = " << 6 * aPolynomial << '\n';
 
 	std::cout << "\nTesting the same operand: " << aPolynomial << "\n";
 	std::cout << aPolynomial << " + " << aPolynomial << " = " << aPolynomial + aPolynomial << '\n';
 	std::cout << aPolynomial << " - " << aPolynomial << " = " << aPolynomial - aPolynomial << '\n';
 	std::cout << aPolynomial << " * " << aPolynomial << " = " << aPolynomial * aPolynomial << '\n';
+
+	std::cout << "\nTesting extractor function: " << aPolynomial << "\n";
+	std::cout << "aPolynomial[degree] = " << aPolynomial[aPolynomial.getDegree()] << "\n";
+	std::cout << "\nTesting assignment function: " << aPolynomial << "\n";
+	std::cout << "aPolynomial[degree] = 10\n"; 
+	aPolynomial[aPolynomial.getDegree()] = 10;
+	std::cout << "\nTesting extractor function: " << aPolynomial << "\n";
+	std::cout << "aPolynomial[degree] = " << aPolynomial[aPolynomial.getDegree()] << "\n";
+
 	std::cout << '\n';
 	return 0;
+}
+
+double& Polynomial::operator [](const int index)
+{
+	if (index < 0 || index > degree)
+		throw std::out_of_range("Polynomial index out of range\n");
+	return coefficients[index];
+}
+
+double Polynomial::operator [](const int index) const
+{
+	if (index < 0 || index > degree)
+		throw std::out_of_range("Polynomial index out of range\n");
+	return coefficients[index];
+}
+
+const Polynomial operator +(const double constant, const Polynomial& myPolynomial)
+{
+	Polynomial temp = Polynomial(myPolynomial.coefficients, myPolynomial.degree);
+	temp.coefficients[0] += constant;
+	return temp;
+}
+
+const Polynomial operator -(const double constant, const Polynomial& myPolynomial)
+{
+	Polynomial temp = Polynomial(myPolynomial.coefficients, myPolynomial.degree);
+	temp.coefficients[0] -= constant;
+	return temp;
+}
+
+const Polynomial operator *(const double constant, const Polynomial& myPolynomial)
+{
+	Polynomial temp = Polynomial(myPolynomial.coefficients, myPolynomial.degree);
+	for (int idx = 0; idx <= myPolynomial.degree; idx++)
+		temp.coefficients[idx] *= constant;
+	return temp;
+}
+
+const Polynomial operator +(const Polynomial& myPolynomial, const double constant)
+{
+	const DoublePtr newCoefficients = new double[myPolynomial.degree + 1];
+	for (int idx = 0; idx <= myPolynomial.degree; idx++)
+		newCoefficients[idx] = myPolynomial.coefficients[idx];
+	newCoefficients[0] += constant;
+	Polynomial newPolynomial = Polynomial(newCoefficients, myPolynomial.degree);
+	delete [] newCoefficients;
+	return newPolynomial;
+}
+
+const Polynomial operator -(const Polynomial& myPolynomial, const double constant)
+{
+	const DoublePtr newCoefficients = new double[myPolynomial.degree + 1];
+	for (int idx = 0; idx <= myPolynomial.degree; idx++)
+		newCoefficients[idx] = myPolynomial.coefficients[idx];
+	newCoefficients[0] -= constant;
+	Polynomial newPolynomial = Polynomial(newCoefficients, myPolynomial.degree);
+	delete [] newCoefficients;
+	return newPolynomial;
+}
+
+const Polynomial operator *(const Polynomial& myPolynomial, const double constant)
+{
+	const DoublePtr newCoefficients = new double[myPolynomial.degree + 1];
+	for (int idx = 0; idx <= myPolynomial.degree; idx++)
+		newCoefficients[idx] = myPolynomial.coefficients[idx] * constant;
+	Polynomial newPolynomial = Polynomial(newCoefficients, myPolynomial.degree);
+	delete [] newCoefficients;
+	return newPolynomial;
+}
+
+Polynomial::Polynomial(const Polynomial& myPolynomial) : degree(myPolynomial.degree)
+{
+	coefficients = new double[degree + 1];
+	for (int idx = 0; idx <= degree; idx++)
+		coefficients[idx] = myPolynomial.coefficients[idx];
+}
+
+Polynomial::Polynomial(double polynomial[], const int newDegree) : degree(newDegree)
+{
+	coefficients = new double[newDegree + 1];
+	for (int idx = 0; idx <= newDegree; idx++)
+		coefficients[idx] = polynomial[idx];
+}
+
+Polynomial& Polynomial::operator =(const Polynomial& myPolynomial)
+{
+	if (degree != myPolynomial.degree)
+	{
+		delete[] coefficients;
+		coefficients = new double[myPolynomial.degree + 1];
+		degree = myPolynomial.degree;
+	}
+	// coefficients = myPolynomial.coefficients; // wrong shallow copy
+	// correct below: deep copy
+	for (int idx = 0; idx <= degree; idx++)
+		coefficients[idx] = myPolynomial.coefficients[idx];
+	return *this;
 }
 
 const Polynomial Polynomial::operator +(const Polynomial& rhs) const
 {
 	const int maxDegree = std::max(this->degree, rhs.degree);
-	DoublePtr sumCoefficients = new double[maxDegree + 1];
+	const DoublePtr sumCoefficients = new double[maxDegree + 1];
 	
 	// Initialization of coefficients
 	for (int idx = 0; idx <= maxDegree; ++idx)
@@ -101,71 +216,43 @@ const Polynomial Polynomial::operator +(const Polynomial& rhs) const
 const Polynomial Polynomial::operator -(const Polynomial& rhs) const
 {
 	const int maxDegree = std::max(this->degree, rhs.degree);
-	DoublePtr sumCoefficients = new double[maxDegree + 1];
+	const DoublePtr differenceCoefficients = new double[maxDegree + 1];
 
 	// Initialization of coefficients
 	for (int idx = 0; idx <= maxDegree; ++idx)
-		sumCoefficients[idx] = 0.0;
+		differenceCoefficients[idx] = 0.0;
 	// Deduct coefficients from both sides
 	for (int idx = 0; idx <= degree; ++idx)
-		sumCoefficients[idx] += coefficients[idx];
+		differenceCoefficients[idx] += coefficients[idx];
 	for (int idx = 0; idx <= rhs.degree; ++idx)
-		sumCoefficients[idx] -= rhs.coefficients[idx];
+		differenceCoefficients[idx] -= rhs.coefficients[idx];
 
 	// Create new dynamic array with parameterized constructor, then deallocate temp array
-	Polynomial result(sumCoefficients, maxDegree);
-	delete[] sumCoefficients;
+	Polynomial result(differenceCoefficients, maxDegree);
+	delete[] differenceCoefficients;
 	return result;
 }
 
 const Polynomial Polynomial::operator *(const Polynomial& rhs) const
 {
-	const int maxDegree = std::max(this->degree, rhs.degree);
-	DoublePtr sumCoefficients = new double[maxDegree + 1];
+	const int maxDegree = degree + rhs.degree;
+	const DoublePtr newCoefficients = new double[maxDegree + 1];
 
 	// Initialization of coefficients
 	for (int idx = 0; idx <= maxDegree; ++idx)
-		sumCoefficients[idx] = 0.0;
+		newCoefficients[idx] = 0.0;
 	// Multiply coefficients from both sides
 	for (int idx = 0; idx <= degree; ++idx)
-		sumCoefficients[idx] += coefficients[idx];
-	for (int idx = 0; idx <= rhs.degree; ++idx)
-		sumCoefficients[idx] *= rhs.coefficients[idx];
+		for (int jdx = 0; jdx <= rhs.degree; ++jdx)
+			newCoefficients[idx + jdx] += coefficients[idx] * rhs.coefficients[jdx];
 
 	// Create new dynamic array with parameterized constructor, then deallocate temp array
-	Polynomial result(sumCoefficients, maxDegree);
-	delete[] sumCoefficients;
+	Polynomial result(newCoefficients, maxDegree);
+	delete [] newCoefficients;
 	return result;
 }
 
-Polynomial& Polynomial::operator =(const Polynomial& myPolynomial)
-{
-	if (degree != myPolynomial.degree)
-	{
-		delete [] coefficients;
-		coefficients = new double[myPolynomial.degree + 1];
-		degree = myPolynomial.degree;
-	}
-	// coefficients = myPolynomial.coefficients; // wrong shallow copy
-	// correct below: deep copy
-	for (int idx = 0; idx <= degree; idx++)
-		coefficients[idx] = myPolynomial.coefficients[idx];
-	return *this;
-}
 
-Polynomial::Polynomial(const Polynomial& myPolynomial) : degree(myPolynomial.degree)
-{
-	coefficients = new double[degree + 1];
-	for (int idx = 0; idx <= degree; idx++)
-		coefficients[idx] = myPolynomial.coefficients[idx];
-}
-
-Polynomial::Polynomial(double polynomial[], const int newDegree) : degree(newDegree)
-{
-	coefficients = new double[newDegree + 1];
-	for (int idx = 0; idx <= newDegree; idx++)
-		coefficients[idx] = polynomial[idx];
-}
 
 std::ostream& operator <<(std::ostream& outputStream, const Polynomial& myPolynomial)
 {
@@ -211,7 +298,7 @@ std::istream& operator >>(std::istream& inputStream, Polynomial& myPolynomial)
 	{
 		inputStream >> temp[idx];
 		// if highest degree coeff. == 0, reset
-		if (idx == newDegree && temp[idx] < EPSILON)
+		if (idx == newDegree && (std::abs(temp[idx]) < EPSILON))
 		{
 			std::cerr << "Coefficient of highest degree must be different than 0\n";
 			inputStream.clear();
@@ -230,21 +317,4 @@ std::istream& operator >>(std::istream& inputStream, Polynomial& myPolynomial)
 	myPolynomial.degree = newDegree;
 
 	return inputStream;
-}
-
-int inputValidation()
-{
-	int number;
-	while (true)
-	{
-		if (!(std::cin >> number))
-		{
-			std::cout << "Wrong input\n";
-			std::cin.clear();
-			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-			continue;
-		}
-		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-		return number;
-	}
 }
