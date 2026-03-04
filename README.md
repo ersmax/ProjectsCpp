@@ -535,3 +535,11 @@ Pointers, Dynamic arrays, Classes, Pointers and dynamic arrays
    THere are functions for querying and modifying individual elements, with input validation for row and column indices.
    Exception handling is also included for invalid operations (e.g., mismatched sizes for addition).
    It demonstrates dynamic memory management, operator overloading, and interactive user input in C++.
+2. [Polynomial class](10_Pointers_Dynamic_arrays/10.02_Polynomial_class)
+   Implements a `Polynomial` class using dynamic arrays to store polynomial coefficients, where the array index represents the exponent. The class supports:
+   - **Dynamic memory management:** Deep copy, assignment operator, and destructor ensure safe handling of dynamic arrays.
+   - **Arithmetic operations:** Overloaded `+`, `-`, and `*` operators for polynomial-polynomial and polynomial-constant arithmetic (as members and friends), returning new `Polynomial` objects.
+   - **Coefficient access:** Overloaded `operator[]` for both reading and writing coefficients by exponent, with bounds checking.
+   - **Evaluation using Horner's method:** The `evaluate(double)` function efficiently computes the polynomial's value at a given point using Horner’s method, reducing time complexity from O(n^2) to O(n).
+   - **Input/Output:** Overloaded `>>` and `<<` operators for reading and printing polynomials in standard form, omitting zero terms except for the zero polynomial.
+   - **Input validation and error handling:** Ensures the highest-degree coefficient is nonzero and throws exceptions for out-of-range access.

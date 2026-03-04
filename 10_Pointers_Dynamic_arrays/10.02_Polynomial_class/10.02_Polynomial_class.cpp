@@ -1,33 +1,5 @@
-/*
-Using dynamic arrays, implement a polynomial class with polynomial addition,
-subtraction, and multiplication.
-Discussion: A variable in a polynomial does nothing but act as a placeholder for
-the coefficients. Hence, the only interesting thing about polynomials is the array
-of coefficients and the corresponding exponent. Think about the polynomial
-x*x*x + x + 1
-Where is the term in x*x? One simple way to implement the polynomial class is to
-use an array of type double to store the coefficients. The index of the array is the
-exponent of the corresponding term. If a term is missing, then it simply has a zero
-coefficient.
-There are techniques for representing polynomials of high degree with many missing terms. 
-These use so-called sparse matrix techniques. Unless you already know
-these techniques, or learn very quickly, do not use these techniques.
-Provide a default constructor, a copy constructor, and a parameterized constructor
-that enables an arbitrary polynomial to be constructed.
-Supply an overloaded operator = and a destructor.
-Provide these operations:
-polynomial + polynomial, constant + polynomial, polynomial + constant,
-polynomial - polynomial, constant - polynomial, polynomial - constant.
-polynomial * polynomial, constant * polynomial, polynomial * constant,
-Supply functions to assign and extract coefficients, indexed by exponent.
-Supply a function to evaluate the polynomial at a value of type double.
-You should decide whether to implement these functions as members, friends, or
-standalone functions.
-*/
-
 #include <iostream>
 #include <string>
-//#include <cmath>
 
 typedef double *DoublePtr;
 
@@ -39,23 +11,61 @@ public:
 	Polynomial() : coefficients(new double[1]{ 0.0 }), degree(0) {};
 	Polynomial(double polynomial[], int newDegree);
 	Polynomial(const Polynomial& myPolynomial);
-	Polynomial& operator =(const Polynomial& myPolynomial);
 	~Polynomial() { delete[] coefficients; }
+	Polynomial& operator =(const Polynomial& myPolynomial);
+	//   Precondition: myPolynomial is a valid Polynomial object passed by reference 
+	// to allow modification of the current object.
+	//   Postcondition: the current object is modified to hold the same polynomial as myPolynomial, 
+	// and a reference to the current object is returned.
+
 	int getDegree() const { return degree; }
 	double evaluate(double unknownVar) const;
+	//   Precondition: unknownVar is a valid double value.
+	//   Postcondition: returns the value of the polynomial evaluated at unknownVar.
+
 	const Polynomial operator +(const Polynomial& rhs) const;
+	//   Precondition: rhs is a valid Polynomial object.
+	//   Postcondition: returns a new Polynomial object that is the sum of the current object and rhs.
+
 	const Polynomial operator -(const Polynomial& rhs) const;
+	//   Postcondition: returns a new Polynomial object that is the difference of the current object and rhs.
+
 	const Polynomial operator *(const Polynomial& rhs) const;
+	//   Postcondition: returns a new Polynomial object that is the product of the current object and rhs.
+
 	double& operator [](int index);
+	//   Precondition: index is a non-negative integer less than or equal to the degree of the polynomial.
+	//   Postcondition: returns a reference to the coefficient of the term with exponent index, 
+	// allowing for modification of the coefficient (L-Value).
+
 	double operator [](int index) const;
+	//   Postcondition: returns the coefficient of the term with exponent index, 
+	// allowing for read-only access to the coefficient (R-Value).
+
 	friend const Polynomial operator +(const Polynomial& myPolynomial, double constant);
 	friend const Polynomial operator +(double constant, const Polynomial& myPolynomial);
+	//   Precondition: myPolynomial is a valid Polynomial object and constant is a valid double value.
+	//   Postcondition: returns a new Polynomial object that is the sum of myPolynomial and constant.
+
 	friend const Polynomial operator -(const Polynomial& myPolynomial, double constant);
 	friend const Polynomial operator -(double constant, const Polynomial& myPolynomial);
+	//   Postcondition: returns a new Polynomial object that is the difference of myPolynomial and constant.
+
 	friend const Polynomial operator *(const Polynomial& myPolynomial, double constant);
 	friend const Polynomial operator *(double constant, const Polynomial& myPolynomial);
+	//   Postcondition: returns a new Polynomial object that is the product of myPolynomial and constant.
+
 	friend std::istream& operator >>(std::istream& inputStream, Polynomial& myPolynomial); 
-	friend std::ostream& operator <<(std::ostream& outputStream, const Polynomial& myPolynomial);
+	//   Precondition: inputStream is a valid input stream and myPolynomial is a valid Polynomial object passed by reference
+	//   Postcondition: reads the degree of the polynomial and the coefficients from the input stream, 
+	// and updates myPolynomial object accordingly. 
+	// The input format should be: degree coefficient0 coefficient1 ... coefficientN
+
+	friend std::ostream& operator <<(std::ostream& outputStream, const Polynomial& myPolynomial); 
+	//   Postcondition: output the polynomial in the form: coefficientN*x^N + ... + coefficient1*x + coefficient0, 
+	// and send it to the output stream. Terms with zero coefficients should be omitted, 
+	// except in the case of the zero polynomial (degree 0 with coefficient 0), which should be output as "0".
+
 private:
 	DoublePtr coefficients;
 	int degree;
@@ -86,12 +96,18 @@ int main( )
 	std::cout << aPolynomial << " * " << aPolynomial << " = " << aPolynomial * aPolynomial << '\n';
 
 	std::cout << "\nTesting extractor function: " << aPolynomial << "\n";
-	std::cout << "aPolynomial[degree] = " << aPolynomial[aPolynomial.getDegree()] << "\n";
-	std::cout << "\nTesting assignment function: " << aPolynomial << "\n";
-	std::cout << "aPolynomial[degree] = 10\n"; 
-	aPolynomial[aPolynomial.getDegree()] = 10;
-	std::cout << "\nTesting extractor function: " << aPolynomial << "\n";
-	std::cout << "aPolynomial[degree] = " << aPolynomial[aPolynomial.getDegree()] << "\n";
+	try
+	{
+		std::cout << "aPolynomial[degree] = " << aPolynomial[aPolynomial.getDegree()] << "\n";
+		std::cout << "\nTesting assignment function: " << aPolynomial << "\n";
+		std::cout << "aPolynomial[degree] = 10\n"; 
+		aPolynomial[aPolynomial.getDegree()] = 10;
+		std::cout << "\nTesting extractor function: " << aPolynomial << "\n";
+		std::cout << "aPolynomial[degree] = " << aPolynomial[aPolynomial.getDegree()] << "\n";
+	} catch (const std::out_of_range& e)
+	{
+		std::cerr << e.what() << '\n';
+	}
 
 	std::cout << "\nTesting evaluation function: " << aPolynomial << "\n";
 	std::cout << aPolynomial.evaluate(2) << '\n';
@@ -104,7 +120,7 @@ double Polynomial::evaluate(const double unknownVar) const
 // Horner's Method
 {
 	double result = 0.0;
-	for (int idx = degree; idx >= 0; --idx)
+	for (int idx = degree; idx >= 0; idx--)
 		result = result * unknownVar + coefficients[idx];
 	return result;
 	
