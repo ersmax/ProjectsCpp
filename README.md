@@ -543,3 +543,8 @@ Pointers, Dynamic arrays, Classes, Pointers and dynamic arrays
    - **Evaluation using Horner's method:** The `evaluate(double)` function efficiently computes the polynomial's value at a given point using Horner’s method, reducing time complexity from O(n^2) to O(n).
    - **Input/Output:** Overloaded `>>` and `<<` operators for reading and printing polynomials in standard form, omitting zero terms except for the zero polynomial.
    - **Input validation and error handling:** Ensures the highest-degree coefficient is nonzero and throws exceptions for out-of-range access.
+3. [Word counts pointers](10_Pointers_Dynamic_arrays/10.03_Word_counts_pointers)
+   This program reads a line of text from the user and checks if the number of words counted from both the front and the back of the string are equal. 
+   The logic is implemented using two functions, each using pointer arithmetic to traverse the string:
+   Several test cases are included to verify correctness for various input scenarios (leading/trailing/multiple spaces, empty string).
+   Both functions use pointer arithmetic and character checks, not advanced string features, and the logic is robust against leading/trailing/multiple spaces and empty input.

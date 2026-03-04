@@ -1,15 +1,3 @@
-/*
-Write a program that accepts a line of text input from the user and checks if the
-number of words counted from both end of the text is equal. Your program should
-work by using two pointers. The ‘head’ pointer should be set to the address of the
-first character in the string, and the ‘tail’ pointer should be set to the address of the
-last character in the string (i.e., the character before the terminating null). The
-program should keep incrementing the “head” pointer and keep decrementing
-the “tail” pointer until the pointers reach the other end. On finding whitespace
-characters while going across the string, increment the word counts and compare
-them at the end.
-*/
-
 #include <iostream>
 #include <string>
 
