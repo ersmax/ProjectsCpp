@@ -70,7 +70,8 @@ int countBack(const std::string& aLine)
 {
 	if (aLine.empty()) return 0;
 	int counter = 0;
-	const CharPtr startLine = aLine.c_str();
+	const CharPtr startLine = aLine.c_str(); 
+	// c_str() returns a pointer to a const C-style (no & address of operator needed)
 	CharPtr backPtr = aLine.c_str() + aLine.length() - 1;
 	while (backPtr >= startLine)
 	{

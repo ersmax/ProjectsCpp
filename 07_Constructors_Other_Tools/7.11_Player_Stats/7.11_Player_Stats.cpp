@@ -32,7 +32,7 @@ bool handleChoice(const char& letter, std::vector<Player>& rooster);
 //   Postcondition: handles the choice selected by the user. 
 // Returns false if the user chose to exit the program, true otherwise.
 
-std::string inputName();
+std::string nameValidation();
 //   Postcondition: prompts the user to enter a name and returns it.
 
 int inputScore();
@@ -140,7 +140,7 @@ void addPlayer(std::vector<Player>& rooster)
 		std::cerr << "Max capacity reached\n";
 		return;
 	}
-	const std::string name = inputName();
+	const std::string name = nameValidation();
 	const int score = inputScore();
 	const Player aPlayer(name, score);
 	rooster.push_back(aPlayer);
@@ -162,7 +162,7 @@ void showPlayers(const std::vector<Player>& rooster)
 	std::cout << std::string(37, '-') << "\n";
 }
 
-std::string inputName()
+std::string nameValidation()
 {
 	std::string line;
 	while (true)
@@ -214,7 +214,7 @@ void scorePlayer(const std::vector<Player>& rooster)
 		std::cout << "No players in the rooster\n";
 		return;
 	}
-	const std::string myPlayer = inputName();
+	const std::string myPlayer = nameValidation();
 	const int scorePlayer = findPlayer(rooster, myPlayer);
 	if (scorePlayer == -1)
 		std::cout << "No player found\n";
@@ -230,7 +230,7 @@ void deletePlayer(std::vector<Player>& rooster)
 		return;
 	}
 	
-	const std::string myPlayer = inputName();
+	const std::string myPlayer = nameValidation();
 	for (std::vector<Player>::iterator iterator = rooster.begin(); iterator != rooster.end(); ++iterator)
 	{
 		if (iterator->getName() == myPlayer)
