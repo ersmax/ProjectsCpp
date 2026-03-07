@@ -1,23 +1,3 @@
-/*
-Create a class named Subscriber that has three member variables:
-name – A string that stores the name of the subscriber
-numChannels – An integer that tracks how many channels the subscriber subscribes
-to.
-channelList – A dynamic array of strings used to store the names of the
-channels the subscriber subscribes to.
-Write appropriate constructor(s), mutator, and accessor functions for the class
-along with the following:
-• A function that inputs all values from the user, including the list of channel names.
-This function will have to support input for an arbitrary number of channels.
-• A function that outputs the name and list of all channels.
-• A function that resets the number of channels to 0 and the channelList to an
-empty list.
-• An overloaded assignment operator that correctly makes a new copy of the list
-of channels.
-• A destructor that releases all memory that has been allocated.
-Write a main function that tests all your functions.
-*/
-
 #include <iostream>
 #include <string>
 
@@ -31,20 +11,35 @@ class Subscriber
 public:
 	Subscriber() : numChannels(0), channelList(new std::string[0]) {};
 	Subscriber(const std::string& newName) : name(newName), numChannels(0), channelList(new std::string[0]) {};
-	Subscriber(const std::string& newName, const std::string newList[], const int newChannels) : name(newName), numChannels(newChannels) { setChannels(newList, newChannels); }
+	Subscriber(const std::string& newName, const std::string newList[], const int newChannels) :	name(newName), 
+																									numChannels(newChannels) 
+																									{ setChannels(newList, newChannels); }
 	Subscriber(const Subscriber& rightSide);
 	Subscriber& operator =(const Subscriber& rightSide);
 	~Subscriber() { delete [] channelList; }
 	void reset();
+	//   Postcondition: The number of channels is set to 0 and the channelList is set to an empty list.
+
 	const std::string& operator [](int index) const;
+	//   Postcondition: The channel at the specified index is returned. 
+	// If the index is out of range, an out_of_range exception is thrown.
+
 	friend std::istream& operator >>(std::istream& inputStream, Subscriber& mySubscriber);
+	//   Postcondition: The user is prompted to enter the subscriber's name and the list of channels.
+
 	friend std::ostream& operator <<(std::ostream& outputStream, const Subscriber& mySubscriber);
+	//   Postcondition: The subscriber's name and the list of channels are output to the outputStream.
 private:
-	void inputChannels(std::istream& inputStream);
 	std::string name;
 	int numChannels;
 	StringPtr channelList;
+	void inputChannels(std::istream& inputStream);
+	//   Postcondition: The user is prompted to enter the number of channels and the names of the channels.
+
 	void setChannels(const std::string newList[], int newChannels);
+	//   Precondition: newList is an array of strings containing the new channel names, 
+	// and newChannels is the number of channels in newList.
+	//   Postcondition: The channelList is updated to contain the new channel names, and numChannels is updated to newChannels.
 };
 
 

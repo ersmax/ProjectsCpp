@@ -548,3 +548,7 @@ Pointers, Dynamic arrays, Classes, Pointers and dynamic arrays
    The logic is implemented using two functions, each using pointer arithmetic to traverse the string:
    Several test cases are included to verify correctness for various input scenarios (leading/trailing/multiple spaces, empty string).
    Both functions use pointer arithmetic and character checks, not advanced string features, and the logic is robust against leading/trailing/multiple spaces and empty input.
+4. [Subscriber Class](10_Pointers_Dynamic_arrays/10.04_Subscriber)
+   This program defines a `Subscriber` class that manages a subscriber's name and their list of subscribed channels using dynamic memory allocation. 
+   The class includes constructors, a destructor, an overloaded assignment operator for deep copying, and member functions to input subscriber data, display it, reset the channel list, and access channels by index.
+   The program demonstrates dynamic memory management, operator overloading, and interactive user input in C++.
