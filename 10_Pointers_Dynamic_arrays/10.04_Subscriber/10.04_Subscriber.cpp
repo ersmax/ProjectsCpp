@@ -29,10 +29,13 @@ int numberValidation(std::istream& inputStream);
 class Subscriber
 {
 public:
-	Subscriber() : name(""), numChannels(0), channelList(new std::string[0]) {};
+	Subscriber() : numChannels(0), channelList(new std::string[0]) {};
 	Subscriber(const std::string& newName) : name(newName), numChannels(0), channelList(new std::string[0]) {};
 	Subscriber(const std::string& newName, const std::string newList[], const int newChannels) : name(newName), numChannels(newChannels) { setChannels(newList, newChannels); }
+	Subscriber(const Subscriber& rightSide);
+	Subscriber& operator =(const Subscriber& rightSide);
 	~Subscriber() { delete [] channelList; }
+	void reset();
 	const std::string& operator [](int index) const;
 	friend std::istream& operator >>(std::istream& inputStream, Subscriber& mySubscriber);
 	friend std::ostream& operator <<(std::ostream& outputStream, const Subscriber& mySubscriber);
@@ -49,10 +52,28 @@ int main( )
 {
 	std::string channels[] = {"Cars", "Books"};
 	Subscriber aSubscriber("Paul", channels, 2);
-	
-	std::cout << "Enter new data.\n";
-	std::cin >> aSubscriber;
-	std::cout << "Data of user: " << aSubscriber;
+	Subscriber aSubscriber2;
+
+	std::cout << "Data of first user: " << aSubscriber;
+
+	std::cout << "Enter data of a second user.\n";
+	std::cin >> aSubscriber2;
+	std::cout << "Data of second user: " << aSubscriber2;
+
+	std::cout << "The third user has same preferences of user 2\n";
+	Subscriber aSubscriber3("Mary");
+	aSubscriber3 = aSubscriber2;
+	std::cout << "Data of third user: " << aSubscriber3;
+
+	std::cout << "The second user has changed preferences to user #1\n";
+	aSubscriber2 = aSubscriber;
+	std::cout << "Data of second user: " << aSubscriber2;
+
+	std::cout << "The fourth user has same preference of second, with a new genre of Zebra\n";
+	Subscriber aSubscriber4(aSubscriber2);
+	std::cin >> aSubscriber4;
+	std::cout << "Data of second user: " << aSubscriber2;
+	std::cout << "Data of fourth user: " << aSubscriber4;
 
 	std::cout << '\n';
 	return 0;
@@ -76,6 +97,35 @@ std::istream& operator >>(std::istream& inputStream, Subscriber& mySubscriber)
 	std::cout << "Enter new channels.\n";
 	mySubscriber.inputChannels(inputStream);
 	return inputStream;
+}
+
+Subscriber& Subscriber::operator =(const Subscriber& rightSide)
+{
+	if (this == &rightSide)	return *this;
+
+	if (numChannels != rightSide.numChannels)
+	{
+		delete [] channelList;
+		channelList = new std::string[rightSide.numChannels];
+	}
+	numChannels = rightSide.numChannels;
+	for (int idx = 0; idx < numChannels; idx++)
+		channelList[idx] = rightSide.channelList[idx];
+	return *this;
+}
+
+Subscriber::Subscriber(const Subscriber& rightSide) :	numChannels(rightSide.numChannels)
+{
+	channelList = new std::string[numChannels];
+	for (int idx = 0; idx < numChannels; idx++)
+		channelList[idx] = rightSide.channelList[idx];
+}
+
+void Subscriber::reset()
+{
+	numChannels = 0;
+	delete[] channelList;
+	channelList = new std::string[0];
 }
 
 const std::string& Subscriber::operator[](const int index) const
