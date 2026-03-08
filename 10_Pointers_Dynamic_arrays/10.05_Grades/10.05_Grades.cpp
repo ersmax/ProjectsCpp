@@ -1,67 +1,45 @@
-/*
-5.7 (Grades)
-Generate a text-based histogram for a quiz given to a class of students. The quiz is
-graded on a scale from 0 to 5. Write a program that allows the user to enter grades
-for each student. As the grades are being entered, the program should count, using
-an array, the number of 0s, the number of 1s, the number of 2s, the number of
-3s, the number of 4s, and the number of 5s. The program should be capable of
-handling an arbitrary number of student grades.
-You can do this by making an array of size 6, where each array element is initialized
-to zero. Whenever a zero is entered, increment the value in the array at index 0.
-Whenever a one is entered, increment the value in the array at index 1, and so on,
-up to index 5 of the array.
-Output the histogram count at the end. For example, if the input grades are 3, 0,
-1, 3, 3, 5, 5, 4, 5, 4, then the program should output
-1 grade(s) of 0
-1 grade(s) of 1
-0 grade(s) of 2
-3 grade(s) of 3
-2 grade(s) of 4
-3 grade(s) of 5
-
-7.8 (Histogram of Grades)
-Write a program that outputs a histogram of grades for an assignment given to
-a class of students. The program should input each student’s grade as an integer
-and store the grade in a vector. Grades should be entered until the user enters −1
-for a grade. The program should then scan through the vector and compute the
-histogram. In computing the histogram, the minimum value of a grade is 0, but
-your program should determine the maximum value entered by the user. Output
-the histogram to the console. See Programming Project 5.7 for information on how
-to compute a histogram.
-Output the histogram count at the end. For example, if the input grades are 3, 0,
-1, 3, 3, 5, 5, 4, 5, 4, then the program should output
-1 grade(s) of 0
-1 grade(s) of 1
-0 grade(s) of 2
-3 grade(s) of 3
-2 grade(s) of 4
-3 grade(s) of 5
-
-10.05
-This programming project is based on Programming Projects 7.8 and 5.7. Write
-a program that outputs a histogram of grades for an assignment given to a class of
-students. The program should input each student’s grade as an integer and store
-the grade in a vector. Grades should be entered until the user enters -1 for a grade.
-The program should then scan through the vector and compute the histogram. In
-computing the histogram, the minimum value of a grade is 0, but your program
-should determine the maximum value entered by the user. Use a dynamic array to
-store the histogram. Output the histogram to the console.
-
-*/
-
 #include <iostream>
 #include <iomanip>
 
 typedef int *IntPtr;
 
 void addGrades(IntPtr& grades, int& capacity, int& nGrades);
+//   Precondition: grades is a dynamic array of integers, 
+// capacity is the size of the array, and nGrades is the number of grades currently stored in the array.
+//   Postcondition: the user is prompted to enter grades, which are stored in the dynamic array grades.
+// nGrades is updated to reflect the number of grades entered, and capacity is updated if the array needs to be resized.
+// The rule of resizing is twice the size of the current array.
+
 int inputValidation();
+//   Postcondition: the user is prompted to enter an integer, which is returned by the function.
+
 void mergeSort(const IntPtr& number, int start, int end);
+//   Precondition: number is a dynamic array of integers, 
+// and start and end are the indices of the first and last elements of the array, respectively.
+//   Postcondition: the dynamic array number is sorted in ascending order from index start to end using the merge sort algorithm.
+
 void sort(const IntPtr& number, int start, int mid, int end);
+//   Precondition: number is a dynamic array of integers, 
+// and start, mid, and end are the indices of the first, middle, and last elements of the array, respectively.
+//   Postcondition: the dynamic array number is sorted in ascending order from index start to end, 
+// given that the left half of the array, from index start to mid, 
+// and the right half of the array, from index mid + 1 to end, are already sorted respectively.
+
 int countDifferent(const IntPtr& number, int size);
+//   Precondition: number is a dynamic array of integers, and size is the number of elements in the array.
+//   Postcondition: the number of different integers in the array is returned by the function.
+
 IntPtr countFrequencies(IntPtr& number, int& size, int differentNumbers);
-//   Postcondition: change number and count freq
+//   Precondition: number is a dynamic array of integers, size is the number of elements in the array,
+// differentNumbers is the number of different integers in the array, and the array is sorted in ascending order.
+//   Postcondition: a new dynamic array is returned by the function, which contains the frequency of each different integer in the original array.
+// Moreover, the original array number is modified to contain only the different integers, 
+// and size is updated to reflect the number of different integers in the array.
+
 void printHistogram(const IntPtr& number, const IntPtr& frequencies, int size);
+//   Precondition: number is a dynamic array of integers, frequencies is a dynamic array of integers, 
+// and size is the number of elements in both arrays.
+//   Postcondition: the histogram is printed to the console, where each line contains the frequency of a grade and the grade itself.
 
 int main( )
 {

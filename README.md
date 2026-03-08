@@ -552,3 +552,12 @@ Pointers, Dynamic arrays, Classes, Pointers and dynamic arrays
    This program defines a `Subscriber` class that manages a subscriber's name and their list of subscribed channels using dynamic memory allocation. 
    The class includes constructors, a destructor, an overloaded assignment operator for deep copying, and member functions to input subscriber data, display it, reset the channel list, and access channels by index.
    The program demonstrates dynamic memory management, operator overloading, and interactive user input in C++.
+5. [Grades tracking](10_Pointers_Dynamic_arrays/10.05_Grades)
+   This program reads an arbitrary number of student grades, sorts them, and prints a histogram showing how many times each unique grade was entered. 
+   It uses dynamic arrays and manual memory management for every step:
+   - Dynamically input grades, resizing the dynamic array as needed (twice the size of the previous).
+   - Sort the grades using merge sort.
+   - Count unique grades and their frequencies, compacting the array to unique grades and a parallel frequency array.
+   - Print a histogram showing only the grades that were actually entered.
+   - Clean up all dynamic memory.
+   Only grades that were actually entered are shown.
