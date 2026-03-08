@@ -86,24 +86,26 @@ int main( )
 IntPtr countFrequencies(IntPtr& number, int& size, const int differentNumbers)
 {
 	if (size == 0)	return new int[0];
-
+	
 	const IntPtr newGrades = new int[differentNumbers];
 	const IntPtr frequencies = new int[differentNumbers];
 
-	newGrades[0] = number[0];
-	frequencies[0] = 1;
+	int uniqueIdx = 0;
+	newGrades[uniqueIdx] = number[0];
+	frequencies[uniqueIdx] = 1;
 
-	for (int idx = 1; idx < size - 1; idx++)
+	for (int idx = 1; idx < size; idx++)
 	{
-		if (number[idx] != number[idx + 1])
-		{
-			newGrades[idx] = number[idx];
-			frequencies[idx] = 1;
-		}
+		if (number[idx] == newGrades[uniqueIdx])
+			frequencies[uniqueIdx]++;
 		else
-			frequencies[idx]++;
+		{
+			uniqueIdx++;
+			newGrades[uniqueIdx] = number[idx];
+			frequencies[uniqueIdx] = 1;
+		}
 	}
-	size = differentNumbers;
+	size = uniqueIdx + 1;
 	delete [] number;
 	number = newGrades;
 	return frequencies;
@@ -146,7 +148,7 @@ void sort(const IntPtr& number, const int start, const int mid, const int end)
 		p2++;
 	}
 	
-	for (int idx = 0; idx <= end; idx++)
+	for (int idx = 0; idx < end - start + 1; idx++)
 		number[start + idx] = temp[idx];
 	
 	delete [] temp;
@@ -178,8 +180,8 @@ int countDifferent(const IntPtr& number, const int size)
 	if (size == 0)	return 0;
 	
 	int counter = 1;
-	for (int idx = 0; idx < size - 1; idx++)
-		if (number[idx] != number[idx + 1])
+	for (int idx = 1; idx < size; idx++)
+		if (number[idx] != number[idx-1])
 			counter++;
 
 	return counter;
