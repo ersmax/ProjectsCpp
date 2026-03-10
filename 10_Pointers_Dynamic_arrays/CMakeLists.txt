@@ -12,6 +12,7 @@ set(FOLDERS
     "10.03_Word_counts_pointers"
     "10.04_Subscriber"
     "10.05_Grades"
+    "10.06_Vector_class"
 )
 
 # Automatically get all .cpp and headers files 
