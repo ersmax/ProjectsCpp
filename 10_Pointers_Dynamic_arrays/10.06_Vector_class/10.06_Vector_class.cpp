@@ -37,6 +37,7 @@ Embed your class in a suitable test program.
 #include <string>
 
 typedef std::string *StringPtr;
+typedef const std::string *ConstStringPtr;
 
 
 class DynamicStringArray
@@ -48,7 +49,7 @@ public:
 	int getSize() const { return size; }
 	void addEntry(const std::string& newEntry);
 	bool deleteEntry(const std::string& entry);
-	const std::string* getEntry(int idx) const;
+	ConstStringPtr getEntry(int idx) const;
 	const DynamicStringArray& operator =(const DynamicStringArray& rhs);
 	const std::string& operator [](int idx) const;
 	friend std::ostream& operator <<(std::ostream& outputStream, const DynamicStringArray& rhs);
@@ -78,8 +79,8 @@ int main( )
 		std::cout << e.what() << '\n';
 	}
 	std::cout << myVector[0] << '\n';
-	const std::string* myQuery = myVector.getEntry(1);
-	const std::string* myQuery2 = myVector.getEntry(2);
+	const ConstStringPtr myQuery = myVector.getEntry(1);
+	const ConstStringPtr myQuery2 = myVector.getEntry(2);
 	if (myQuery == nullptr)
 		std::cout << "No valid element at the index 1\n";
 	else
@@ -88,7 +89,6 @@ int main( )
 		std::cout << "No valid element at the index 2\n";
 	else
 		std::cout << "Element at index 2: " << *myQuery2 << '\n';
-
 
 	std::cout << '\n';
 	return 0;
@@ -140,11 +140,12 @@ const std::string& DynamicStringArray::operator [](const int idx) const
 	return dynamicArray[idx];
 }
 
-const std::string* DynamicStringArray::getEntry(const int idx) const
+ConstStringPtr DynamicStringArray::getEntry(const int idx) const
 {
 	if (idx < 0 || idx >= size)
 		return nullptr;
 	return (dynamicArray + idx);
+	// return &dynamicArray[idx];
 }
 
 bool DynamicStringArray::deleteEntry(const std::string& entry)
