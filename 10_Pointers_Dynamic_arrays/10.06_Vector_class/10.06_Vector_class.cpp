@@ -178,4 +178,3 @@ StringPtr DynamicStringArray::helperEntry(const std::string& newEntry) const
 	newArray[size] = newEntry;
 	return newArray;
 }
-e
