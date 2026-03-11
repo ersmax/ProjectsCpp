@@ -1,37 +1,3 @@
-/*
-One problem with dynamic arrays is that once the array is created using the new
-operator the size cannot be changed. For example, you might want to add or delete
-entries from the array similar to the behavior of a vector. This project asks you
-to create a class called DynamicStringArray that includes member functions that
-allow it to emulate the behavior of a vector of strings.
-The class should have the following:
-• A private member variable called dynamicArray that references a dynamic array
-of type string.
-• A private member variable called size that holds the number of entries in the
-array.
-• A default constructor that sets the dynamic array to nullptr and sets size
-to 0.
-• A function that returns size.
-• A function named addEntry that takes a string as input. The function should
-create a new dynamic array one element larger than dynamicArray, copy all
-elements from dynamicArray into the new array, add the new string onto the
-end of the new array, increment size, delete the old dynamicArray, and then
-set dynamicArray to the new array.
-• A function named deleteEntry that takes a string as input. The function
-should search dynamicArray for the string. If not found, it returns false. If
-found, it creates a new dynamic array one element smaller than dynamicArray.
-It should copy all elements except the input string into the new array, delete
-dynamicArray, decrement size, and return true.
-• A function named getEntry that takes an integer as input and returns the
-string at that index in dynamicArray. It should return nullptr if the index is
-out of dynamicArray’s bounds.
-• A copy constructor that makes a copy of the input object’s dynamic array.
-• Overload the assignment operator so that the dynamic array is properly copied
-to the target object.
-• A destructor that frees up the memory allocated to the dynamic array.
-Embed your class in a suitable test program.
-*/
-
 #include <iostream>
 #include <stdexcept>
 #include <string>
@@ -48,11 +14,28 @@ public:
 	~DynamicStringArray() { delete [] dynamicArray; }
 	int getSize() const { return size; }
 	void addEntry(const std::string& newEntry);
+	//  Postcondition: The newEntry is added to the end of the dynamic array. 
+	// The size of the array is increased by 1.
+
 	bool deleteEntry(const std::string& entry);
+	//   Postcondition: If the entry is found in the dynamic array, 
+	// it is deleted and the size of the array is decreased by 1.
+
 	ConstStringPtr getEntry(int idx) const;
+	//   Postcondition: If the index is valid, a pointer to the string at that index is returned.
+
 	const DynamicStringArray& operator =(const DynamicStringArray& rhs);
+	//   Postcondition: The dynamic array of the rhs object is copied to the current object. 
+
 	const std::string& operator [](int idx) const;
+	//   Postcondition: If the index is valid, a reference to the string at that index is returned.
+	// If not, an out_of_range exception is thrown.
+
 	friend std::ostream& operator <<(std::ostream& outputStream, const DynamicStringArray& rhs);
+	//   Precondition: The outputStream is open and ready for output. rhs is a valid DynamicStringArray object.
+	//   Postcondition: The contents of the dynamic array are output to the outputStream in the format {entry1, entry2, ..., entryN}.
+	// If the array is empty, {} is output.
+
 private:
 	int size;
 	StringPtr dynamicArray;
@@ -195,3 +178,4 @@ StringPtr DynamicStringArray::helperEntry(const std::string& newEntry) const
 	newArray[size] = newEntry;
 	return newArray;
 }
+e

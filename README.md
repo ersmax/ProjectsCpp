@@ -561,3 +561,7 @@ Pointers, Dynamic arrays, Classes, Pointers and dynamic arrays
    - Print a histogram showing only the grades that were actually entered.
    - Clean up all dynamic memory.
    Only grades that were actually entered are shown.
+6. [Vector class](10_Pointers_Dynamic_arrays/10.06_Vector_class)
+   This program defines a `DynamicStringArray` class that emulates the behavior of a vector of strings using dynamic arrays. 
+   The class includes member functions to add and delete entries, access entries by index, and manage memory properly with a copy constructor, assignment operator, and destructor.
+   The program demonstrates dynamic memory management, operator overloading, and interactive user input in C++.
