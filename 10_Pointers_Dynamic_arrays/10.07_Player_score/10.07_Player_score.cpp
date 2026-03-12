@@ -65,6 +65,8 @@ void printRooster(const PlayerPtr& myRooster, int size);
 void queryScore(const PlayerPtr& myRooster, int size);
 ConstPlayerPtr findPlayer(const PlayerPtr& myRooster, int size, const std::string& namePlayer);
 int findIdxPlayer(const PlayerPtr& myRooster, int size, const std::string& namePlayer);
+void removePlayer(PlayerPtr& myRooster, int& size);
+PlayerPtr helperDelete(const PlayerPtr& myRooster, const int size, const ConstPlayerPtr& idxDeletePlayer);
 
 int main( )
 {
@@ -98,7 +100,7 @@ bool menu(PlayerPtr& myRooster, int& size)
 			queryScore(myRooster, size);
 			break;
 		case 'd':
-			// TODO
+			removePlayer(myRooster, size);
 			break;
 		case 'e':
 			return false;
@@ -164,12 +166,45 @@ void queryScore(const PlayerPtr& myRooster, const int size)
 	else
 		std::cout << "Player not found\n";
 
-	const int idxPlayer = findIdxPlayer(myRooster, size, namePlayer);
-	if (idxPlayer != -1)
-		std::cout << myRooster[idxPlayer];
+	// By index
+	// const int idxPlayer = findIdxPlayer(myRooster, size, namePlayer);
+	// if (idxPlayer != -1)
+	//	 std::cout << myRooster[idxPlayer];
+	// else
+	//	 std::cout << "Player not found\n";
+}
+
+void removePlayer(PlayerPtr& myRooster, int& size)
+{
+	const std::string namePlayer = enterName(std::cin);
+	const ConstPlayerPtr idxDeletePlayer = findPlayer(myRooster, size, namePlayer);
+	if (idxDeletePlayer != nullptr)
+	{
+		const PlayerPtr temp = helperDelete(myRooster, size, idxDeletePlayer);
+		delete [] myRooster;
+		myRooster = temp;
+		size--;
+	}
 	else
 		std::cout << "Player not found\n";
+
 }
+
+PlayerPtr helperDelete(const PlayerPtr& myRooster, const int size, const ConstPlayerPtr& idxDeletePlayer)
+{
+	const PlayerPtr temp = new Player[size - 1];
+	for (int idx = 0, newIdx = 0; idx < size; idx++)
+		if ((myRooster + idx) != idxDeletePlayer)
+			temp[newIdx++] = myRooster[idx];
+	
+	return temp;
+}
+
+//void removePlayerByIdx(PlayerPtr& myRooster, int& size)
+//{
+//	const std::string namePlayer = enterName(std::cin);
+//	int idxPlyaer = findIdxPlayer(myRooster,)
+//}
 
 ConstPlayerPtr findPlayer(const PlayerPtr& myRooster, const int size, const std::string& namePlayer)
 {
