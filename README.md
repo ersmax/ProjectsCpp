@@ -565,3 +565,10 @@ Pointers, Dynamic arrays, Classes, Pointers and dynamic arrays
    This program defines a `DynamicStringArray` class that emulates the behavior of a vector of strings using dynamic arrays. 
    The class includes member functions to add and delete entries, access entries by index, and manage memory properly with a copy constructor, assignment operator, and destructor.
    The program demonstrates dynamic memory management, operator overloading, and interactive user input in C++.
+7. [Player score](10_Pointers_Dynamic_arrays/10.07_Player_score)
+   This program manages a dynamic list of up to ten players and their high scores using a `Player` class and dynamic arrays. 
+   The user can add new players, print all players and scores, look up a player's score by name, and remove a player by name. 
+   Each add/remove operation resizes the dynamic array, copying existing players and updating the array pointer. 
+   Input is robustly validated: names are read with `getline` to support spaces, and scores must be non-negative integers. 
+   The menu system ensures safe memory management (no leaks or double-frees), and the code demonstrates dynamic allocation, pointer manipulation, 
+   and modular design. The README for this project explores alternative approaches for removing players (by index or pointer to indexed variable to be deleted).

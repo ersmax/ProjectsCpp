@@ -1,30 +1,3 @@
-/*
-5.19: 
-Write a program that manages a list of up to ten players and their high scores in the
-computer’s memory (not on disk as in Programming Project 18). Use two arrays
-to manage the list. One array should store the player’s name, and the other array
-should store the player’s high score. Use the index of the arrays to correlate the
-names with the scores. In the next chapter you will learn a different way to organize
-related data by putting them into a struct or class. Do not use a struct or class for
-this program. Your program should support the following features:
-a. Add a new player and score (up to ten players).
-b. Print all player names and their scores to the screen.
-c. Allow the user to enter a player name and output that player’s score or a message
-if the player name has not been entered.
-d. Allow the user to enter a player name and remove the player from the list.
-Create a menu system that allows the user to select which option to invoke.
-
-10.07:
-Do Programming Project 5.19 but this time use a class named Player to store a
-player’s name and score. Be sure to include a constructor with this class that sets
-the name and score. Then, use a dynamic array of the Player class to store the
-players. Start with a dynamic array that stores no players. To add a player, create
-a new dynamic array that is one larger than the current size, and copy the existing
-and the new player into it. To remove a player, create a new dynamic array that is
-one smaller than the current size, and copy all players into it except the player that
-is to be removed.
-*/
-
 #include <iostream>
 #include <string>
 
@@ -40,6 +13,8 @@ constexpr const char *MENU =	"a. Add a new player and score\n"
 								"e. Exit\n"
 								"Enter an option:\n";
 
+constexpr int MAX_SIZE = 10;
+
 class Player
 {
 public:
@@ -48,7 +23,16 @@ public:
 	Player(const std::string& newName, const int newScore) : name(newName) { setScore(newScore); }
 	const std::string& getName() const { return name; }
 	friend std::ostream& operator <<(std::ostream& outputStream, const Player& aPlayer);
+	//   Precondition: aPlayer is a valid Player object, outputStream is a valid output stream
+	//   Postcondition: aPlayer's name and score have been output to outputStream in the format:
+	// 					Player name: <name>
+	//					Player score: <score>
+
 	friend std::istream& operator >>(std::istream& inputStream, Player& newPlayer);
+	//   Postcondition: newPlayer's name and score have been set to the values entered by the user. 
+	// The user is prompted to enter the name and score. The name must not be empty, and the score must be a non-negative integer. 
+	// If invalid input is entered, the user is prompted to re-enter the data until valid input is provided.
+
 private:
 	std::string name;
 	int score;
@@ -56,17 +40,49 @@ private:
 };
 
 bool menu(PlayerPtr& myRooster, int& size);
+//   Precondition: myRooster is a valid pointer to a dynamic array of Player objects, size is the number of players currently in the array
+//   Postcondition: The user has been presented with a menu of options and has selected one. 
+// The appropriate action has been taken based on the user's selection.
+
 PlayerPtr addPlayer(const PlayerPtr& myRooster, int& size);
+//   Precondition: myRooster is a valid pointer to a dynamic array of Player objects, size is the number of players currently in the array
+//   Postcondition: A new Player object has been added to the dynamic array myRooster, and size has been incremented by 1.
 
 char inputValidation();
+//   Postcondition: The user has been prompted to enter a character corresponding to a menu option.
+
 std::string enterName(std::istream& inputStream);
+//   Precondition: inputStream is a valid input stream
+//   Postcondition: The user has been prompted to enter a name, and a valid name has been returned.
+
 int enterScore(std::istream& inputStream);
+//   Postcondition: The user has been prompted to enter a score, and a valid non-negative integer score has been returned.
+
 void printRooster(const PlayerPtr& myRooster, int size);
+//   Postcondition: The names and scores of all players in the dynamic array myRooster have been printed to the screen.
+
 void queryScore(const PlayerPtr& myRooster, int size);
+//   Postcondition: The user has been prompted to enter a player's name, and the score for that player has been printed to the screen. 
+// If the player is not found, a message indicating that the player was not found has been printed.
+
 ConstPlayerPtr findPlayer(const PlayerPtr& myRooster, int size, const std::string& namePlayer);
+//   Precondition: myRooster is a valid pointer to a dynamic array of Player objects, size is the number of players currently in the array, namePlayer is a valid string
+//   Postcondition: A pointer to the Player object in myRooster (i.e. a dynamic array) with a name matching namePlayer has been returned.
+// If no such player is found, nullptr has been returned.
+
 int findIdxPlayer(const PlayerPtr& myRooster, int size, const std::string& namePlayer);
+//   Postcondition: The index of the Player object in myRooster with a name matching namePlayer has been returned. If no such player is found, -1 has been returned.
+
 void removePlayer(PlayerPtr& myRooster, int& size);
+//   Precondition: myRooster is a valid pointer to a dynamic array of Player objects, size is the number of players currently in the array
+//   Precondition: The user has been prompted to enter a player's name, and if a player with that name is found in myRooster, 
+// that player has been removed from the dynamic array, and size has been decremented by 1.
+
 PlayerPtr helperDelete(const PlayerPtr& myRooster, const int size, const ConstPlayerPtr& idxDeletePlayer);
+//   Postcondition: A new dynamic array of Player objects has been created that contains all the players in myRooster except for the player pointed to by idxDeletePlayer.
+
+PlayerPtr helperDeleteByIdx(const PlayerPtr& myRooster, int size, int idxDeletePlayer);
+//   Postcondition: A new dynamic array of Player objects has been created that contains all the players in myRooster except for the player at index idxDeletePlayer.
 
 int main( )
 {
@@ -88,6 +104,11 @@ bool menu(PlayerPtr& myRooster, int& size)
 	{
 		case 'a':
 		{
+			if (size == MAX_SIZE) 
+			{
+				std::cerr << "Max players reached (" << MAX_SIZE << ")\n";
+				break;
+			}
 			const PlayerPtr newRooster = addPlayer(myRooster, size);
 			delete [] myRooster;
 			myRooster = newRooster;
@@ -125,7 +146,6 @@ PlayerPtr addPlayer(const PlayerPtr& myRooster, int& size)
 }
 
 
-
 std::istream& operator >>(std::istream& inputStream, Player& newPlayer)
 {
 	const std::string newName = enterName(inputStream);
@@ -154,7 +174,7 @@ void Player::setScore(const int number)
 void printRooster(const PlayerPtr& myRooster, const int size)
 {
 	for (int idx = 0; idx < size; idx++)
-		std::cout << *(myRooster + idx) << '\n';
+		std::cout << *(myRooster + idx);
 }
 
 void queryScore(const PlayerPtr& myRooster, const int size)
@@ -177,6 +197,20 @@ void queryScore(const PlayerPtr& myRooster, const int size)
 void removePlayer(PlayerPtr& myRooster, int& size)
 {
 	const std::string namePlayer = enterName(std::cin);
+	// Search by index
+	const int idxDeletePlayer = findIdxPlayer(myRooster, size, namePlayer);
+	if (idxDeletePlayer != -1)
+	{
+		const PlayerPtr temp = helperDeleteByIdx(myRooster, size, idxDeletePlayer);
+		delete[] myRooster;
+		myRooster = temp;
+		size--;
+	}
+	else
+		std::cout << "Player not found\n";
+	
+	// Search by pointer (address of pointed variable)
+	/*
 	const ConstPlayerPtr idxDeletePlayer = findPlayer(myRooster, size, namePlayer);
 	if (idxDeletePlayer != nullptr)
 	{
@@ -185,9 +219,9 @@ void removePlayer(PlayerPtr& myRooster, int& size)
 		myRooster = temp;
 		size--;
 	}
-	else
+	else 
 		std::cout << "Player not found\n";
-
+	*/
 }
 
 PlayerPtr helperDelete(const PlayerPtr& myRooster, const int size, const ConstPlayerPtr& idxDeletePlayer)
@@ -200,11 +234,16 @@ PlayerPtr helperDelete(const PlayerPtr& myRooster, const int size, const ConstPl
 	return temp;
 }
 
-//void removePlayerByIdx(PlayerPtr& myRooster, int& size)
-//{
-//	const std::string namePlayer = enterName(std::cin);
-//	int idxPlyaer = findIdxPlayer(myRooster,)
-//}
+PlayerPtr helperDeleteByIdx(const PlayerPtr& myRooster, const int size, const int idxDeletePlayer)
+{
+	const PlayerPtr temp = new Player[size - 1];
+	for (int idx = 0, newIdx = 0; idx < size; idx++)
+		if (idx != idxDeletePlayer)
+			temp[newIdx++] = myRooster[idx];
+
+	return temp;
+}
+
 
 ConstPlayerPtr findPlayer(const PlayerPtr& myRooster, const int size, const std::string& namePlayer)
 {
@@ -215,7 +254,7 @@ ConstPlayerPtr findPlayer(const PlayerPtr& myRooster, const int size, const std:
 	return nullptr;
 }
 
-int findIdxPlayer(const PlayerPtr& myRooster, int size, const std::string& namePlayer)
+int findIdxPlayer(const PlayerPtr& myRooster, const int size, const std::string& namePlayer)
 {
 	for (int idx = 0; idx < size; idx++)
 		if (myRooster[idx].getName() == namePlayer)
