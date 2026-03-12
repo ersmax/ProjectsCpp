@@ -14,6 +14,7 @@ set(FOLDERS
     "10.05_Grades"
     "10.06_Vector_class"
     "10.07_Player_score"
+    "10.08_Television"
 )
 
 # Automatically get all .cpp and headers files 
