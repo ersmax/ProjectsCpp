@@ -68,11 +68,11 @@ private:
 bool menu(TvPtr& tvList, int& size);
 char enterInput();
 char inputValidation();
-void addTelevision(TvPtr& tvList, int& size);
+void addTelevisions(TvPtr& tvList, int& size, bool multipleTvs);
 void showTelevision(const TvPtr& tvList, int size);
 
-std::string enterName(std::istream& inputStream);
-double enterNumber(std::istream& inputStream);
+std::string enterName(std::istream& inputStream, const std::string& prompt = "Enter name:\n");
+double enterNumber(std::istream& inputStream, const std::string& prompt = "Enter number:\n");
 
 StringPtr enterPorts(std::istream& inputStream, int& sizeNewPorts);
 void printPorts();
@@ -137,11 +137,17 @@ bool menu(TvPtr& tvList, int& size)
 	switch (char answer = inputValidation())
 	{
 		case 'a':
-			addTelevision(tvList, size);
+		{
+			constexpr bool multiple = false;
+			addTelevisions(tvList, size, multiple);
 			break;
+		}
 		case 'b':
-			// TODO
+		{
+			constexpr bool multiple = true;
+			addTelevisions(tvList, size, multiple); 
 			break;
+		}
 		case 'c':
 			showTelevision(tvList, size);
 			break;
@@ -165,18 +171,25 @@ void showTelevision(const TvPtr& tvList, const int size)
 		std::cout << tvList[idx] << '\n';
 }
 
-void addTelevision(TvPtr& tvList, int& size)
+void addTelevisions(TvPtr& tvList, int& size, const bool multipleTvs)
 {
-	const TvPtr temp = new Television[size + 1];
+	if (multipleTvs)	std::cout << "How many new televisions?\n";
+
+	const int numberTvs = (multipleTvs == true) ? static_cast<int>(enterNumber(std::cin, "")) : 1;
+		
+	const TvPtr temp = new Television[size + numberTvs];
 	for (int idx = 0; idx < size; idx++)
 		temp[idx] = tvList[idx];
-
+	
 	Television newTelevision;
 	std::cout << "Enter new television.\n";
 	std::cin >> newTelevision;
-	temp[size] = newTelevision;
-	size++;
-	delete[] tvList;
+
+	for (int idx = 0; idx < numberTvs; idx++)
+		temp[size + idx] = newTelevision;
+	
+	size += numberTvs;
+	delete [] tvList;
 	tvList = temp;
 }
 
@@ -198,8 +211,8 @@ std::ostream& operator <<(std::ostream& outputStream, const Television& myTelevi
 
 std::istream& operator >>(std::istream& inputStream, Television& newTelevision)
 {
-	const std::string newDisplayType = enterName(inputStream);
-	const double newDimension = enterNumber(inputStream);
+	const std::string newDisplayType = enterName(inputStream, "Enter model name:\n");
+	const double newDimension = enterNumber(inputStream, "Enter display in inches:\n");
 	int sizeNewPorts = 0;
 	const StringPtr newPorts = enterPorts(inputStream, sizeNewPorts);
 	newTelevision.displayType = newDisplayType;
@@ -218,7 +231,7 @@ StringPtr enterPorts(std::istream& inputStream, int& sizeNewPorts)
 	while (std::tolower(answer) == 'y')
 	{
 		printPorts();
-		std::string port = enterName(inputStream);
+		std::string port = enterName(inputStream, "Enter port name:\n");
 		if (isDuplicate(newPorts, sizeNewPorts, port))	continue;
 
 		if (!addPort(newPorts, sizeNewPorts, port))
@@ -278,12 +291,12 @@ void printPorts()
 	std::cout << "\"" << PORTS[N_PORTS - 1] << '\n';
 }
 
-std::string enterName(std::istream& inputStream)
+std::string enterName(std::istream& inputStream, const std::string& prompt)
 {
 	std::string name;
 	while (true)
 	{
-		std::cout << "Enter name:\n";
+		std::cout << prompt;
 		if (!std::getline(inputStream, name))
 		{
 			std::cerr << "Not a valid model name\n";
@@ -300,12 +313,12 @@ std::string enterName(std::istream& inputStream)
 	}
 }
 
-double enterNumber(std::istream& inputStream)
+double enterNumber(std::istream& inputStream, const std::string& prompt)
 {
 	double number;
 	while (true)
 	{
-		std::cout << "Enter display in inches:\n";
+		std::cout << prompt;
 		if (!(inputStream >> number))
 		{
 			std::cerr << "Not a valid number\n";
@@ -313,9 +326,10 @@ double enterNumber(std::istream& inputStream)
 			inputStream.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 			continue;
 		}
+		inputStream.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		if (number < 1.0)
 		{
-			std::cout << "At least number greater than or equal 1.0\n";
+			std::cout << "At least number greater than or equal to 1\n";
 			continue;
 		}
 		return number;
@@ -344,8 +358,8 @@ char inputValidation()
 {
 	while (true)
 	{
-		char letter = enterInput();
-		if (letter >= 'a' && letter <= 'e')
+		const char letter = std::tolower(enterInput());
+		if (letter >= 'a' && letter <= 'f')
 			return letter;
 		std::cout << "Not a valid choice. Retry\n";
 	}
