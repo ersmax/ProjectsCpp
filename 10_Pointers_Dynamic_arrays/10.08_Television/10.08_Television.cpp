@@ -31,8 +31,8 @@ typedef const Television *ConstTvPtr;
 const std::string MENU =		"a. Add a new tv model\n"
 								"b. Enter a standard model and a number of that item\n"
 								"c. Print all tv models\n"
-								"d. Enter a tv's name to change characteristics\n"
-								"e. Enter a tv to remove it\n"
+								"d. Enter a tv ID to change characteristics\n"
+								"e. Enter a tv ID to remove it\n"
 								"f. Exit\n"
 								"Enter an option:\n";
 constexpr int N_PORTS = 4;
@@ -70,6 +70,12 @@ char enterInput();
 char inputValidation();
 void addTelevisions(TvPtr& tvList, int& size, bool multipleTvs);
 void showTelevision(const TvPtr& tvList, int size);
+void changeCharacteristics(TvPtr& tvList, int& size, bool deleteFlag);
+void showId(const ConstTvPtr& tvList, int size);
+int selectId(const ConstTvPtr& tvList, int size);
+void changeTelevision(const TvPtr& tvList, int size, int id);
+void deleteTv(TvPtr& tvList, int& size, const int idDelete);
+
 
 std::string enterName(std::istream& inputStream, const std::string& prompt = "Enter name:\n");
 double enterNumber(std::istream& inputStream, const std::string& prompt = "Enter number:\n");
@@ -152,11 +158,17 @@ bool menu(TvPtr& tvList, int& size)
 			showTelevision(tvList, size);
 			break;
 		case 'd':
-			// TODO
+		{
+			constexpr bool deleteFlag = false;
+			changeCharacteristics(tvList, size, deleteFlag);
 			break;
+		}
 		case 'e':
-			// TODO
+		{
+			constexpr bool deleteFlag = true;
+			changeCharacteristics(tvList, size, deleteFlag);
 			break;
+		}
 		case 'f':
 			return false;
 		default:
@@ -165,10 +177,78 @@ bool menu(TvPtr& tvList, int& size)
 	return true;
 }
 
+void changeCharacteristics(TvPtr& tvList, int& size, const bool deleteFlag)
+{
+	showId(tvList, size);
+	const int id = selectId(tvList, size);
+	if (id == -1)
+	{
+		std::cout << "Empty list\n";
+		return;
+	}
+	if (deleteFlag)
+		deleteTv(tvList, size, id);
+	else
+		changeTelevision(tvList, size, id);
+}
+
+void deleteTv(TvPtr& tvList, int& size, const int idDelete)
+{
+	if (size == 1)
+	{
+		delete[] tvList;
+		tvList = nullptr;
+		size = 0;
+		std::cout << "Last item deleted. List is empty\n";
+		return;
+	}
+	
+	const TvPtr temp = new Television[size - 1];
+	for (int idx = 0, idxNew = 0; idx < size; idx++)
+		if (idx != idDelete)
+			temp[idxNew++] = tvList[idx];
+
+	size--;
+	delete [] tvList;
+	tvList = temp;
+}
+
+void showId(const ConstTvPtr& tvList, const int size)
+{
+	std::cout << "List IDs:\n";
+	for (int idx = 0; idx < size - 1; idx++)
+		std::cout << idx + 1 << ", ";
+	std::cout << size << '\n';
+}
+
+int selectId(const ConstTvPtr& tvList, const int size)
+{	
+	if (size == 0)	return -1;
+	int idSelected = static_cast<int>(enterNumber(std::cin));
+	idSelected--;	// 0-base index
+	while (idSelected < 0 || idSelected >= size)
+	{
+		std::cout << "Index not valid. Please choose one of the valid IDs among these:\n";
+		showId(tvList, size);
+		idSelected = static_cast<int>(enterNumber(std::cin));
+		idSelected--;
+	}
+	return idSelected;
+}
+
+void changeTelevision(const TvPtr& tvList, const int size, const int id)
+{
+	std::cout << std::setw(15) << "ID: " << id + 1 << '\n';
+	std::cout << tvList[id];
+	Television newTelevision;
+	std::cin >> newTelevision;
+	tvList[id] = newTelevision;
+}
+
 void showTelevision(const TvPtr& tvList, const int size)
 {
 	for (int idx = 0; idx < size; idx++)
-		std::cout << tvList[idx] << '\n';
+		std::cout << std::setw(15) << "ID: " << idx + 1 << tvList[idx] << '\n';
 }
 
 void addTelevisions(TvPtr& tvList, int& size, const bool multipleTvs)
@@ -186,8 +266,14 @@ void addTelevisions(TvPtr& tvList, int& size, const bool multipleTvs)
 	std::cin >> newTelevision;
 
 	for (int idx = 0; idx < numberTvs; idx++)
-		temp[size + idx] = newTelevision;
-	
+	{
+		/* Initialize with the overloaded assignment operator (deep copy) */
+		// temp[size + idx] = newTelevision;
+
+		/* Explicitly use the copy constructor to create new object (deep copy) */
+		const Television copyTv(newTelevision);
+		temp[size + idx] = copyTv;
+	}
 	size += numberTvs;
 	delete [] tvList;
 	tvList = temp;
