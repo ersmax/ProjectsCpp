@@ -1,22 +1,3 @@
-/*
-Create a class called Television that has member variables
-displayType – A string that stores the television’s display type
-dimension – A variable of type double that stores the dimension
-of the television in inches.
-connectivitySupport – A dynamic array of strings that stores the different
-connectivity modes supported by the television
-The class should have mutator and accessor functions to set and get the above
-member variables. Include a constructor that takes arguments of type string,
-double, and an array of strings to assign the three member variables. Also include
-a copy constructor.
-Embed your class in a test program that reads the input from the user to set displayType,
-dimension, and connectivitySupport values by default for a television.
-Your program should then read in input for the number of televisions. Your
-program should create as many Television objects as required using the copy
-constructor, and ask the user if customization is required for any television. If so,
-use the mutator methods to set the values accordingly.
-*/
-
 #include <iomanip>
 #include <iostream>
 #include <string>
@@ -53,37 +34,104 @@ public:
 	~Television() { delete [] connectivitySupport; }
 	Television(const Television& secondTv);
 	Television& operator =(const Television& secondTv);
+	//   Postcondition: The calling object has been assigned the values of the secondTv object. 
+	// A deep copy is performed for the dynamic array.
+
 	friend std::istream& operator >>(std::istream& inputStream, Television& newTelevision);
+	//   Precondition: The input stream is open and ready for reading. 
+	// The newTelevision object is passed by reference and will be modified by the function.
+	//   Postcondition: The function reads the display type, dimension, and connectivity support from the input stream 
+	// and assigns them to the newTelevision object.
+
 	friend std::ostream& operator <<(std::ostream& outputStream, const Television& myTelevision);
+	//   Precondition: The output stream is open and ready for writing. 
+	// The myTelevision object is passed by reference and will not be modified by the function.
+	//   Postcondition: The function writes the display type, dimension, and connectivity support of the myTelevision object
+	// to the output stream in a formatted manner.
+
 private:
 	std::string displayType;
 	double dimension;
 	StringPtr connectivitySupport;
 	int sizeConnectivity;
 	void setDimension(const double inches) { dimension = (inches >= 1.0) ? inches : throw std::invalid_argument("Not a valid size\n"); }
-
 };
 
 
 bool menu(TvPtr& tvList, int& size);
-char enterInput();
-char inputValidation();
-void addTelevisions(TvPtr& tvList, int& size, bool multipleTvs);
-void showTelevision(const TvPtr& tvList, int size);
-void changeCharacteristics(TvPtr& tvList, int& size, bool deleteFlag);
-void showId(const ConstTvPtr& tvList, int size);
-int selectId(const ConstTvPtr& tvList, int size);
-void changeTelevision(const TvPtr& tvList, int size, int id);
-void deleteTv(TvPtr& tvList, int& size, const int idDelete);
+//   Precondition: The tvList pointer is initialized to nullptr and size is initialized to 0.
+//   Postcondition: The function displays a menu of options to the user and processes the user's input to perform various operations on the tvList.
 
+char inputValidation();
+//   Postcondition: The function continuously prompts the user for input until a valid character (between 'a' and 'f') is entered, 
+// and returns the valid character. Used to ensure that the user selects a valid option from the menu.
+
+char enterInput();
+//   Postcondition: The function reads a single character input from the user, validates it, and returns the lowercase version of the character.
+
+void addTelevisions(TvPtr& tvList, int& size, bool multipleTvs);
+//   Precondition: The tvList pointer is initialized to nullptr and size is initialized to 0. 
+// multipleTvs is a boolean that indicates whether the user wants to add multiple televisions or just one.
+//   Postcondition: The function prompts the user to enter the details of a new television (or multiple televisions if multipleTvs is true),
+// creates new Television objects using the copy constructor, and adds them to the tvList. The size variable is updated accordingly.
+
+void showTelevision(const TvPtr& tvList, int size);
+//   Postcondition: The function iterates through the tvList and prints the details of each television to the console in a formatted manner.
+
+void changeCharacteristics(TvPtr& tvList, int& size, bool deleteFlag);
+//   Precondition: The tvList pointer is initialized to nullptr and size is initialized to 0. 
+// deleteFlag is a boolean that indicates whether the user wants to change the characteristics of a television or delete
+//   Postcondition: The function displays the IDs of the televisions in the tvList, 
+// prompts the user to select a television by its ID, and either changes the characteristics of the selected television (if deleteFlag is false) 
+// or deletes the selected television from the list (if deleteFlag is true). The size variable is updated accordingly if a television is deleted.
+
+void showId(const ConstTvPtr& tvList, int size);
+//   Postcondition: The function iterates through the tvList and prints the IDs (1-based index) of each television to the console.
+
+int selectId(const ConstTvPtr& tvList, int size);
+//   Postcondition: The function prompts the user to enter a television ID, validates the input, 
+// and returns the selected ID (0-based index) if it is valid.
+
+void changeTelevision(const TvPtr& tvList, int size, int id);
+//   Precondition: The tvList pointer is initialized to nullptr and size is initialized to 0. id is a valid index of the tvList.
+//   Postcondition: The function displays the details of the television at the specified ID, prompts the user to enter new details for the television,
+// and updates the television at the specified ID with the new details.
+
+void deleteTv(TvPtr& tvList, int& size, int idDelete);
+//   Precondition: The tvList pointer is initialized to nullptr and size is initialized to 0. idDelete is a valid index of the tvList.
+//   Postcondition: The function deletes the television at the specified ID from the tvList, updates the size variable accordingly,
+// and handles the case when the last television is deleted, resulting in an empty list.
 
 std::string enterName(std::istream& inputStream, const std::string& prompt = "Enter name:\n");
+//   Precondition: The inputStream is open and ready for reading. The prompt is a string that will be displayed to the user when asking for input.
+//   Postcondition: The function prompts the user with the provided prompt, reads a line of input from the user, 
+// validates it, and returns the input as a string.
+
 double enterNumber(std::istream& inputStream, const std::string& prompt = "Enter number:\n");
+//   Precondition: The inputStream is open and ready for reading. The prompt is a string that will be displayed to the user when asking for input.
+//   Postcondition: The function prompts the user with the provided prompt, reads a number from the user, validates it, and returns the number as a double.
 
 StringPtr enterPorts(std::istream& inputStream, int& sizeNewPorts);
+//   Precondition: The inputStream is open and ready for reading. sizeNewPorts is initialized to 0.
+//   Postcondition: The function prompts the user to enter port names, validates the input, 
+// and returns a dynamic array of strings containing the entered port names.
+
 void printPorts();
-bool isDuplicate(const ConstStringPtr& newPorts, const int size, const std::string& port);
+//   Precondition: Helper function of enterPorts.
+//   Postcondition: The function prints the list of valid port names to the console.
+
+bool isDuplicate(const ConstStringPtr& newPorts, int size, const std::string& port);
+//   Precondition: Helper function of enterPorts.
+// newPorts is a dynamic array of strings containing the currently entered port names, 
+// size is the number of ports in the array, and port is the new port name to be checked for duplication.
+//   Postcondition: The function checks if the provided port name already exists in the newPorts array and returns true if it is a duplicate,
+// or false if it is not a duplicate.
+
 bool addPort(StringPtr& newPorts, int& size, const std::string& port);
+//   Precondition: Helper function of enterPorts.
+//   Postcondition: The function checks if the provided port name is valid (exists in the predefined list of ports), 
+// and if it is valid, adds it to the newPorts array, updates the size variable accordingly, and returns true. 
+// If the port name is not valid, the function returns false and does not modify the newPorts array or size variable.
 
 int main( )
 {

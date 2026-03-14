@@ -572,3 +572,10 @@ Pointers, Dynamic arrays, Classes, Pointers and dynamic arrays
    Input is robustly validated: names are read with `getline` to support spaces, and scores must be non-negative integers. 
    The menu system ensures safe memory management (no leaks or double-frees), and the code demonstrates dynamic allocation, pointer manipulation, 
    and modular design. The README for this project explores alternative approaches for removing players (by index or pointer to indexed variable to be deleted).
+8. [Television Invetory manager](10_Pointers_Dynamic_arrays/10.08_Television_store)
+   Implements an interactive **Television inventory manager** using raw pointers and dynamic arrays.
+   - Defines a `Television` class with `displayType`, `dimension`, and a dynamic array of connectivity ports (`connectivitySupport`), managing memory via the Rule of Three (destructor, copy constructor, copy assignment).
+   - Provides multiple constructors, including one that takes a name, size, and an array of strings for ports.
+   - Overloads stream operators `>>` and `<<` to read/write televisions, delegating validation of names, numeric input, and ports to helper functions.
+   - Maintains a dynamic array of `Television` objects (`tvList`); menu actions add, clone, modify, and delete items by ID by reallocating arrays and deep-copying elements.
+   - Validates all user input: menu choices (`a`–`f`), numeric ranges (size ≥ 1 inch, counts ≥ 1), and connectivity ports against a fixed list (`HDMI`, `DISPLAY PORT`, `USB A`, `USB C`), rejecting invalid or duplicate ports.
