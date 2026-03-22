@@ -579,3 +579,16 @@ Pointers, Dynamic arrays, Classes, Pointers and dynamic arrays
    - Overloads stream operators `>>` and `<<` to read/write televisions, delegating validation of names, numeric input, and ports to helper functions.
    - Maintains a dynamic array of `Television` objects (`tvList`); menu actions add, clone, modify, and delete items by ID by reallocating arrays and deep-copying elements.
    - Validates all user input: menu choices (`a`–`f`), numeric ranges (size ≥ 1 inch, counts ≥ 1), and connectivity ports against a fixed list (`HDMI`, `DISPLAY PORT`, `USB A`, `USB C`), rejecting invalid or duplicate ports.
+
+   ---
+
+## 11. Separate Compilation and Namespaces
+Separate Compilation, Namespaces
+
+1. [Namespace handling](11_Separate_Compilation_Namespaces/11.01_Namespace_handling) 
+   \- This program demonstrates the use of namespaces and separate compilation in C++. 
+   It defines two functions within a user-defined namespace. The program is organized into multiple files: 
+   header files for declarations (interface), source files for definitions (implementation), 
+   and a main program file (application). 
+   The main program calls both functions to demonstrate how namespaces group related functions 
+   and how separate compilation allows for modular design and efficient build times.
