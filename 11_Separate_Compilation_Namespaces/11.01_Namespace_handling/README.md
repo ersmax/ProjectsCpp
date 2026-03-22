@@ -42,6 +42,8 @@ In the header files I declare the functions inside a user-defined namespace
 "A" and protect each header with an include guard, so it can be included
 safely from multiple source files:
 
+```cpp
+
     #ifndef F_H_11_01
     #define F_H_11_01
 
@@ -50,6 +52,7 @@ safely from multiple source files:
     }
 
     #endif
+```
 
 The header for "g()" is analogous. These headers expose only the function
 declarations and the namespace, but they do not include <iostream>.
@@ -61,6 +64,7 @@ In the implementation files "11.01_f.cpp" and "11.01_g.cpp" I include the
 corresponding header and <iostream>, then provide the function bodies
 inside the same namespace "A". For example, "11.01_f.cpp" contains:
 
+```cpp
     #include <iostream>
     #include "11.01_f.h"
 
@@ -69,6 +73,7 @@ inside the same namespace "A". For example, "11.01_f.cpp" contains:
             std::cout << "Calling function f()\n";
         }
     }
+```
 
 This shows how the namespace groups related functions ("f" and "g") and
 how the implementation is kept separate from the interface. Each ".cpp"
@@ -80,13 +85,16 @@ separate compilation for build times and modular design.
 
 The main program "11.01_main.cpp" includes just the headers it needs:
 
+```cpp
     #include "11.01_f.h"
     #include "11.01_g.h"
+```
 
 Inside main() I avoid a global "using namespace std;" directive. Instead
 I either qualify names (for example std::cout and A::f) or use local
 using declarations in small blocks, as in:
 
+```cpp
     int main() {
         {
             using A::f;
@@ -98,6 +106,7 @@ using declarations in small blocks, as in:
         }
         return 0;
     }
+```
 
 This demonstrates how to access names from a user-defined namespace without
 polluting the global namespace. The local using declarations are limited
