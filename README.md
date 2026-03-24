@@ -592,3 +592,16 @@ Separate Compilation, Namespaces
    and a main program file (application). 
    The main program calls both functions to demonstrate how namespaces group related functions 
    and how separate compilation allows for modular design and efficient build times.
+2. [Partially Filled Arrays of doubles](11_Separate_Compilation_Namespaces/11.02_Partially_filled_arrays_doubles) 
+   \- This program defines a Partially Filled Array of doubles class inside a namespace to manage a dynamic array of doubles with a fixed capacity and a "used" count. 
+   It supports default and capacity constructors, copy constructor, overloaded assignment operator, and destructor (Rule of Three), plus `addElement` with capacity checks, `operator[]` with bounds checking, and utility functions `full`, `getCapacity`, `getNumberUSed`, and `emptyArray`. 
+   Friend stream operators `>>` and `<<` let the user enter nonnegative doubles (stopping at a negative sentinel or when full) and print all stored values. 
+   The project demonstrates separate compilation and namespaces by placing the class interface in a header, its implementation in a source file, and the test driver in a third file that uses a local `using` declaration to access `PFArrayD`.
+3. [Rainbow](11_Separate_Compilation_Namespaces/11.03_Rainbow) 
+   \- This program defines a `RainbowColor` abstract data type inside namespace `myNamespace` to represent a single color in the visible spectrum.
+   Colors are stored internally as integer codes with parallel name/code lookup tables in an unnamed namespace. 
+   The class provides constructors from a color code, from the first letter of the color name, and a default constructor (first spectrum color), 
+   plus `getColorCode`, `getColorName`, and `nextColor` which cycles to the next spectrum color with wrap-around.
+   Helper functions and an overloaded `operator>>` allow the user to enter either a color name or its numeric code with validation. 
+   A separate application file prints the table of all colors/codes, reads two `RainbowColor` objects from the user, 
+   and shows each entered color along with its successor in the spectrum, illustrating both namespaces and separate compilation.
