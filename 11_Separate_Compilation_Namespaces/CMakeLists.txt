@@ -9,5 +9,6 @@
 add_subdirectory ("11.01_Namespace_handling")
 add_subdirectory ("11.02_Array_doubles")
 add_subdirectory ("11.03_Rainbow")
+add_subdirectory ("11.04_Security")
 
 # TODO: Add tests and install targets if needed.
