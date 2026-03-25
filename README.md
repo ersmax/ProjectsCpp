@@ -592,7 +592,7 @@ Separate Compilation, Namespaces
    and a main program file (application). 
    The main program calls both functions to demonstrate how namespaces group related functions 
    and how separate compilation allows for modular design and efficient build times.
-2. [Partially Filled Arrays of doubles](11_Separate_Compilation_Namespaces/11.02_Partially_filled_arrays_doubles) 
+2. [Partially Filled Arrays of doubles](11_Separate_Compilation_Namespaces/11.02_Arrays_doubles) 
    \- This program defines a Partially Filled Array of doubles class inside a namespace to manage a dynamic array of doubles with a fixed capacity and a "used" count. 
    It supports default and capacity constructors, copy constructor, overloaded assignment operator, and destructor (Rule of Three), plus `addElement` with capacity checks, `operator[]` with bounds checking, and utility functions `full`, `getCapacity`, `getNumberUSed`, and `emptyArray`. 
    Friend stream operators `>>` and `<<` let the user enter nonnegative doubles (stopping at a negative sentinel or when full) and print all stored values. 
