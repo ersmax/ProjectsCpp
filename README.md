@@ -610,3 +610,10 @@ Separate Compilation, Namespaces
    The class includes a `validate` function that checks a given username and password, returning an integer representing the privilege level (0 for invalid, 1 for user, 2 for admin). 
    The program is organized into separate files: a header file for the `Security` class declaration, a source file for its implementation, and additional files for `Administrator` and `User` classes that utilize `Security`. 
    The main application tests the login functionality for both user and administrator classes, demonstrating the use of namespaces and separate compilation in C++.
+5. [Authenticate](11_Separate_Compilation_Namespaces/11.05_Authentication) 
+   \- This program implements a simple authentication system using separate compilation and namespaces. 
+   It defines two modules: one for handling usernames and another for passwords, each with its own implementation details hidden in unnamed namespaces. 
+   The `Authenticate` namespace provides a public interface for inputting and retrieving the username and password, while the internal logic 
+   for validation is encapsulated within the respective source files. 
+   The main application prompts the user to enter a valid username (8 letters only) and a valid password (at least 8 characters, including at least one digit and one special character), 
+   demonstrating how separate compilation allows for modular design and how namespaces help organize code while preventing name conflicts.
