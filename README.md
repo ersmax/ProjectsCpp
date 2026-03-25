@@ -605,3 +605,8 @@ Separate Compilation, Namespaces
    Helper functions and an overloaded `operator>>` allow the user to enter either a color name or its numeric code with validation. 
    A separate application file prints the table of all colors/codes, reads two `RainbowColor` objects from the user, 
    and shows each entered color along with its successor in the spectrum, illustrating both namespaces and separate compilation.
+4. [Security](11_Separate_Compilation_Namespaces/11.04_Security) 
+   \- This program defines a `Security` class that manages user credentials and validates them against stored accounts. 
+   The class includes a `validate` function that checks a given username and password, returning an integer representing the privilege level (0 for invalid, 1 for user, 2 for admin). 
+   The program is organized into separate files: a header file for the `Security` class declaration, a source file for its implementation, and additional files for `Administrator` and `User` classes that utilize `Security`. 
+   The main application tests the login functionality for both user and administrator classes, demonstrating the use of namespaces and separate compilation in C++.

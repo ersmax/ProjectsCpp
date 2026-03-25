@@ -1,6 +1,9 @@
 #include <iostream>
 #include <stdexcept>
+#include <limits>
 #include "11.04_Security.h"
+
+const std::vector<int> PRIVILEGES = {1, 2};
 
 namespace
 {
@@ -32,20 +35,20 @@ namespace
 				continue;
 			}
 			inputStream.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-			if (number < 1 || number > 2)
+			if (number < 1 || number > 2)	// check privileges
 				continue;
 			break;
 		}
 	}
 
 
-}
-
+} // unnamed namespace
 
 Security::Security() : privilege(1)
 { /* body intentionally left empty */ }
 
-Security::Security(const std::string& user, const std::string& pwd, const int userType) : username(user), password(pwd)
+Security::Security(std::string user, std::string pwd, const int userType) : username(std::move(user)), 
+																			password(std::move(pwd))
 {
 	if (userType < 1 || userType > 2)
 		throw std::invalid_argument("Not a valid privilege type\n");
@@ -60,11 +63,6 @@ int Security::validate(const std::string& user, const std::string& pwd) const
 	
 	return 0;
 }
-
-const std::string& Security::getName() const { return username; }
-
-const std::string& Security::getPassword() const { return password; }
-
 
 std::istream& operator >>(std::istream& inputStream, Security& myLogin)
 {
