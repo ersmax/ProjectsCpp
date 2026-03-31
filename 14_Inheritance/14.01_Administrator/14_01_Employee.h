@@ -44,7 +44,8 @@ namespace myNamespaceEmployees
 		void setName(const std::string& newName);
 		void setSsn(const std::string& newSsn);
 		void setNetPay(double newNetPay);
-		static void printCheck();
+		virtual void printCheck();
+		virtual ~Employee() = default;
 	private:
 		std::string name;
 		std::string ssn;
