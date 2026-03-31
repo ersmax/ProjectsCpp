@@ -617,3 +617,14 @@ Separate Compilation, Namespaces
    for validation is encapsulated within the respective source files. 
    The main application prompts the user to enter a valid username (8 letters only) and a valid password (at least 8 characters, including at least one digit and one special character), 
    demonstrating how separate compilation allows for modular design and how namespaces help organize code while preventing name conflicts.
+
+  
+---
+
+## 14. Inheritance
+Inheritance basics, Programming with Inheritance.
+
+1. [Administrator](14_Inheritance/14.01_Administrator) 
+   Extends a base class of Employees with an `Administrator` class that adds title, area of responsibility, and supervisor name,
+   reads administrator data from the keyboard with validation, computes annual salary from weekly salary, and overrides
+   `printCheck` to emit an annotated annual-salary check.
