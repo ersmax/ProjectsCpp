@@ -12,10 +12,10 @@ immediate supervisor.
 - A protected member variable of type double that holds the administrator’s
 annual salary. It is possible for you to use the existing salary member if you
 changed private in the base class to protected.
-\- A member function called setSupervisor, which changes the supervisor name.
-\- A member function for reading in an administrator’s data from the keyboard.
-\- A member function called print, which outputs the object’s data to the screen.
-\- Finally, an overloading of the member function printCheck( ) with appropriate
+- A member function called setSupervisor, which changes the supervisor name.
+- A member function for reading in an administrator’s data from the keyboard.
+- A member function called print, which outputs the object’s data to the screen.
+- Finally, an overloading of the member function printCheck( ) with appropriate
 notations on the check.
 
 ---
