@@ -14,7 +14,7 @@ namespace myNamespaceEmployees
 		SalariedEmployee(const std::string& theName, const std::string& theSsn, double theWeeklySalary);
 		double getSalary() const;
 		void setSalary(double newSalary);
-		void printCheck();
+		void printCheck() override;
 		// Override base class function behavior of printCheck()
 	private:
 		double salary;	// weekly

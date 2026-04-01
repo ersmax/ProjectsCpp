@@ -40,7 +40,7 @@ namespace
 		bool firstChar = true;
 		for (char& c : myString)
 		{
-			unsigned char uc = static_cast<unsigned char>(c);
+			const unsigned char uc = static_cast<unsigned char>(c);
 			if (firstChar)
 			{
 				c = static_cast<char>(std::toupper(uc));

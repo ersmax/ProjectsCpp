@@ -633,4 +633,8 @@ Inheritance basics, Programming with Inheritance.
    (`HourlyEmployee`, `SalariedEmployee` and `SalariedEmployee`-derived `Administrator`).
    Uses `std::vector<std::unique_ptr<Employee>>` to avoid slicing, helper functions for validated input, and a text menu to add
    employees or display subsets by dynamic type (hourly / salaried / admin), and print aggregate employee counts.
+3. [Doctor](14_Inheritance/14.03_Doctor)
+   Defines a derived class `Doctor` from `SalariedEmployee` that adds a medical specialty and office visit fee,
+   validates the specialty against a fixed list, reads all doctor data interactively with robust input checks,
+   and overrides parent functions to print a weekly pay stub that also shows the doctor’s specialty and visit fee.
 

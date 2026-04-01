@@ -26,7 +26,7 @@ namespace myNamespaceEmployees
 		void print() const;
 		//   Postcondition: The administrator's name, ssn, weekly salary, title, area of responsibility,
 		// and supervisor have been printed to the screen.
-		void printCheck();
+		void printCheck() override;
 		//   Precondition: Override base class function behavior of printCheck()
 		//   Postcondition: The administrator's name, ssn, and annual salary have been printed on a check.
 	private:

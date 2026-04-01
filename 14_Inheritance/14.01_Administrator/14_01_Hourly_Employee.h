@@ -18,7 +18,7 @@ namespace myNamespaceEmployees
 		void setHours(double hoursWorked);
 		double getRate() const;
 		double getHours() const;
-		void printCheck();
+		void printCheck() override;
 		// Override base class function behavior of printCheck()
 	private:
 		double wageRate;
