@@ -4,11 +4,10 @@
 using myNamespaceMenu::Menu;
 
 void test(Menu & myMenu);
-char choiceValidation();
 
 int main()
 {
-
+	using myNamespaceMenu::choiceValidation;
 	Menu aMenu;
 	do
 	{
@@ -22,6 +21,7 @@ int main()
 
 void test(Menu& myMenu)
 {
+	using myNamespaceMenu::choiceValidation;
 	std::cout << "Add ('a') or show ('s') employees?\n";
 	switch (choiceValidation())
 	{
@@ -34,22 +34,5 @@ void test(Menu& myMenu)
 	default:
 		std::cout << "Not a valid choice\n";
 		break;
-	}
-}
-
-char choiceValidation()
-{
-	char choice;
-	while (true)
-	{
-		if (!(std::cin >> choice))
-		{
-			std::cout << "Not a valid choice\n";
-			std::cin.clear();
-			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-			continue;
-		}
-		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-		return choice;
 	}
 }

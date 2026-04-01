@@ -15,24 +15,6 @@ typedef Employee *EmployeePtr;
 
 namespace 
 {
-
-	char choiceValidation()
-	{
-		char choice;
-		while (true)
-		{
-			if (!(std::cin >> choice))
-			{
-				std::cout << "Not a valid choice\n";
-				std::cin.clear();
-				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-				continue;
-			}
-			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-			return choice;
-		}
-	}
-
 	std::string nameValidation()
 	//   Postcondition: Reads a line of input from the user and returns it. 
 	// If the input is empty or invalid, prompts the user to enter a valid input until a non-empty line is entered.
@@ -147,6 +129,23 @@ namespace myNamespaceMenu
 	int Menu::hourlyEmployees = 0;
 	int Menu::salariedEmployees = 0;
 	int Menu::administratorEmployees = 0;
+
+	char choiceValidation()
+	{
+		char choice;
+		while (true)
+		{
+			if (!(std::cin >> choice))
+			{
+				std::cout << "Not a valid choice\n";
+				std::cin.clear();
+				std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+				continue;
+			}
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			return choice;
+		}
+	}
 
 	Menu::Menu()
 	{ /* body intentionally left empty */ }

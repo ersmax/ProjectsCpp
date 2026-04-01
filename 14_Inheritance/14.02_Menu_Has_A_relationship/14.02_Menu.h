@@ -18,22 +18,32 @@ using myNamespaceEmployees::Employee;
 namespace myNamespaceMenu
 {
 
-      class Menu
-		{
-		public:
-			Menu();
-			void addEmployee();
-			//   Precondition: we want to avoid object slicing, 
-			// that is derived class that is treated as base class
-			// (avoid losing derived class extra member definition and overriden printCheck() ).
-			void showEmployee();
-			void getNumberEmployees() const;
-		private:
-			std::vector<std::unique_ptr<Employee>> employees;
-			static int hourlyEmployees;
-			static int salariedEmployees;
-			static int administratorEmployees;
-		}; 
+	class Menu
+	{
+	public:
+		Menu();
+		void addEmployee();
+		//   Precondition: we want to avoid object slicing, 
+		// that is derived class that is treated as base class
+		// (avoid losing derived class extra member definition and overriden printCheck() ).
+		//   Postcondition: the employee is added to the vector of unique pointers to Employee objects.
+		void showEmployee();
+		//   Postcondition: the employee information is displayed by calling the printCheck() 
+		// function of each Employee object in the vector of unique pointers to Employee objects.
+		void getNumberEmployees() const;
+		//   Postcondition: the number of employees in each category (hourly, salaried, administrator) 
+		// is displayed.
+	private:
+		std::vector<std::unique_ptr<Employee>> employees;
+		//   Precondition: the vector of unique pointers to Employee objects is initialized 
+		// and ready to store Employee objects.
+		static int hourlyEmployees;
+		static int salariedEmployees;
+		static int administratorEmployees;
+	}; 
+	
+	char choiceValidation();
+	  		
 
 } // myNamespaceMenu
 
