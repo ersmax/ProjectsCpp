@@ -1,7 +1,7 @@
 #include <iomanip>
 #include <iostream>
 #include <limits>
-#include "14.02_Menu.h"
+#include "14_02_Menu.h"
 
 
 using myNamespaceEmployees::Administrator;
@@ -89,14 +89,6 @@ namespace
 		return anHourly;
 	}
 
-	void showAdministrators(const std::vector<std::unique_ptr<Employee>>& employees)
-	//   Postcondition: show only Administrator class
-	{
-		for (const auto& e : employees)
-			if (const AdministratorPtr admin = dynamic_cast<AdministratorPtr>(e.get()))
-				admin->printCheck();
-	}
-
 	void showSalaried(const std::vector<std::unique_ptr<Employee>>& employees)
 	//   Postcondition: show only Salaried class
 	{
@@ -105,6 +97,14 @@ namespace
 			// if the real object is a SalariedEmployee (or a class derived from it, 
 			// like Administrator), the cast succeeds and returns a non‑null pointer.
 				salaried->printCheck();
+	}
+
+	void showAdministrators(const std::vector<std::unique_ptr<Employee>>& employees)
+	//   Postcondition: show only Administrator class
+	{
+		for (const auto& e : employees)
+			if (const AdministratorPtr admin = dynamic_cast<AdministratorPtr>(e.get()))
+				admin->printCheck();
 	}
 
 	void showHourly(const std::vector<std::unique_ptr<Employee>>& employees)
