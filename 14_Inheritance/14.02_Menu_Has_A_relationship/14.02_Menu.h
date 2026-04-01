@@ -1,11 +1,3 @@
-/*
-Add temporary, administrative, permanent, and other classifications of employees
-to the hierarchy from Displays 14.1, 14.3, and 14.4. Implement and test this
-hierarchy.
-Test all member functions. A user interface with a menu would be a nice
-touch for your test program.
-*/
-
 #ifndef MENU_14_02_H
 #define MENU_14_02_H
 
@@ -43,7 +35,11 @@ namespace myNamespaceMenu
 	}; 
 	
 	char choiceValidation();
-	  		
+	//   Postcondition: Reads a character of input from the user and returns it.
+	// This allows the user to choose between adding an employee or showing employee information,
+	// in a menu-fashion style. 
+	// The reason is not defined in an unnamed namespace is that 
+	// it is used in both Menu member functions and the test function in 14.02_Application.cpp.
 
 } // myNamespaceMenu
 

@@ -3,7 +3,7 @@
 
 using myNamespaceMenu::Menu;
 
-void test(Menu & myMenu);
+static void test(Menu & myMenu);
 
 int main()
 {

@@ -628,3 +628,9 @@ Inheritance basics, Programming with Inheritance.
    Extends a base class of Employees with an `Administrator` class that adds title, area of responsibility, and supervisor name,
    reads administrator data from the keyboard with validation, computes annual salary from weekly salary, and overrides
    `printCheck` to emit an annotated annual-salary check.
+2. [Menu Interface Employees](14_Inheritance/14.02_Menu_Has_A_relationship)
+   Console menu that showcases *has-a* relationship, which represents a collection of polymorphic `Employee` objects 
+   (`HourlyEmployee`, `SalariedEmployee` and `SalariedEmployee`-derived `Administrator`).
+   Uses `std::vector<std::unique_ptr<Employee>>` to avoid slicing, helper functions for validated input, and a text menu to add
+   employees or display subsets by dynamic type (hourly / salaried / admin), and print aggregate employee counts.
+
