@@ -643,3 +643,10 @@ Inheritance basics, Programming with Inheritance.
    and a derived `ScienceStudent` class that adds science discipline and course type (Undergraduate/Postgraduate).
    Includes stream operators `>>`/`<<` for all classes, shared input-validation helpers, and explicit
    copy constructor and assignment operator tests for the derived class.
+5. [Electronic Medical System](14_Inheritance/14.05_EMS)
+   Implements a simple clinic billing system using inheritance and composition.
+   `Person` is a base class storing a patient's name and stream operators that use shared input-validation helpers.
+   `Doctor` derives from a `Salaried Employee` class and adds medical specialty and visit fee, and reads/prints full doctor information.
+   `Patient` derives from `Person` and owns a primary `Doctor` by value; it can be constructed with an existing `Doctor` or read interactively.
+   `Billing` owns a `Patient`, a `Doctor`, and a computed the amount due (doctor fee plus 22% VAT); stream operators read/write full billing records.
+   The driver program creates doctors, patients, and billing records, then prints each bill and the total clinic income.
