@@ -11,10 +11,18 @@ namespace myNamespaceUniversity
 		ScienceStudent();
 		ScienceStudent(const std::string& theName, int theNumber, const UniversityStaff& theProctor,
 		               std::string theDiscipline, const std::string& theCourse);
+		ScienceStudent(const ScienceStudent& theObject) = default;
+		ScienceStudent& operator =(const ScienceStudent& aScienceStudent) = default;
 		const std::string& getDiscipline() const;
 		const std::string& getCourse() const;
 		friend std::istream& operator >>(std::istream& inputStream, ScienceStudent& aScienceStudent);
+		//   Postcondition: The student's university name, registration number, proctor, discipline, 
+		// and course have been read from the input stream and stored in aScienceStudent. 
+		// The course must be either "Undergraduate" or "Postgraduate". 
+		// If the input is invalid, the user is prompted to re-enter the information until valid input is entered.
 		friend std::ostream& operator <<(std::ostream& outputStream, const ScienceStudent& aScienceStudent);
+		//   Postcondition: The student's university name, registration number, proctor, discipline, 
+		// and course have been printed to the output stream.
 	private:
 		std::string discipline;
 		std::string course;

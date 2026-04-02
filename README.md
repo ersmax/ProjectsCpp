@@ -637,4 +637,9 @@ Inheritance basics, Programming with Inheritance.
    Defines a derived class `Doctor` from `SalariedEmployee` that adds a medical specialty and office visit fee,
    validates the specialty against a fixed list, reads all doctor data interactively with robust input checks,
    and overrides parent functions to print a weekly pay stub that also shows the doctor’s specialty and visit fee.
-
+4. [Student](14_Inheritance/14.04_Student)
+   Implements a small inheritance hierarchy to model university enrollment.
+   Defines a base `Student` class with university name, registration number, and a `UniversityStaff` proctor,
+   and a derived `ScienceStudent` class that adds science discipline and course type (Undergraduate/Postgraduate).
+   Includes stream operators `>>`/`<<` for all classes, shared input-validation helpers, and explicit
+   copy constructor and assignment operator tests for the derived class.

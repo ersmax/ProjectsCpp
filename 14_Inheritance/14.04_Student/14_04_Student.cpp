@@ -25,15 +25,15 @@ namespace myNamespaceUniversity
 
 	std::ostream& operator <<(std::ostream& outputStream, const Student& aStudent)
 	{
-		outputStream << "University name: " << aStudent.universityName << '\n';
+		outputStream << "\nUniversity name: " << aStudent.universityName << '\n';
 		outputStream << "Student number: " << aStudent.registrationNumber << '\n';
-		outputStream << "Proctor: " << aStudent.proctor.getName() << '\n';
+		outputStream << "Proctor " << aStudent.proctor;
 		return outputStream;
 	}
 
 	const std::string& Student::getUniversity() const { return universityName; }
 
-	const std::string& Student::getRegistration() const { return universityName; }
+	int Student::getRegistration() const { return registrationNumber; }
 
 	const std::string& Student::getProctor() const { return (proctor.getName()); }
 

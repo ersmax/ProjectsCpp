@@ -20,7 +20,7 @@ namespace myNamespaceUniversity
 
 	std::ostream& operator <<(std::ostream& outputStream, const UniversityStaff& aStaff)
 	{
-		outputStream << aStaff.name;
+		outputStream << "Professor name: " << aStaff.name << '\n';
 		return outputStream;
 	}
 }
