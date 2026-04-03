@@ -16,7 +16,7 @@ namespace myNamespacePayment
 	std::ostream& operator <<(std::ostream& outputStream, const CashPayment& aPayment)
 	{
 		outputStream << dynamic_cast<const Payment&>(aPayment);
-		CashPayment::paymentDetails(outputStream);
+		aPayment.paymentDetails(outputStream);
 		return outputStream;
 	}
 }

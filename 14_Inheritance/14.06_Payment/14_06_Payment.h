@@ -12,7 +12,7 @@ namespace myNamespacePayment
 		Payment(float theAmount);
 		float getAmountPayment() const;
 		void setAmount(float theAmount);
-		static void paymentDetails(std::ostream& outputStream);
+		void paymentDetails(std::ostream& outputStream);
 		friend std::istream& operator >>(std::istream& inputStream, Payment& aPayment);
 		friend std::ostream& operator <<(std::ostream& outputStream, const Payment& aPayment);
 	private:

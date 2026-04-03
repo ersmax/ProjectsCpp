@@ -1,9 +1,12 @@
 #include <limits>
+#include <string>
 #include "14_06_Validation.h"
 
-namespace myNamespaceValidation
+namespace
 {
-	void readNumber(std::istream& inputStream, float& number)
+	template<typename T>
+	void readNumberImpl(std::istream& inputStream, T& number)
+	//   Postcondition: Reading  numeric types from a stream
 	{
 		while (true)
 		{
@@ -19,4 +22,31 @@ namespace myNamespaceValidation
 		}
 	}
 
+} // unnamed namespace
+
+namespace myNamespaceValidation
+{
+	void readNumber(std::istream& inputStream, float& number)
+	{
+		readNumberImpl(inputStream, number);
+	}
+
+	void readNumber(std::istream& inputStream, int& number)
+	{
+		readNumberImpl(inputStream, number);
+	}
+
+	void readInput(std::istream& inputStream, std::string& input)
+	{
+		while (true)
+		{
+			if (!std::getline(inputStream, input))
+			{
+				std::cout << "Not a valid input\n";
+				inputStream.ignore();
+				continue;
+			}
+			return;
+		}
+	}
 } // myNamespaceValidation

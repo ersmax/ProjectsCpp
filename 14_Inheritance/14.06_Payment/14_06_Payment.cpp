@@ -6,11 +6,20 @@ namespace myNamespacePayment
 	Payment::Payment() : amountPayment(0)
 	{ /* Body intentionally left empty */ }
 
-	Payment::Payment(const float theAmount) { setAmount(theAmount); }
+	Payment::Payment(const float theAmount)
+	{
+		if (theAmount < 0.0)
+			throw std::invalid_argument("Amount should be positive\n");
+		setAmount(theAmount);
+	}
 
 	void Payment::setAmount(const float theAmount)
 	{
-		if (theAmount < 0.0)	throw std::invalid_argument("Amount should be positive\n");
+		if (theAmount < 0.0)
+		{
+			std::cout << "Amount should be positive\n";
+			return;
+		}
 		amountPayment = theAmount;
 	}
 
@@ -34,7 +43,7 @@ namespace myNamespacePayment
 		return outputStream;
 	}
 
-	void Payment::paymentDetails(std::ostream& outputStream)
+	void Payment::paymentDetails(std::ostream& outputStream) 
 	{
 		throw std::invalid_argument("Payment details CALLED FOR AN UNDIFFERENTIATED PAYMENT\n");
 	}
