@@ -13,6 +13,7 @@ namespace myNamespacePayment
 		float getAmountPayment() const;
 		void setAmount(float theAmount);
 		void paymentDetails(std::ostream& outputStream);
+		//  Postcondition: outputStream has been modified to include the details of a payment.
 		friend std::istream& operator >>(std::istream& inputStream, Payment& aPayment);
 		friend std::ostream& operator <<(std::ostream& outputStream, const Payment& aPayment);
 	private:

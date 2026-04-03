@@ -23,6 +23,7 @@ namespace myNamespacePayment
 		const std::string& getCardNumber() const;
 		const ExpirationDate& getExpirationDate() const;
 		void paymentDetails(std::ostream& outputStream) const;
+		//   Postcondition: outputStream has been modified to include the details of a credit card payment.
 		friend std::istream& operator >>(std::istream& inputStream, CreditCardPayment& aCard);
 		friend std::ostream& operator <<(std::ostream& outputStream, const CreditCardPayment& aCard);
 	private:

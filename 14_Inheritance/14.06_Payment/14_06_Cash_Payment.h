@@ -11,7 +11,11 @@ namespace myNamespacePayment
 		CashPayment();
 		CashPayment(float theAmount);
 		static void paymentDetails(std::ostream& outputStream);
+		//   Postcondition: outputStream has been modified to include the details of a cash payment.
 		friend std::ostream& operator <<(std::ostream& outputStream, const CashPayment& aPayment);
+		//   Precondition: outputStream is open, aPayment is a valid CashPayment object.
+		//   Postcondition: outputStream has been modified to include the details of aPayment. 
+		// outputStream is returned.
 	};
 
 

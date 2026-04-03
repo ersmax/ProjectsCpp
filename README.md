@@ -650,3 +650,10 @@ Inheritance basics, Programming with Inheritance.
    `Patient` derives from `Person` and owns a primary `Doctor` by value; it can be constructed with an existing `Doctor` or read interactively.
    `Billing` owns a `Patient`, a `Doctor`, and a computed the amount due (doctor fee plus 22% VAT); stream operators read/write full billing records.
    The driver program creates doctors, patients, and billing records, then prints each bill and the total clinic income.
+6. [Payment](14_Inheritance/14.06_Payment)
+   Implements a simple payment system using inheritance.
+   `Payment` is a base class that stores a payment amount and provides accessors, mutators with validation, and stream operators.
+   `CashPayment` derives from `Payment` and redefines the details function to indicate it's a cash payment.
+   `CreditCardPayment` derives from `Payment`, adds card holder name, card number, and expiration date (using an `ExpirationDate` class), 
+   and redefines the details function to include all credit card information. 
+   The driver program creates multiple cash and credit card payments with different values and prints their details.
