@@ -11,5 +11,6 @@ add_subdirectory ("14.02_Menu_Has_A_relationship")
 add_subdirectory ("14.03_Doctor")
 add_subdirectory ("14.04_Student")
 add_subdirectory ("14.05_EMS")
+add_subdirectory ("14.06_Payment")
 
 # TODO: Add tests and install targets if needed.
