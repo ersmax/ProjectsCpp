@@ -24,6 +24,13 @@ namespace myNamespaceDocs
 
 	const std::string& Email::getTitle() const { return title; }
 
+	void Email::printInfo(std::ostream& outputStream) const
+	{
+		outputStream << "Email from " << sender
+					 << " to " << receiver
+					 << " titled \"" << title << "\"";
+	}
+
 	std::istream& operator >>(std::istream& inputStream, Email& anEmail)
 	{
 		inputStream >> dynamic_cast<Document&>(anEmail);

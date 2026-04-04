@@ -32,6 +32,10 @@ namespace myNamespaceDocs
 
 	const std::string& File::getPathFile() const { return pathFile; }
 
+	void File::printInfo(std::ostream& outputStream) const
+	{
+		outputStream << "File path at: " << pathFile;
+	}
 
 	std::istream& operator >>(std::istream& inputStream, File& aFile)
 	{

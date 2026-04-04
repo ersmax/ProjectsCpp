@@ -11,6 +11,11 @@ namespace myNamespaceDocs
 
 	const std::string& Document::getText() const { return text; }
 
+	void Document::printInfo(std::ostream& outputStream) const
+	{
+		outputStream << "Document";
+	}
+
 	std::istream& operator >>(std::istream& inputStream, Document& aDocument)
 	{
 		using myNamespaceValidation::readText;

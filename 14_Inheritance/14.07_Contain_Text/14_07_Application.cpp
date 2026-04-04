@@ -16,6 +16,13 @@ bool containsKeyword(const myNamespaceDocs::Document& docObject, const std::stri
 // If the value returned by string::find is string::npos, the search was unsuccessful.
 
 void printTest(const std::string& label, const Document& aDocument, const std::string& keyword);
+//   Precondition: label and keyword are valid string variables, aDocument is a valid Document object.
+//   Postcondition: Print the label, then print whether aDocument contains keyword in its text or not, 
+// and finally print the keyword.
+
+void printTestDynamic(const Document& aDocument, const std::string& keyword);
+//   Postcondition: Print the information of aDocument, then print whether aDocument contains keyword in its text or not,
+// and finally print the keyword. The information of aDocument is printed using dynamic dispatch (late binding).
 
 int main( )
 {
@@ -35,6 +42,12 @@ int main( )
 	printTest("First file ", aFile, "c++");
 	printTest("Second file  ", anotherFile, "c++");
 
+	/* dynamic dispatch - late binding */
+	printTestDynamic(anEmail, "c++");
+	printTestDynamic(anotherEmail, "c++");
+	printTestDynamic(aFile, "c++");
+	printTestDynamic(anotherFile, "c++");
+
 	std::cout << '\n';
 	return 0;
 }
@@ -49,6 +62,17 @@ bool containsKeyword(const myNamespaceDocs::Document& docObject, const std::stri
 void printTest(const std::string& label, const Document& aDocument, const std::string& keyword)
 {
 	std::cout << label << ' ';
+	if (containsKeyword(aDocument, keyword))
+		std::cout << "contains ";
+	else
+		std::cout << "does not contain ";
+	std::cout << "the keyword " << keyword << '\n';
+}
+
+void printTestDynamic(const Document& aDocument, const std::string& keyword)
+{
+	aDocument.printInfo(std::cout);
+	std::cout << ' ';
 	if (containsKeyword(aDocument, keyword))
 		std::cout << "contains ";
 	else

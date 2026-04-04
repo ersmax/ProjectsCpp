@@ -16,6 +16,7 @@ namespace myNamespaceDocs
 		//   Postcondition: An File object has been created with path initialized 
 		// to thePath and text initialized to theText.
 		const std::string& getPathFile() const;
+		void printInfo(std::ostream& outputStream) const override;
 		friend std::istream& operator >>(std::istream& inputStream, File& aFile);
 		//   Postcondition: inputStream has been modified to read a string into the path of aFile, 
 		// and to read the text of aFile.

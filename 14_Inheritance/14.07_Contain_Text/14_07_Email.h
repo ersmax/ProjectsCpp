@@ -20,6 +20,7 @@ namespace myNamespaceDocs
 		const std::string& getSender() const;
 		const std::string& getReceiver() const;
 		const std::string& getTitle() const;
+		void printInfo(std::ostream& outputStream) const override;
 		friend std::istream& operator >>(std::istream& inputStream, Email& anEmail);
 		//   Precondition: inputStream is open, anEmail is a valid Email object.
 		//   Postcondition: inputStream has been modified to read a string into the text of anEmail,
