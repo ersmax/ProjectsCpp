@@ -3,6 +3,8 @@
 #include "14_07_Email.h"
 #include "14_07_File.h"
 
+using myNamespaceDocs::Document;
+
 const std::string CURRENT_PATH = std::filesystem::current_path().string();
 
 bool containsKeyword(const myNamespaceDocs::Document& docObject, const std::string& keyword);
@@ -12,6 +14,8 @@ bool containsKeyword(const myNamespaceDocs::Document& docObject, const std::stri
 // The meaning in searches is: “this operation did not find anything”.
 // Its function is to indicate that no matches were found in string::find and related functions. 
 // If the value returned by string::find is string::npos, the search was unsuccessful.
+
+void printTest(const std::string& label, const Document& aDocument, const std::string& keyword);
 
 int main( )
 {
@@ -26,34 +30,10 @@ int main( )
 	File anotherFile(CURRENT_PATH, "This is okay\n");
 	std::cin >> aFile;
 
-	std::cout << "First email ";
-	if (containsKeyword(anEmail, "c++"))
-		std::cout << "contains ";
-	else
-		std::cout << "does not contain ";
-	std::cout << "the keyword c++\n";
-
-
-	std::cout << "Second email ";
-	if (containsKeyword(anotherEmail, "c++"))
-		std::cout << "contains ";
-	else
-		std::cout << "does not contain ";
-	std::cout << "the keyword c++\n";
-
-	std::cout << "First File ";
-	if (containsKeyword(aFile, "c++"))
-		std::cout << "contains ";
-	else
-		std::cout << "does not contain ";
-	std::cout << "the keyword c++\n";
-
-	std::cout << "Second file ";
-	if (containsKeyword(anotherFile, "c++"))
-		std::cout << "contains ";
-	else
-		std::cout << "does not contain ";
-	std::cout << "the keyword c++\n";
+	printTest("First email ", anEmail, "c++");
+	printTest("Second email ", anotherEmail, "c++");
+	printTest("First file ", aFile, "c++");
+	printTest("Second file  ", anotherFile, "c++");
 
 	std::cout << '\n';
 	return 0;
@@ -64,4 +44,14 @@ bool containsKeyword(const myNamespaceDocs::Document& docObject, const std::stri
 	if (docObject.getText().find(keyword) != std::string::npos)
 		return true;
 	return false;
+}
+
+void printTest(const std::string& label, const Document& aDocument, const std::string& keyword)
+{
+	std::cout << label << ' ';
+	if (containsKeyword(aDocument, keyword))
+		std::cout << "contains ";
+	else
+		std::cout << "does not contain ";
+	std::cout << "the keyword " << keyword << '\n';
 }
