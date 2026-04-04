@@ -33,8 +33,6 @@ namespace myNamespaceDocs
 
 	std::istream& operator >>(std::istream& inputStream, Email& anEmail)
 	{
-		inputStream >> dynamic_cast<Document&>(anEmail);
-		
 		using myNamespaceValidation::readText;
 		std::cout << "Enter email sender:\n";
 		readText(inputStream, anEmail.sender);
@@ -42,6 +40,8 @@ namespace myNamespaceDocs
 		readText(inputStream, anEmail.receiver);
 		std::cout << "Enter email title:\n";
 		readText(inputStream, anEmail.title);
+		std::cout << "Enter email text:\n";
+		inputStream >> dynamic_cast<Document&>(anEmail);
 		return inputStream;
 	}
 
