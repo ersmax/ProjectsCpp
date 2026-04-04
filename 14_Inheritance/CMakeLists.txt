@@ -12,5 +12,6 @@ add_subdirectory ("14.03_Doctor")
 add_subdirectory ("14.04_Student")
 add_subdirectory ("14.05_EMS")
 add_subdirectory ("14.06_Payment")
+add_subdirectory ("14.07_Contain_Text")
 
 # TODO: Add tests and install targets if needed.

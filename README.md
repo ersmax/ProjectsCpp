@@ -657,3 +657,7 @@ Inheritance basics, Programming with Inheritance.
    `CreditCardPayment` derives from `Payment`, adds card holder name, card number, and expiration date (using an `ExpirationDate` class), 
    and redefines the details function to include all credit card information. 
    The driver program creates multiple cash and credit card payments with different values and prints their details.
+7. [Contain Text](14_Inheritance/14.07_Contain_Text)
+   Implements a small inheritance hierarchy with a base `Document` class and derived `Email` and `File` classes that reuse a shared `text` field.
+   Demonstrates input validation (including simple pathname checks and use of `std::filesystem::current_path`), stream operator overloading, 
+   and a utility that searches each document's text for a given keyword.
