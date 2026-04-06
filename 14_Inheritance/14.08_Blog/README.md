@@ -77,6 +77,9 @@ File: `14_08_Application.cpp`
   - Calls `oliver.menu()` to exercise the owner menu (post, list, show, delete).
   - Calls `aViewer.menu()` to exercise the viewer menu (list, show).
   - Asks whether to continue.
-- After the loop, calls `willie.menu()` to demonstrate that an owner with no associated blog is handled gracefully.
+- After the loop, calls `willie.menu()` to demonstrate that an owner with no associated blog is handled properly.
 
-This structure satisfies the assignment: messages are stored centrally in a `Blog`, owners can post/delete and list/display, viewers can only list/display, and both roles see the same blog content when they share the same `Blog` instance.
+This structure satisfies the assignment: messages are stored centrally in a `Blog`, 
+owners can post/delete and list/display, 
+viewers can only list/display, 
+and both roles see the same blog content when they share the same `Blog` instance.
