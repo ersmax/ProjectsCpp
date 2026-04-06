@@ -23,8 +23,9 @@ namespace myNamespaceBlog
 		return blog->operator[](numberMessage);
 	}
 
+	const BlogPtr& Viewer::getBlog() const { return blog; }
 
-	void Viewer::menu()
+	void Viewer::menu() const
 	{
 		if (blog == nullptr)
 		{

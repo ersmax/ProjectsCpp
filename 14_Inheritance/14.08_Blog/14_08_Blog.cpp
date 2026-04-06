@@ -13,7 +13,7 @@ namespace myNamespaceBlog
 			blogMessages[idx] = anotherBlog.blogMessages[idx];
 	}
 
-	Blog& Blog::operator=(const Blog& anotherBlog)
+	Blog& Blog::operator =(const Blog& anotherBlog)
 	{
 		if (this == &anotherBlog)	return *this;
 		if (nMessages != anotherBlog.nMessages)
