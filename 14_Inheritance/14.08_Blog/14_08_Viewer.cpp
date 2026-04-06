@@ -31,7 +31,6 @@ namespace myNamespaceBlog
 			std::cout << "No blog associated with this user\n";
 			return;
 		}
-		
 		using myNamespaceValidation::readNumber;
 		int choice = 0;
 		do

@@ -661,3 +661,7 @@ Inheritance basics, Programming with Inheritance.
    Implements a small inheritance hierarchy with a base `Document` class and derived `Email` and `File` classes that reuse a shared `text` field.
    Demonstrates input validation (including simple pathname checks and use of `std::filesystem::current_path`), stream operator overloading, 
    and a utility that searches each document's text for a given keyword.
+8. [Blog](14_Inheritance/14.08_Blog)
+    Models a simple blog system with a `Blog` storage class, a `Viewer` role that can list and display messages, and an `Owner` role that can also post and delete messages.
+    Demonstrates inheritance (`Owner` derives from `Viewer`), manual dynamic array management for `Message` objects, and shared input-validation utilities for text and numbers.
+    Check for undefined behavior through a condition that checks if the blog has been properly initialized or has initialization with nullptr.
