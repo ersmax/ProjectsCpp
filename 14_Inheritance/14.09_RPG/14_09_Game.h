@@ -9,12 +9,16 @@ namespace myNamespaceRPG
 	{
 	public:
 		const Creature& operator [](int index) const;
+		void playNextTurn();
 	private:
 		friend class GameBuilder;
 		Game();
-		Game(const CreaturePtr& theCreatures, int theSize);
-		CreaturePtr creatures;
+		Game(const CreaturePtr*& theCreatures, int theSize);
+		~Game();
+		const CreaturePtr *creatures;
+		// Dynamic arrays of pointers to a Creature object
 		int numberCreatures;
+		int turn;
 	};
 
 

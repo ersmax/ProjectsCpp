@@ -5,6 +5,8 @@
 
 constexpr int MAX_STRENGTH = 100;
 constexpr int MAX_HITPOINTS = 100;
+constexpr int MAX_CREATURES = 4;
+//	1 = Human	| 2 = Cyberdemon	| 3 = Balrog	| 4 = Elf
 
 namespace myNamespaceRPG
 {
@@ -14,10 +16,12 @@ namespace myNamespaceRPG
 		Creature();
 		//   Postcondition: Initialize to human, 10 strength, 10 hit points
 		Creature(int newStrength, int newHit);
-		//   Postcondition: Initialize creature to newType, strength, hit points
-		int getDamage();
+		//   Postcondition: Initialize creature with specified strength and hit points
+		virtual ~Creature() = default;
+		virtual int getDamage() const;
 		//   Postcondition: Returns amount of damage this creature inflicts in 
 		// one round of combat.
+		virtual const std::string& getSpecies() const;
 		int getStrength() const;
 		int getHitpoints() const;
 		friend std::istream& operator >>(std::istream& inputStream, Creature& aCreature);

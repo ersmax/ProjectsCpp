@@ -9,7 +9,7 @@ namespace myNamespaceRPG
 
 	GameBuilder::GameBuilder(const GameBuilder& anotherGame) : numberCreatures(anotherGame.numberCreatures)
 	{
-		creatures = new Creature[anotherGame.numberCreatures];
+		creatures = new CreaturePtr[anotherGame.numberCreatures];
 		for (int idx = 0; idx < numberCreatures; idx++)
 			creatures[idx] = anotherGame.creatures[idx];
 	}
@@ -20,7 +20,7 @@ namespace myNamespaceRPG
 		if (numberCreatures != anotherGame.numberCreatures)
 		{
 			delete [] creatures;
-			creatures = new Creature[anotherGame.numberCreatures];
+			creatures = new CreaturePtr[anotherGame.numberCreatures];
 		}
 		numberCreatures = anotherGame.numberCreatures;
 		for (int idx = 0; idx < numberCreatures; idx++)
@@ -45,7 +45,7 @@ namespace myNamespaceRPG
 	{
 		if (index < 0 || index >= numberCreatures)
 			throw std::out_of_range("Invalid index\n");
-		return creatures[index];
+		return *creatures[index];
 	}
 	
 	void GameBuilder::showCreatures() const
@@ -54,9 +54,9 @@ namespace myNamespaceRPG
 			std::cout << idx + 1 << ") " << creatures[idx] << '\n';
 	}
 
-	void GameBuilder::addCreature(const Creature& newCreature)
+	void GameBuilder::addCreature(const CreaturePtr& newCreature)
 	{
-		const CreaturePtr temp = new Creature[numberCreatures + 1];
+		CreaturePtr *temp = new CreaturePtr[numberCreatures + 1];
 		for (int idx = 0; idx < numberCreatures; idx++)
 			temp[idx] = creatures[idx];
 		temp[numberCreatures] = newCreature;
@@ -68,7 +68,7 @@ namespace myNamespaceRPG
 	void GameBuilder::deleteCreature(const int index)
 	{
 		showCreatures();
-		const CreaturePtr temp = new Creature[numberCreatures - 1];
+		CreaturePtr *temp = new CreaturePtr[numberCreatures - 1];
 		int newIdx = 0;
 		for (int idx = 0; idx < numberCreatures; idx++)
 			if (idx != index)
