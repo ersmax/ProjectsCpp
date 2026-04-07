@@ -1,9 +1,21 @@
 #include <iostream>
 #include <stdexcept>
 #include "14_09_Game_Builder.h"
+#include "14_09_Human.h"
+#include "14_09_Cyberdemon.h"
+#include "14_09_Balrog.h"
+#include "14_09_Elf.h"
+
+#include "14_09_Validation.h"
 
 namespace myNamespaceRPG
 {
+	typedef Human *HumanPtr;
+	typedef Cyberdemon *CyberdemonPtr;
+	typedef Balrog *BalrogPtr;
+	typedef Elf *ElfPtr;
+
+
 	GameBuilder::GameBuilder() : creatures(nullptr), numberCreatures(0)
 	{ /* Body intentionally left empty */ }
 
@@ -54,7 +66,54 @@ namespace myNamespaceRPG
 			std::cout << idx + 1 << ") " << creatures[idx] << '\n';
 	}
 
-	void GameBuilder::addCreature(const CreaturePtr& newCreature)
+	void GameBuilder::addCreature()
+	{
+		std::cout << "Enter a creature to add among these:\n"
+				  << "1. Humans\n2. Cyberdemon\n3. Balrog\n4. Elf\n";	// 14_09_Creature.h
+		using myNamespaceValidation::readNumber;
+		int choice;
+		readNumber(std::cin, choice);
+		switch (choice)
+		{
+		case 1:
+			{
+				const HumanPtr aHuman = new Human;
+				std::cout << "Enter new Human player:\n";
+				std::cin >> *aHuman;
+				addCreatureHelper(aHuman);
+				break;
+			}
+		case 2:
+			{
+				const CyberdemonPtr aCyberdemon = new Cyberdemon;
+				std::cout << "Enter new Cyberdemon player:\n";
+				std::cin >> *aCyberdemon;
+				addCreatureHelper(aCyberdemon);
+				break;
+			}
+		case 3:
+			{
+				const BalrogPtr aBalrog = new Balrog;
+				std::cout << "Enter new Balrog player:\n";
+				std::cin >> *aBalrog;
+				addCreatureHelper(aBalrog);
+				break;
+			}
+		case 4:
+			{
+				const ElfPtr anElf = new Elf;
+				std::cout << "Enter new Elf player:\n";
+				std::cin >> *anElf;
+				addCreatureHelper(anElf);
+				break;
+			}
+		default:
+			std::cout << "Not a valid choice\n";
+			break;
+		}
+	}
+
+	void GameBuilder::addCreatureHelper(const CreaturePtr& newCreature)
 	{
 		CreaturePtr *temp = new CreaturePtr[numberCreatures + 1];
 		for (int idx = 0; idx < numberCreatures; idx++)
@@ -65,9 +124,27 @@ namespace myNamespaceRPG
 		creatures = temp;
 	}
 
-	void GameBuilder::deleteCreature(const int index)
+	void GameBuilder::deleteCreature()
 	{
+		if (numberCreatures <= 0)
+		{
+			std::cout << "There are no creatures\n";
+			return 0;
+		}
 		showCreatures();
+		std::cout << "Enter index of creature to delete:\n";
+		using myNamespaceValidation::readNumber;
+		int index;
+		readNumber(std::cin, index);
+		index--; // Zero-normalize
+		if (index >= 0 && index < numberCreatures)
+			deleteCreatureHelper(index);
+		else
+			std::cout << "Index not valid\n";
+	}
+
+	void GameBuilder::deleteCreatureHelper(const int index)
+	{
 		CreaturePtr *temp = new CreaturePtr[numberCreatures - 1];
 		int newIdx = 0;
 		for (int idx = 0; idx < numberCreatures; idx++)

@@ -13,7 +13,7 @@ namespace myNamespaceRPG
 	private:
 		friend class GameBuilder;
 		Game();
-		Game(const CreaturePtr*& theCreatures, int theSize);
+		Game(const CreaturePtr* theCreatures, int theSize);
 		~Game();
 		const CreaturePtr *creatures;
 		// Dynamic arrays of pointers to a Creature object

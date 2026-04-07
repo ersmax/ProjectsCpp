@@ -1,6 +1,10 @@
 #include <stdexcept>
 #include <iostream>
 #include "14_09_Game.h"
+#include "14_09_Human.h"
+#include "14_09_Cyberdemon.h"
+#include "14_09_Balrog.h"
+#include "14_09_Elf.h"
 
 namespace myNamespaceRPG
 {
@@ -8,7 +12,7 @@ namespace myNamespaceRPG
 	{ /* Body intentionally left empty */ }
 
 
-	Game::Game(const CreaturePtr*& theCreatures, const int theSize) : creatures(theCreatures), numberCreatures(theSize), turn(0)
+	Game::Game(const CreaturePtr* theCreatures, const int theSize) : creatures(theCreatures), numberCreatures(theSize), turn(0)
 	{ /* Body intentionally left empty */ }
 
 	Game::~Game()
@@ -35,11 +39,29 @@ namespace myNamespaceRPG
 
 		std::cout << "Turn: " << ++turn << '\n';
 		
+		int damageHumans = 0, damageCyberdemons = 0, damageBalrogs = 0, damageElves = 0;
 		for (int idx = 0; idx < numberCreatures; idx++)
 		{
-			std::cout << idx + 1 << "). " << creatures[idx]->getSpecies() 
-					  << ". Damage: " << creatures[idx]->getDamage();
-		}
+			const CreaturePtr creature = creatures[idx];
+			const std::string& species = creature->getSpecies();
+			const int damage = creature->getDamage();
+			
+			if (Human* human = dynamic_cast<Human*>(creature))
+				// Downcast: non-null if creature's dynamic type is Human (or derived from Human)
+				damageHumans += damage;
+			else if (Cyberdemon *cyberdemon = dynamic_cast<Cyberdemon*>(creature))
+				damageCyberdemons += damage;
+			else if (Balrog *balrog = dynamic_cast<Balrog*>(creature))
+				damageBalrogs += damage;
+			else if (Elf *elf = dynamic_cast<Elf*>(creature))
+				damageElves += damage;
 
+			std::cout << idx + 1 << "). " << species << ". Damage: " << damage;
+		}
+		std::cout << "Damage Humans: " << damageHumans << '\n';
+		std::cout << "Damage Cyberdemons: " << damageCyberdemons << '\n';
+		std::cout << "Damage Balrogs: " << damageBalrogs << '\n';
+		std::cout << "Damage Elves: " << damageElves << '\n' << '\n';
+		std::cout << "Ready for the next turn\n\n";
 	}
 } // myNamespaceRPG

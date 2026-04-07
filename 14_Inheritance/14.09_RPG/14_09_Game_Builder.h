@@ -19,11 +19,15 @@ namespace myNamespaceRPG
 		~GameBuilder();
 		const Creature& operator [](int index) const;
 		void showCreatures() const;
-		void addCreature(const CreaturePtr& newCreature);
-		void deleteCreature(int index);
+		void addCreature();
+		void deleteCreature();
 		const Game build();
 		//   Postcondition: move creatures into the immutable Game
 	private:
+		void addCreatureHelper(const CreaturePtr& newCreature);
+		void deleteCreatureHelper(int index);
+		//   Precondition: index is within bounds (greater than or equal 0 and less than 
+		// number of creatures)
 		CreaturePtr *creatures;
 		// Dynamic arrays of pointers to a Creature object
 		int numberCreatures;
