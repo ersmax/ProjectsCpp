@@ -18,6 +18,7 @@ namespace myNamespaceRPG
 		int damage = Demon::getDamage();
 
 		// Double attack from Balrog class (Base attack)
+		// (old implementation)
 		// damage += myNamespaceRPG::Creature::getDamage();
 
 		// Balrog gets a second, fast attack: random in [1, strength]

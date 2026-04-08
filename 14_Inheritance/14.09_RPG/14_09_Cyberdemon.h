@@ -11,6 +11,7 @@ namespace myNamespaceRPG
 		Cyberdemon();
 		Cyberdemon(int newStrength, int newHit);
 		const std::string& getSpecies() const override;
+		//   Postcondition: Return the string "Cyberdemon"
 	private:
 		std::string name;
 	};

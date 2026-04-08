@@ -665,3 +665,9 @@ Inheritance basics, Programming with Inheritance.
     Models a simple blog system with a `Blog` storage class, a `Viewer` role that can list and display messages, and an `Owner` role that can also post and delete messages.
     Demonstrates inheritance (`Owner` derives from `Viewer`), manual dynamic array management for `Message` objects, and shared input-validation utilities for text and numbers.
     Check for undefined behavior through a condition that checks if the blog has been properly initialized or has initialization with nullptr.
+9. [RPG](14_Inheritance/14.09_RPG)
+   Implements a fantasy combat system using an inheritance hierarchy rooted at an abstract `Creature` class with `strength` and `hitpoints`.
+   Derived types are `Human`, `Demon`, `Cyberdemon`, `Balrog`, and `Elf`, each overriding `getSpecies`/`getDamage` to add specific class rules: 
+   base random damage, demons' 5% demonic +50 bonus, elves' 10% double-damage chance, and balrogs' double (speed) attack.
+   A `GameBuilder` class manages the setup phase with a dynamic array of `Creature*` (adding/removing polymorphic creatures), 
+   while a `Game` class represents the play phase, owning the creatures and running turns that call `getDamage` polymorphically and aggregate damage per species.

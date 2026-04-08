@@ -14,6 +14,8 @@ namespace myNamespaceRPG
 		Demon(int newStrength, int newHit);
 		int getDamage() const override;
 		//   Precondition: Demons can inflict damage of 50 with a 5% chance
+		//   Postcondition: Compute the additional damage from the demonic attack 
+		// and add it to the base damage computed by Creature::getDamage()
 	private:
 	};
 

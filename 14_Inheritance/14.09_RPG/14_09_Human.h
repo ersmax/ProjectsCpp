@@ -11,8 +11,11 @@ namespace myNamespaceRPG
 		Human();
 		Human(int newStrength, int newHit);
 		int getDamage() const override;
-		//   Postcondition: return the parent class function
+		//   Postcondition: return the parent class function.
+		// (The human does not have any special attacks, 
+		// so it just uses the base damage from Creature)
 		const std::string& getSpecies() const override;
+		//   Postcondition: Return the string "Human"
 	private:
 		std::string name;
 	};

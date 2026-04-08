@@ -15,7 +15,11 @@ namespace myNamespaceRPG
 	public:
 		const Creature& operator [](int index) const;
 		void playNextTurn();
+		//   Postcondition: Compute and output the damage inflicted 
+		// by each creature in the game.
 		~Game();
+		//   Postcondition: Free the dynamic array of creatures 
+		// and returns the memory to the freestore manager
 	private:
 		friend class GameBuilder;
 		Game();
