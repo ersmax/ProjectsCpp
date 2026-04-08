@@ -51,8 +51,8 @@ namespace myNamespaceRPG
 
 	std::ostream& operator <<(std::ostream& outputStream, const Creature& aCreature)
 	{
-		std::cout << "Strength: " << aCreature.strength << '\n';
-		std::cout << "Hitpoints: " << aCreature.hitpoints << '\n';
+		outputStream << "Strength: " << aCreature.strength << '\n';
+		outputStream << "Hitpoints: " << aCreature.hitpoints << '\n';
 		return outputStream;
 	}
 

@@ -2,11 +2,13 @@
 #define GAME_BUILDER_14_09_H
 
 #include "14_09_Creature.h"
-#include "14_09_Game.h"
 
 
 namespace myNamespaceRPG
 {
+	class Game;
+	// forward declaration
+
 	typedef Creature *CreaturePtr;
 
 	class GameBuilder

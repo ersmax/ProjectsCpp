@@ -14,5 +14,6 @@ add_subdirectory ("14.05_EMS")
 add_subdirectory ("14.06_Payment")
 add_subdirectory ("14.07_Contain_Text")
 add_subdirectory ("14.08_Blog")
+add_subdirectory ("14.09_RPG")
 
 # TODO: Add tests and install targets if needed.

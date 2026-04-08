@@ -44,6 +44,8 @@ namespace myNamespaceRPG
 		{
 			const CreaturePtr creature = creatures[idx];
 			const std::string& species = creature->getSpecies();
+			
+			std::cout << idx + 1 << "). ";
 			const int damage = creature->getDamage();
 			
 			if (Human* human = dynamic_cast<Human*>(creature))
@@ -55,8 +57,6 @@ namespace myNamespaceRPG
 				damageBalrogs += damage;
 			else if (Elf *elf = dynamic_cast<Elf*>(creature))
 				damageElves += damage;
-
-			std::cout << idx + 1 << "). " << species << ". Damage: " << damage;
 		}
 		std::cout << "Damage Humans: " << damageHumans << '\n';
 		std::cout << "Damage Cyberdemons: " << damageCyberdemons << '\n';

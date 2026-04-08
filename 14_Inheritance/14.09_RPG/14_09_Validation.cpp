@@ -27,4 +27,20 @@ namespace myNamespaceValidation
 	{
 		readNumberImpl(inputStream, number);
 	}
+
+	void readLetter(std::istream& inputStream, char& letter)
+	{
+		while (true)
+		{
+			if (!(inputStream >> letter))
+			{
+				std::cout << "Not a valid input\n";
+				inputStream.clear();
+				inputStream.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+				continue;
+			}
+			inputStream.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			return;
+		}
+	}
 } // myNamespaceValidation

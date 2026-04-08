@@ -21,7 +21,7 @@ namespace myNamespaceRPG
 		virtual int getDamage() const;
 		//   Postcondition: Returns amount of damage this creature inflicts in 
 		// one round of combat.
-		virtual const std::string& getSpecies() const;
+		virtual const std::string& getSpecies() const = 0;
 		int getStrength() const;
 		int getHitpoints() const;
 		friend std::istream& operator >>(std::istream& inputStream, Creature& aCreature);

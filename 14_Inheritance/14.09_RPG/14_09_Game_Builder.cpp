@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stdexcept>
+#include "14_09_Game.h"
 #include "14_09_Game_Builder.h"
 #include "14_09_Human.h"
 #include "14_09_Cyberdemon.h"
@@ -63,7 +64,7 @@ namespace myNamespaceRPG
 	void GameBuilder::showCreatures() const
 	{
 		for (int idx = 0; idx < numberCreatures; idx++)
-			std::cout << idx + 1 << ") " << creatures[idx] << '\n';
+			std::cout << idx + 1 << ") " << *creatures[idx] << '\n';
 	}
 
 	void GameBuilder::addCreature()
@@ -129,7 +130,7 @@ namespace myNamespaceRPG
 		if (numberCreatures <= 0)
 		{
 			std::cout << "There are no creatures\n";
-			return 0;
+			return;
 		}
 		showCreatures();
 		std::cout << "Enter index of creature to delete:\n";
@@ -145,6 +146,9 @@ namespace myNamespaceRPG
 
 	void GameBuilder::deleteCreatureHelper(const int index)
 	{
+		delete creatures[index];
+		// Return the space to the heap by deleting the pointed object (dynamic variable on the heap)
+		
 		CreaturePtr *temp = new CreaturePtr[numberCreatures - 1];
 		int newIdx = 0;
 		for (int idx = 0; idx < numberCreatures; idx++)
@@ -152,6 +156,7 @@ namespace myNamespaceRPG
 				temp[newIdx++] = creatures[idx];
 		numberCreatures--;
 		delete [] creatures;
+		// Delete old pointer to the dynamic array
 		creatures = temp;
 	}
 
