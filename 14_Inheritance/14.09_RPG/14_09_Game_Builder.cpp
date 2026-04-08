@@ -71,7 +71,7 @@ namespace myNamespaceRPG
 	void GameBuilder::showCreatures() const
 	{
 		for (int idx = 0; idx < numberCreatures; idx++)
-			std::cout << idx + 1 << ") " << *creatures[idx] << '\n';
+			std::cout << idx + 1 << ") " << creatures[idx]->getSpecies() << '\n';
 	}
 
 	void GameBuilder::addCreature()
