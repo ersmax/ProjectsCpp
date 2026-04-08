@@ -41,7 +41,14 @@ namespace myNamespaceRPG
 		return *this;
 	}
 
-	GameBuilder::~GameBuilder() { delete [] creatures; }
+	GameBuilder::~GameBuilder()
+	{
+		for (int idx = 0; idx < numberCreatures; idx++)
+			delete creatures[idx];
+			 // Return the space to the heap by deleting the pointed object 
+			 // (dynamic variable on the heap)
+		delete [] creatures;
+	}
 
 	const Game GameBuilder::build()
 	{
