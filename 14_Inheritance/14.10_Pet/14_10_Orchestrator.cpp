@@ -22,19 +22,19 @@ namespace myNamespacePet
 		delete [] things;
 	}
 
-	void Orchestrator::addThing()
+	void Orchestrator::addThing(std::istream& inputStream)
 	{
 		std::cout << "Enter 1 to add a Dog, 2 to add a Rock\n";
 		int choice;
 		using myNamespaceValidation::readNumber;
-		readNumber(std::cin, choice);
+		readNumber(inputStream, choice);
 		switch (choice)
 		{
 		case 1:
 		{
 			const DogPtr aDog = new Dog;
 			std::cout << "Enter new Dog:\n";
-			std::cin >> *aDog;
+			inputStream >> *aDog;
 			addThingHelper(aDog);
 			break;
 		}
@@ -42,7 +42,7 @@ namespace myNamespacePet
 		{
 			const RockPtr aRock = new Rock;
 			std::cout << "Enter new Rock:\n";
-			std::cin >> *aRock;
+			inputStream >> *aRock;
 			addThingHelper(aRock);
 			break;
 		}
@@ -124,7 +124,7 @@ namespace myNamespacePet
 		char answer;
 		do
 		{
-			aOrchestrator.addThing();
+			aOrchestrator.addThing(inputStream);
 			std::cout << "Add more? (y/n)\n";
             inputStream >> answer;
 		} while (std::tolower(static_cast<unsigned char>(answer)) == 'y');

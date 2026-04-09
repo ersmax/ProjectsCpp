@@ -671,3 +671,7 @@ Inheritance basics, Programming with Inheritance.
    base random damage, demons' 5% demonic +50 bonus, elves' 10% double-damage chance, and balrogs' double (speed) attack.
    A `GameBuilder` class manages the setup phase with a dynamic array of `Creature*` (adding/removing polymorphic creatures), 
    while a `Game` class represents the play phase, owning the creatures and running turns that call `getDamage` polymorphically and aggregate damage per species.
+10. [Pet](14_Inheritance/14.10_Pet)
+    Models a pet management system with a base class and derived classes.
+    `Pet` stores name, age, and weight, and defines virtual `getLifespan` and `print` functions for polymorphic behaviours in the derived classes.
+    An `Orchestrator` class owns a dynamic array of `Pet*`, provides menu-driven operations to add/delete pets, and uses polymorphic stream operators with shared input-validation utilities to display each pet's data and lifespan.

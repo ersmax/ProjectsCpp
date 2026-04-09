@@ -46,7 +46,7 @@ void test(Orchestrator& anOrchestrator, int& choice)
 	switch (choice)
 	{
 	case 1:
-		anOrchestrator.addThing();
+		anOrchestrator.addThing(std::cin);
 		break;
 	case 2: 
 		anOrchestrator.deleteThing();

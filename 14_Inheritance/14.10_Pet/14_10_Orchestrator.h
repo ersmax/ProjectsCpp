@@ -16,7 +16,7 @@ namespace myNamespacePet
 		~Orchestrator();
 		const Pet& operator [](int index) const;
 		void deleteThing();
-        void addThing();
+        void addThing(std::istream& inputStream);
 		friend std::ostream& operator <<(std::ostream& outputStream, const Orchestrator& aOrchestrator);
 		friend std::istream& operator >>(std::istream& inputStream, Orchestrator& aOrchestrator);
 	private:
