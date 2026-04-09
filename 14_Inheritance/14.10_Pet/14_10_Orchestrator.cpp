@@ -34,7 +34,7 @@ namespace myNamespacePet
 		{
 			const DogPtr aDog = new Dog;
 			std::cout << "Enter new Dog:\n";
-			inputStream >> *aDog;
+			inputStream >> *aDog;	// use overloaded input operator for Dog to input the dog's name, age, weight, and breed from inputStream
 			addThingHelper(aDog);
 			break;
 		}
@@ -42,7 +42,7 @@ namespace myNamespacePet
 		{
 			const RockPtr aRock = new Rock;
 			std::cout << "Enter new Rock:\n";
-			inputStream >> *aRock;
+			inputStream >> *aRock; // use overloaded input operator for Rock to input the rock's name, age, and weight from inputStream
 			addThingHelper(aRock);
 			break;
 		}

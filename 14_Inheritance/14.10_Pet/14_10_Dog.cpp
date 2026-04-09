@@ -35,7 +35,7 @@ namespace myNamespacePet
 
 	std::istream& operator >>(std::istream& inputStream, Dog& aDog)
 	{
-		inputStream >> dynamic_cast<Pet&>(aDog);
+		inputStream >> static_cast<Pet&>(aDog);
 		std::cout << "Enter dog's breed:\n";
 		using myNamespaceValidation::readName;
 		readName(inputStream, aDog.breed);

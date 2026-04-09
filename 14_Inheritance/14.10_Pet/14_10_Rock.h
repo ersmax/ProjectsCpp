@@ -11,6 +11,8 @@ namespace myNamespacePet
 		Rock();
 		Rock(const std::string& theName, int theAge, int theWeight);
 		const std::string& getLifespan() const override;
+		//   Postcondition: returns the lifespan of the rock based on its weight
+		// Override due to the fact that behavior of this function is different for different types of pets.
 	};
 		
 } // myNamespacePet
