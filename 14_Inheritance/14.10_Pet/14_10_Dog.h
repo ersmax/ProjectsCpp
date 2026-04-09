@@ -12,6 +12,7 @@ namespace myNamespacePet
 		Dog(const std::string& theName, int theAge, int theWeight, const std::string& theBreed);
 		const std::string& getBreed() const;
 		const std::string& getLifespan() const override;
+		void print(std::ostream& outputStream) const override;
 		friend std::istream& operator >>(std::istream& inputStream, Dog& aDog);
 		friend std::ostream& operator <<(std::ostream& outputStream, const Dog& aDog);
 	private:

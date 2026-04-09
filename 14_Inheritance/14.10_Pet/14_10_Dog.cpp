@@ -27,6 +27,12 @@ namespace myNamespacePet
 		return LARGE_SIZE;
 	}
 
+	void Dog::print(std::ostream& outputStream) const
+	{
+		Pet::print(outputStream);
+		outputStream << "Dog's breed: " << breed << '\n';
+	}
+
 	std::istream& operator >>(std::istream& inputStream, Dog& aDog)
 	{
 		inputStream >> dynamic_cast<Pet&>(aDog);
@@ -38,8 +44,7 @@ namespace myNamespacePet
 
 	std::ostream& operator <<(std::ostream& outputStream, const Dog& aDog)
 	{
-		outputStream << dynamic_cast<const Pet&>(aDog);
-		outputStream << "Dog's breed: " << aDog.breed;
+		aDog.print(outputStream);
 		return outputStream;
 	}
 

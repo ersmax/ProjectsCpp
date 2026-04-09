@@ -44,11 +44,17 @@ namespace myNamespacePet
 		return inputStream;
 	}
 
+	void Pet::print(std::ostream& outputStream) const
+	{
+		outputStream << "Name: " << name << '\n';
+		outputStream << "Age: " << age << '\n';
+		outputStream << "Weight: " << weight << '\n';
+	}
+
 	std::ostream& operator <<(std::ostream& outputStream, const Pet& aPet)
 	{
-		outputStream << "Name: " << aPet.name << '\n';
-		outputStream << "Age: " << aPet.age << '\n';
-		outputStream << "Weight: " << aPet.weight << '\n';
+		aPet.print(outputStream);
+		// virtual dispatch
 		return outputStream;
 	}
 

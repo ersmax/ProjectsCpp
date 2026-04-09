@@ -15,6 +15,7 @@ namespace myNamespacePet
 		const std::string& getName() const;
 		int getAge() const;
 		int getWeight() const;
+		virtual void print(std::ostream& outputStream) const;
 		friend std::istream& operator >>(std::istream& inputStream, Pet& aPet);
 		friend std::ostream& operator <<(std::ostream& outputStream, const Pet& aPet);
 	private:

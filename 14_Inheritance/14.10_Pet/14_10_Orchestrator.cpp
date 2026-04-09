@@ -111,9 +111,10 @@ namespace myNamespacePet
 	{
 		for (int idx = 0; idx < aOrchestrator.numberThings; idx++)
 		{
+			const Pet& pet = aOrchestrator.operator[](idx);
 			outputStream << "Object number " << idx + 1 << '\n';
-			outputStream << aOrchestrator.operator[](idx);
-			outputStream << aOrchestrator[idx].getLifespan() << '\n' << '\n';
+			outputStream << pet;
+			outputStream << "Lifetime: " << pet.getLifespan() << "\n\n";
 		}
 		return outputStream;
 	}
