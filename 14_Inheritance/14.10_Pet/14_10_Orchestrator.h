@@ -13,6 +13,7 @@ namespace myNamespacePet
 	{
 	public:
 		Orchestrator();
+		~Orchestrator();
 		const Pet& operator [](int index) const;
 		void deleteThing();
         void addThing();

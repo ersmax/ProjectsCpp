@@ -6,7 +6,7 @@
 
 namespace myNamespacePet
 {
-	constexpr std::string UNKNOWN = "Unknown lifespan";
+	const std::string UNKNOWN = "Unknown lifespan";
 
 	Pet::Pet() : name("No name"), age(0), weight(0)
 	{ /* Body intentionally left empty */ }

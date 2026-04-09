@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stdexcept>
 #include "14_10_Orchestrator.h"
 #include "14_10_Dog.h"
 #include "14_10_Rock.h"
@@ -11,6 +12,15 @@ namespace myNamespacePet
 
 	Orchestrator::Orchestrator() : things(nullptr), numberThings(0)
 	{ /* Body intentionally left empty */ }
+
+	Orchestrator::~Orchestrator()
+	{
+		for (int idx = 0; idx < numberThings; idx++)
+			delete things[idx];
+			// deallocate memory given to a dynamic object
+
+		delete [] things;
+	}
 
 	void Orchestrator::addThing()
 	{
@@ -63,7 +73,7 @@ namespace myNamespacePet
 			return;
 		}
 		using myNamespaceValidation::readNumber;
-		std::cout << this->numberThings;
+		std::cout << *this;
 		std::cout << "Enter index of Thing you wish to delete:\n";
 		int choice;
 		readNumber(std::cin, choice);
@@ -92,6 +102,8 @@ namespace myNamespacePet
 
 	const Pet& Orchestrator::operator[](const int index) const
 	{
+		if (index < 0 || index >= numberThings)
+			throw std::out_of_range("Index out of bounds\n");
 		return *things[index];
 	}
 
@@ -100,8 +112,8 @@ namespace myNamespacePet
 		for (int idx = 0; idx < aOrchestrator.numberThings; idx++)
 		{
 			outputStream << "Object number " << idx + 1 << '\n';
-			outputStream << aOrchestrator.operator[](idx) << '\n';
-			outputStream << aOrchestrator[idx].getLifespan() << '\n';
+			outputStream << aOrchestrator.operator[](idx);
+			outputStream << aOrchestrator[idx].getLifespan() << '\n' << '\n';
 		}
 		return outputStream;
 	}

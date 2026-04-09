@@ -2,7 +2,7 @@
 
 namespace myNamespacePet
 {
-	constexpr std::string FOREVER = "Thousands of years";
+	const std::string FOREVER = "Thousands of years";
 	
 	Rock::Rock() : Pet()
 	{ /* Body intentionally left empty */ }

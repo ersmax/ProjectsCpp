@@ -1,13 +1,14 @@
 #include <stdexcept>
 #include <iostream>
+#include <string>
 #include "14_10_Dog.h"
 #include "14_10_Validation.h"
 
 namespace myNamespacePet
 {
 	constexpr int BIG_SIZE = 100;
-	constexpr std::string SMALL_SIZE = "Approximately 7 years";
-	constexpr std::string LARGE_SIZE = "Approximately 13 years";
+	const std::string SMALL_SIZE = "Approximately 7 years";
+	const std::string LARGE_SIZE = "Approximately 13 years";
 
 	Dog::Dog() : Pet(), breed("No breed")
 	{ /* Body intentionally left empty */ }
@@ -22,7 +23,7 @@ namespace myNamespacePet
 
 	const std::string& Dog::getLifespan() const
 	{
-		if (getWeight() < BIG_SIZE)	return SMALL_SIZE;
+		if (getWeight() > BIG_SIZE)	return SMALL_SIZE;
 		return LARGE_SIZE;
 	}
 
