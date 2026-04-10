@@ -19,11 +19,18 @@ namespace myNamespaceCards
 		Deck& operator =(const Deck& anotherDeck);
 		int getNumberCards() const;
 		void print(std::ostream& outputStream) const;
-		void shuffle() const;
+		//   Postcondition: Print all cards in the deck
+		void shuffle();
+		//   Postcondition: Shuffle the cards in the deck. 
+		// The Fisher-Yates shuffle algorithm is used.
 		void add(const Card& aCard);
+		//   Postcondition: Add a new card to the deck. 
 		void emptyDeck();
+		//   Postcondition: Set the number of cards in the deck to 0.
 		const Card remove();
-		void sort() const;
+		//   Postcondition: Remove a card from the deck. 
+		// This removes the first card stored in the dynamic array and returns it.
+		Deck& sort();
 		//   Postcondition: Sort cards by name (Ace, 2, 3, etc.)
 		// Break ties by suit (Clubs, Diamonds, Hearts, Spades).
 		friend std::ostream& operator <<(std::ostream& outputStream, const Deck& aDeck);

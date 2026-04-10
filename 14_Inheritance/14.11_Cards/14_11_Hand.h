@@ -9,6 +9,8 @@ namespace myNamespaceCards
 	{
 	public:
 		Hand();
+		//   Postcondition: Set the hand to an empty set of cards.
+		// This calls the emptyDeck function of the Deck class to set the number of cards in the hand to 0.
 	};
 
 

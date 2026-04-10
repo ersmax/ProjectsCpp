@@ -14,13 +14,18 @@ namespace myNamespaceCards
 	{
 	public:
 		Card();
+		//   Postcondition: Initialize the card to the Ace of Clubs.
 		Card(const std::string& theSuit, const std::string& theName);
 		const std::string& getSuit() const;
 		const std::string& getName() const;
 		bool operator <(const Card& card2) const;
+		//   Postcondition: Compare cards by name (Ace, 2, 3, etc.). Break ties by suit (Clubs, Diamonds, Hearts, Spades).
 		bool operator ==(const Card& card2) const;
+		//   Postcondition: Return true if the suit and name of the cards are the same.
 		friend std::istream& operator >>(std::istream& inputStream, Card& aCard);
+		//   Postcondition: Read the suit and name of a card from the user. Check that the suit and name are valid.
 		friend std::ostream& operator <<(std::ostream& outputStream, const Card& aCard);
+		//   Postcondition: Print the suit and name of the card.
 	private:
 		std::string suit;
 		std::string name;

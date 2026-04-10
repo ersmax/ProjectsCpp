@@ -1,64 +1,72 @@
-/*
-Use inheritance and classes to represent a deck of playing cards.Create a Card class
-that stores the suit(Clubs, Diamonds, Hearts, Spades) and name(e.g., Ace, 2, 10,
-Jack) along with appropriate accessors, constructors, and mutators.
-Next, create a Deck class that stores a vector of Card objects.The default constructor
-should create objects that represent the standard 52 cards and store them in the
-vector.The Deck class should have functions to :
-■ Print every card in the deck.
-■ Shuffle the cards in the deck.You can implement this by randomly swapping
-every card in the deck.
-■ Add a new card to the deck.This function should take a Card object as a
-parameter
-and add it to the vector.
-■ Remove a card from the deck.This removes the first card stored in the vector
-and returns it.
-■ Sort the cards in the deck ordered by name.
-Next, create a Hand class that represents the cards in a hand. Hand should be derived
-from Deck. This is because a hand is like a specialized version of a deck; we can
-print, shuffle, add, remove, and sort cards in a hand just like cards in a deck. The
-default constructor should set the hand to an empty set of cards.
-Finally, write a main function that creates a deck of cards, shuffles the deck, and
-creates two hands of five cards each. The cards should be removed from the deck
-and added to the hand. Test the sort and print functions for the hands and the
-deck. Finally, return the cards in the hand to the deck and test to ensure that the
-cards have been properly returned.
-You may add additional functions or class variables as desired to implement your
-solution.
-*/
-
 #include <iostream>
+#include <vector>
 #include "14_11_Hand.h"
 
+constexpr int CARDS_HAND = 5;
+
+using myNamespaceCards::Card;
 using myNamespaceCards::Hand;
 using myNamespaceCards::Deck;
 
-void createHand(Deck& theDeck, Hand& theHand);
-void returnHand(Deck& theDeck, Hand& theHand);
+void createHand(Deck& theDeck, std::vector<Hand>& hands);
+void returnHand(Deck& theDeck, std::vector<Hand>& hands);
 
 int main ( )
 {
 	Deck aDeck;
-	Hand hand1, hand2;
+	std::vector<Hand> hands;
+	for (int idx = 0; idx < 2; idx++)
+	{
+		Hand aHand;
+		hands.push_back(aHand);
+	}
 	
 	aDeck.shuffle();
-	createHand(aDeck, hand1);
-	createHand(aDeck, hand2);
-	std::cout << "The hand 1 is:\n" << hand1 << '\n';
-	std::cout << "The hand 1 sorted is:\n" << hand1.sort() << '\n';
-	std::cout << "The hand 2 is:\n" << hand2 << '\n';
-	std::cout << "The hand 2 sorted is:\n" << hand2.sort() << '\n';
+	createHand(aDeck, hands);
+	std::cout << "The hand 1 is:\n" << hands[0] << '\n';
+	std::cout << "The hand 1 sorted is:\n" << hands[0].sort() << '\n';
+	std::cout << "The hand 2 is:\n" << hands[1] << '\n';
+	std::cout << "The hand 2 sorted is:\n" << hands[1].sort() << '\n';
 	std::cout << "Remaining card in the deck (unsorted):\n" << aDeck << '\n';
 	std::cout << "Remaining card in the deck (sorted):\n" << aDeck.sort() << '\n';
 
-	returnHand(aDeck, hand1);
-	returnHand(aDeck, hand2);
+	returnHand(aDeck, hands);
 	aDeck.sort();
 	std::cout << "Sorted cards in the deck:\n" << aDeck << '\n';
 	std::cout << "Total card in the deck: " << aDeck.getNumberCards() << '\n';
-	std::cout << "Total card in hand 1: " << hand1.getNumberCards() << '\n';
-	std::cout << "Total card in hand 2: " << hand2.getNumberCards() << '\n';
+	std::cout << "Total card in hand 1: " << hands[0].getNumberCards() << '\n';
+	std::cout << "Total card in hand 2: " << hands[1].getNumberCards() << '\n';
 
 	std::cout << '\n';
 	return 0;
 }
+
+void createHand(Deck& theDeck, std::vector<Hand>& hands)
+{
+	if (static_cast<size_t>(theDeck.getNumberCards()) < hands.size() * CARDS_HAND )
+	{
+		std::cout << "Not enough cards in the deck\n";
+		return;
+	}    
+	int nCards = 0;
+	while (nCards < CARDS_HAND)
+	{
+		for (size_t idx = 0; idx < hands.size(); idx++)
+		{
+			Card theCard = theDeck.remove();
+			hands[idx].add(theCard);
+		}
+		nCards++;
+	}
+}
+
+void returnHand(Deck& theDeck, std::vector<Hand>& hands)
+{
+	for (Hand& hand : hands)
+		while (hand.getNumberCards() > 0) 
+		{
+			Card theCard = hand.remove();
+			theDeck.add(theCard);
+		}
+}
+                                                  

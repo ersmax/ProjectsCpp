@@ -675,3 +675,9 @@ Inheritance basics, Programming with Inheritance.
     Models a pet management system with a base class and derived classes.
     `Pet` stores name, age, and weight, and defines virtual `getLifespan` and `print` functions for polymorphic behaviours in the derived classes.
     An `Orchestrator` class owns a dynamic array of `Pet*`, provides menu-driven operations to add/delete pets, and uses polymorphic stream operators with shared input-validation utilities to display each pet's data and lifespan.
+11. [Card](14_Inheritance/14.11_Cards)
+    Implements a simple card-handling system using inheritance and dynamic arrays.
+    The `Card` class stores a suit and a name as strings, validates them against predefined arrays of valid suits and names, and defines comparison operators (`<`, `==`) so cards can be sorted by rank and then suit.
+    The `Deck` class owns a dynamic array of `Card` objects, constructs a standard 52-card deck from the suit/rank tables, and provides operations to print, shuffle (Fisher–Yates using `<random>`), sort (selection sort using `Card::operator<`), add a card, remove the first card, logically empty the deck, and query the current number of cards.
+    The `Hand` class publicly derives from `Deck` and calls `emptyDeck()` in its default constructor so that a hand starts as an empty specialized deck but reuses all deck operations (print, shuffle, add, remove, sort).
+    The driver program creates a shuffled deck and two hands, deals five cards per hand from the deck, demonstrates sorting and printing both hands and the remaining deck, then returns all cards from the hands back to the deck, sorts the full deck again, and prints final card counts to verify all 52 cards have been restored.

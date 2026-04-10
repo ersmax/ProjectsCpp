@@ -60,7 +60,7 @@ namespace myNamespaceCards
 			return (nameCard < nameCard2);
 
 		const int suitCard = indexOf(suit, SUITS, N_SUITS);
-		const int suitCard2 = indexOf(card2.name, SUITS, N_SUITS);
+		const int suitCard2 = indexOf(card2.suit, SUITS, N_SUITS);
 		return suitCard < suitCard2;
 	}
 

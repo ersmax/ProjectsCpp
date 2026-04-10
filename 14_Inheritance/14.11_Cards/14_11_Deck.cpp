@@ -16,7 +16,7 @@ namespace myNamespaceCards
 		int idxCard = 0;
 		for (int idx = 0; idx < N_NAMES; idx++)
 			for (int idx2 = 0; idx2 < N_SUITS; idx2++)
-				deck[idxCard++] = Card(NAMES[idx], SUITS[idx2]);
+				deck[idxCard++] = Card(SUITS[idx2], NAMES[idx]);
 	}
 
 	Deck::~Deck()
@@ -27,7 +27,7 @@ namespace myNamespaceCards
 	Deck::Deck(const Deck& anotherDeck) : numberCards(anotherDeck.numberCards)
 	{
 		deck = new Card[numberCards];
-		for (int idx = 0; idx < 0; idx++)
+		for (int idx = 0; idx < numberCards; idx++)
 			deck[idx] = anotherDeck.deck[idx];
 	}
 
@@ -37,7 +37,7 @@ namespace myNamespaceCards
 		if (numberCards != anotherDeck.numberCards)
 		{
 			delete [] deck;
-			deck = new Card[numberCards];
+			deck = new Card[anotherDeck.numberCards];
 		}
 		numberCards = anotherDeck.numberCards;
 		for (int idx = 0; idx < numberCards; idx++)
@@ -48,10 +48,10 @@ namespace myNamespaceCards
 	void Deck::print(std::ostream& outputStream) const
 	{
 		for (int idx = 0; idx < numberCards; idx++)
-			std::cout << "Card " << idx + 1 << ": " << deck[idx] << '\n';
+			outputStream << "Card " << idx + 1 << ": " << deck[idx];
 	}
 
-	void Deck::sort() const
+	Deck& Deck::sort()
 	{
 		for (int idx = 0; idx < numberCards - 1; idx++)
 		{
@@ -67,9 +67,10 @@ namespace myNamespaceCards
 				deck[idxMinCard] = temp;
 			}
 		}
+		return *this;
 	}
 
-	void Deck::shuffle() const
+	void Deck::shuffle()
 	{
 		// ONE Rng per thread
 		thread_local std::mt19937 rng{ std::random_device{}() };
@@ -83,7 +84,7 @@ namespace myNamespaceCards
 			// not thread safe
 			// const int idxRandom = std::rand() % (idx + 1);
 
-			const Card temp = deck[idxRandom];
+			const Card temp = deck[idx];
 			deck[idx] = deck[idxRandom];
 			deck[idxRandom] = temp;
 		}	
