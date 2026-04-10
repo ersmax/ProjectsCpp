@@ -33,6 +33,8 @@ namespace myNamespaceCards
 		Deck& sort();
 		//   Postcondition: Sort cards by name (Ace, 2, 3, etc.)
 		// Break ties by suit (Clubs, Diamonds, Hearts, Spades).
+		const Card& operator [](int idx) const;
+		//   Postcondition: Return the card at the specified index.
 		friend std::ostream& operator <<(std::ostream& outputStream, const Deck& aDeck);
 		//   Postcondition: Print all cards in the deck
 		friend std::istream& operator >>(std::istream& inputStream, Deck& aDeck);

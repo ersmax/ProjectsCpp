@@ -1,5 +1,6 @@
 #include <iostream>
 #include <random>
+#include <stdexcept>
 #include "14_11_Deck.h"
 #include "14_11_Validation.h"
 
@@ -123,6 +124,21 @@ namespace myNamespaceCards
 	}
 
 	int Deck::getNumberCards() const { return numberCards; }
+
+	const Card& Deck::operator [](const int idx) const
+	{
+		if (numberCards < 0)
+		{
+			std::cout << "No cards in the deck\n";
+			throw std::out_of_range("Not a valid index\n");
+		}
+		if (idx < 0 || idx >= numberCards)
+		{
+			std::cout << "No cards in the deck\n";
+			throw std::out_of_range("Not a valid index\n");
+		}
+		return deck[idx];
+	}
 
 	std::istream& operator >>(std::istream& inputStream, Deck& aDeck)
 	{
