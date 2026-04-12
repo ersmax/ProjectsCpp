@@ -687,5 +687,5 @@ Inheritance basics, Programming with Inheritance.
     A `Game` class owns a shuffled `Deck` (the shoe) and an array of `Hand` objects (`hands[0]` for the dealer, `hands[1..N_PLAYERS-1]` for players), and implements the round flow: deal two cards to each participant, run each player's turn (hit/stand) while showing the dealer's second card hidden, then—if at least one player is not bust—run the dealer's turn under standard house rules (hit until 17 or more).
     Helper functions compute Blackjack hand values with correct Ace handling (11 or 1), detect busts and natural blackjacks, and support printing the dealer's hand with one card hidden. At the end of the round, the game compares each player's final hand against the dealer to determine win/lose/push, printing detailed results for every participant.
     <p align="center">
-      <img src="14_Inhertiance/14.12_Blackjack/Figures/Blackjack.gif" alt="Blackjack" width="48%" />
+      <img src="14_Inheritance/14.12_Blackjack/Figures/Blackjack.gif" alt="Blackjack" width="48%" />
     </p>
