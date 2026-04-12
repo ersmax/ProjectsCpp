@@ -17,9 +17,6 @@ namespace myNamespacePoker
 		//   Postcondition: calling the emptyDeck() function to move to the next round
 		int getMoney() const;
 		void placeBet();
-		void win();
-		void lose();
-
 	private:
 		Hand hand;
 		//   Postcondition: hold the player's current 2-card hand
