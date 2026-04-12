@@ -9,7 +9,8 @@ namespace myNamespaceBlackjack
 {
 	constexpr int N_PLAYERS = 3;
 	// 0 = dealer, 1 - .. = new player
-
+	constexpr int DEALER = 0;
+	constexpr int HOUSE_STAND = 17;
 
 	class Game
 	{
@@ -43,7 +44,7 @@ namespace myNamespaceBlackjack
 		int handValueHidden(const Hand& hand) const;
 		//   Postcondition: Calculate the total value of the hand, counting only the visible cards (not the hidden card).
 		// This function is useful to show the points of the dealer to the players excluding the hidden card.
-		int handValue(const Hand& hand, int visibleCards) const;
+		static int handValue(const Hand& hand, int visibleCards);
 		//   Postcondition: Calculate the total value of the hand, counting only the specified number of visible cards.
 		bool isBust(const Hand& hand) const;
 		//   Postcondition: Return true if the total value of the hand exceeds 21, indicating that the player has busted.

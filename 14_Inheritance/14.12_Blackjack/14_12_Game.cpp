@@ -5,9 +5,6 @@
 
 namespace myNamespaceBlackjack
 {
-	constexpr int DEALER = 0;
-	constexpr int HOUSE_STAND = 17;
-
 	Game::Game() 
 	{
 		shoe.shuffle();
@@ -117,11 +114,12 @@ namespace myNamespaceBlackjack
 
 	void Game::dealerTurn()
 	{
+		const Hand& dealerHand = hands[DEALER];
 		int houseScore;
 		do
 		{
-			std::cout << "Cards of the House:\n" << hands[DEALER];
-			houseScore = handValue(hands[DEALER]);
+			std::cout << "Cards of the House:\n" << dealerHand;
+			houseScore = handValue(dealerHand);
 			std::cout << "Current House Score: " << houseScore << '\n';
 
 			// House hits until 17 or more is reached
@@ -146,7 +144,7 @@ namespace myNamespaceBlackjack
 			printHiddenCardsHouse(hands[DEALER]);
 			std::cout << "Score of the house: " << handValueHidden(hands[DEALER]) << '\n';
 
-			if (isTwentyone(hand) == 21)	return;
+			if (isTwentyone(hand))	return;
 
 			std::cout << "Draw new card (hit)? Enter 'h'\n";
 			std::cout << "Don't draw anything (stand)? Enter 's'\n";
@@ -199,7 +197,7 @@ namespace myNamespaceBlackjack
 		// do not show the points of the last hidden card
 	} 
 
-	int Game::handValue(const Hand& hand, const int visibleCards) const
+	int Game::handValue(const Hand& hand, const int visibleCards)
 	{
 		int points = 0;
 		int aces = 0;
