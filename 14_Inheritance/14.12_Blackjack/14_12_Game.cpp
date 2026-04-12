@@ -20,7 +20,7 @@ namespace myNamespaceBlackjack
 			playerTurn(hands[idx]);
 
 		bool allBusted = true;
-		for (int idx = 0; idx < N_PLAYERS; idx++)
+		for (int idx = 1; idx < N_PLAYERS; idx++)
 		{
 			if (!isBust(hands[idx]))
 			{
@@ -39,12 +39,13 @@ namespace myNamespaceBlackjack
 	}
 
 
-	void Game::resolveRound()
+	void Game::resolveRound() const
 	{
-		
 		const Hand& dealerHand = hands[DEALER];
+		const int dealerPoints = handValue(dealerHand);
+
 		std::cout << "Dealer's hand:\n" << dealerHand << '\n';
-		std::cout << "Dealer's score: " << handValue(dealerHand) << '\n';
+		std::cout << "Dealer's score: " << dealerPoints << '\n';
 		if (isBlackjack(dealerHand))
 			std::cout << "Dealer has scored blackjack\n";
 		if (isBust(dealerHand))
@@ -54,9 +55,10 @@ namespace myNamespaceBlackjack
 		for (int idx = 1; idx < N_PLAYERS; idx++)
 		{
 			const Hand& playerHand = hands[idx];
-			
+			const int playerPoints = handValue(playerHand);
+
 			std::cout << "Player " << idx << " hand:\n" << playerHand;
-			std::cout << "Player " << idx << " score:\n" << handValue(playerHand);
+			std::cout << "Player " << idx << " score:\n" << playerPoints;
 
 			if (isBlackjack(playerHand))
 				std::cout << "Player " << idx << " has scored blackjack\n";
@@ -69,25 +71,36 @@ namespace myNamespaceBlackjack
 			std::cout << "Result for the player " << idx << ":\n";
 			if (isBust(playerHand))
 			{
-				std::cout << "Player LOST (player bust)\n";
+				std::cout << "Player LOST (player bust) (" << playerPoints << ")\n";
 				continue;
 			}
 			// 2) Dealer bust
 			if (isBust(dealerHand))
 			{
-				std::cout << "Player WIN (dealer bust)\n";
+				std::cout << "Player WINS over busted dealer (" << playerPoints << " vs " << dealerPoints << ")\n";
 				continue;
 			}
 			// 3) Player only blackjack 
-			// TODO
+			if (isBlackjack(playerHand) && !isBlackjack(dealerHand))
+			{
+				std::cout << "Player WINS (blackjack) (points: " << playerPoints << " vs house: " << dealerPoints << ")\n";
+				continue;
+			}
 			// 4) Dealer only blackjack
-			// TODO
+			if (!isBlackjack(playerHand) && isBlackjack(dealerHand))
+			{
+				std::cout << "Player LOST (house's blackjack) (points: " << playerPoints << " vs house: " << dealerPoints << ")\n";
+				continue;
+			}
 			// 5) Compare totals
-			// TODO
+			if (playerPoints > dealerPoints)
+				std::cout << "Player WIN (" << playerPoints << " vs house: " << dealerPoints << ")\n";
+			else if (playerPoints < dealerPoints)
+				std::cout << "Player LOST (" << playerPoints << " vs house: " << dealerPoints << ")\n";
+			else
+				std::cout << "Tie (player: " << playerPoints << " vs house: " << dealerPoints << ")\n";
 
 		}
-
-
 	}
 
 
@@ -110,7 +123,8 @@ namespace myNamespaceBlackjack
 			std::cout << "Cards of the House:\n" << hands[DEALER];
 			houseScore = handValue(hands[DEALER]);
 			std::cout << "Current House Score: " << houseScore << '\n';
-			
+
+			// House hits until 17 or more is reached
 			if (houseScore < HOUSE_STAND)
 			{
 				Card aCard = shoe.remove();
@@ -131,6 +145,8 @@ namespace myNamespaceBlackjack
 			std::cout << "Cards of the House:\n";
 			printHiddenCardsHouse(hands[DEALER]);
 			std::cout << "Score of the house: " << handValueHidden(hands[DEALER]) << '\n';
+
+			if (isTwentyone(hand) == 21)	return;
 
 			std::cout << "Draw new card (hit)? Enter 'h'\n";
 			std::cout << "Don't draw anything (stand)? Enter 's'\n";
@@ -216,8 +232,14 @@ namespace myNamespaceBlackjack
 		return (hand.getNumberCards() == 2 && handValue(hand) == 21);
 	}
 
+	bool Game::isTwentyone(const Hand& hand) const
+	{
+		return (handValue(hand) == 21);
+	}
+
 	bool Game::isBust(const Hand& hand) const
 	{
 		return handValue(hand) > 21;
 	}
+
 } // myNamespaceBlackjack

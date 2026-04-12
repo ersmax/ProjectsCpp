@@ -8,7 +8,7 @@ namespace myNamespaceCards
 	inline constexpr int N_SUITS = 4;
 	inline constexpr int N_NAMES = 13;
 	inline const std::string SUITS[N_SUITS] = { "Clubs", "Diamonds", "Hearts", "Spades" };
-	inline const std::string NAMES[N_NAMES] = { "Ace", "2", "3", "4", "5", "6", "7", "8", "9", "Jack", "Queen", "King" };
+	inline const std::string NAMES[N_NAMES] = { "Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King" };
 
 	class Card
 	{

@@ -681,3 +681,11 @@ Inheritance basics, Programming with Inheritance.
     The `Deck` class owns a dynamic array of `Card` objects, constructs a standard 52-card deck from the suit/rank tables, and provides operations to print, shuffle (Fisher–Yates using `<random>`), sort (selection sort using `Card::operator<`), add a card, remove the first card, logically empty the deck, and query the current number of cards.
     The `Hand` class publicly derives from `Deck` and calls `emptyDeck()` in its default constructor so that a hand starts as an empty specialized deck but reuses all deck operations (print, shuffle, add, remove, sort).
     The driver program creates a shuffled deck and two hands, deals five cards per hand from the deck, demonstrates sorting and printing both hands and the remaining deck, then returns all cards from the hands back to the deck, sorts the full deck again, and prints final card counts to verify all 52 cards have been restored.
+12. [Blackjack](14_Inheritance/14.12_Blackjack)
+    Extends the `Card`/`Deck`/`Hand` classes to implement a Blackjack game where the computer acts as the dealer (house) and one or more players play against it.
+    Reuses the `Card` and `Deck` classes to represent a standard 52-card deck and individual cards, and the `Hand` class (derived from `Deck`) to represent the cards held by each player and the dealer.
+    A `Game` class owns a shuffled `Deck` (the shoe) and an array of `Hand` objects (`hands[0]` for the dealer, `hands[1..N_PLAYERS-1]` for players), and implements the round flow: deal two cards to each participant, run each player's turn (hit/stand) while showing the dealer's second card hidden, then—if at least one player is not bust—run the dealer's turn under standard house rules (hit until 17 or more).
+    Helper functions compute Blackjack hand values with correct Ace handling (11 or 1), detect busts and natural blackjacks, and support printing the dealer's hand with one card hidden. At the end of the round, the game compares each player's final hand against the dealer to determine win/lose/push, printing detailed results for every participant.
+    <p align="center">
+      <img src="14_Inhertiance/14.12_Blackjack/Figures/Blackjack.gif" alt="Blackjack" width="48%" />
+    </p>

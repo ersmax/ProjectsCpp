@@ -7,14 +7,15 @@
 
 namespace myNamespaceBlackjack
 {
-	constexpr int N_PLAYERS = 2;
-	// 0 = dealer, 1 = new player
+	constexpr int N_PLAYERS = 3;
+	// 0 = dealer, 1 - .. = new player
+
 
 	class Game
 	{
-		using myNamespaceCards::Deck;
-		using myNamespaceCards::Hand;
-		using myNamespaceCards::Card;
+	using Hand = myNamespaceCards::Hand;
+	using Card = myNamespaceCards::Card;
+	using Deck = myNamespaceCards::Deck;
 
 	public:
 		Game();
@@ -26,13 +27,14 @@ namespace myNamespaceBlackjack
 		void dealInitial();
 		void playerTurn(Hand& hand);
 		void dealerTurn();
-		void resolveRound();
+		void resolveRound() const;
 
 		int handValue(const Hand& hand) const;
 		int handValueHidden(const Hand& hand) const;
 		int handValue(const Hand& hand, int visibleCards) const;
 		bool isBust(const Hand& hand) const;
 		bool isBlackjack(const Hand& hand) const;
+		bool isTwentyone(const Hand& hand) const;
 
 		void printHiddenCardsHouse(const Hand& hand);
 		
