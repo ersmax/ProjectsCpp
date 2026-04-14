@@ -33,4 +33,19 @@ namespace myNamespaceValidation
 		}
 	}
 
+	void readNumber(std::istream& inputStream, int& theNumber)
+	{
+		while (true)
+		{
+			if (!(inputStream >> theNumber))
+			{
+				std::cout << "Not a valid number\n";
+				inputStream.clear();
+				inputStream.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+				continue;
+			}
+			inputStream.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			return;
+		}
+	}
 } // myNamespaceValidation

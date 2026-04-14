@@ -6,6 +6,7 @@
 namespace myNamespacePoker
 {
 	using Hand = myNamespaceCards::Hand;
+	using Card = myNamespaceCards::Card;
 
 	class Player
 	{
@@ -15,14 +16,25 @@ namespace myNamespacePoker
 		Player(const std::string& theName, int money);
 		void clearHand();
 		//   Postcondition: calling the emptyDeck() function to move to the next round
+		void setRanking(int theRanking);
 		int getMoney() const;
-		void placeBet();
+		bool hasFolded() const;
+		void fold();
+		void placeBet(int theBet);
+		//   Postcondition: allow Game class to set up the bet in each round
+		int getBet() const;
+		//   Postcondition: returns the bet
+		void addCard(const Card& theCard);
+		//   Postcondition: add a card to the player's hand;
+		const Hand& getHand() const;
 	private:
 		Hand hand;
 		//   Postcondition: hold the player's current 2-card hand
 		int money;
-		int currentBet;
+		int bet;
 		std::string namePlayer;
+		bool folded;
+		int ranking;
 	};
 
 

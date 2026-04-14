@@ -9,6 +9,8 @@ namespace myNamespaceValidation
 	//   Postcondition: Read the name input from the user. 
 	void readName(std::istream& inputStream, char& aName);
 	//   Postcondition: Read the character input from the user.
+	void readNumber(std::istream& inputStream, int& theNumber);
+	//   Postcondition: Read theNumber from the user
 
 } // myNamespaceValidation
 

@@ -23,7 +23,7 @@ namespace
 		return false;
 	}
 
-	int indexOf(const std::string& value, const std::string *array, const int size)
+	int indexOf(const std::string& value, const std::string array[], const int size)
 	{
 		for (int idx = 0; idx < size; idx++)
 			if (array[idx] == value)
