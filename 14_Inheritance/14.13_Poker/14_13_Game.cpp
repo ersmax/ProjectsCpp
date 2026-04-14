@@ -385,9 +385,7 @@ namespace myNamespacePoker
 	// Ranking 3
 	bool Game::isFourOfAKind(const std::vector<Card>& theHand)
 	{
-
 		int counts[N_NAMES] = { 0 };
-
 		for (const Card& card : theHand)
 		{
 			const int idxRank = lowRank(card.getName(), NAMES, N_NAMES);
