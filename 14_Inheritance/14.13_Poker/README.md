@@ -1,7 +1,48 @@
 ```cpp
+bool Game::isFourOfAKind(const std::vector<Card>& theHand)
+{
+	/* THE VERSION BELOW PROCEEDS TO COUNT BY DISTINGUISHING SUITS AND RANKS, if we had more than 2 decks */
+	for (size_t idx = 0; idx < theHand.size() - 1; idx++)
+	{
+		const Card& card1 = theHand[idx];
+		std::vector<std::string> suits;
+		suits.push_back(card1.getSuit());
+
+		for (size_t idx2 = idx + 1; idx2 < theHand.size(); idx2++)
+		{
+			const Card& card2 = theHand[idx2];
+			// Different rank
+			if (card1.getName() != card2.getName())	continue;
+
+			// Suit already counted
+			bool alreadySeen = false;
+			for (const std::string& suit : suits)
+			{
+				if (suit == card2.getSuit())
+				{
+					alreadySeen = true;
+					break;
+				}
+			}
+			if (alreadySeen)	continue;
+				
+			suits.push_back(card2.getSuit());
+		}
+			
+		if (suits.size() == 4)	return true;
+	}
+
+	return false;
+}
+
+```
+
+
+
+```cpp
 bool Game::isFullHouse(const std::vector<Card>& theHand)
 {
-	/* THE VERSION BELOW PROCEEDS TO COUNT BY DISTINGUISHING SUITS, if we had more than 2 decks */
+	/* THE VERSION BELOW PROCEEDS TO COUNT BY DISTINGUISHING SUITS AND RANKS, if we had more than 2 decks */
 	int triples = 0;
 	int pair = 0;
 

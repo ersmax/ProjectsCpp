@@ -385,36 +385,17 @@ namespace myNamespacePoker
 	// Ranking 3
 	bool Game::isFourOfAKind(const std::vector<Card>& theHand)
 	{
-		for (size_t idx = 0; idx < theHand.size() - 1; idx++)
+
+		int counts[N_NAMES] = { 0 };
+
+		for (const Card& card : theHand)
 		{
-			const Card& card1 = theHand[idx];
-			std::vector<std::string> suits;
-			suits.push_back(card1.getSuit());
-
-			for (size_t idx2 = idx + 1; idx2 < theHand.size(); idx2++)
-			{
-				const Card& card2 = theHand[idx2];
-				// Different rank
-				if (card1.getName() != card2.getName())	continue;
-
-				// Suit already counted
-				bool alreadySeen = false;
-				for (const std::string& suit : suits)
-				{
-					if (suit == card2.getSuit())
-					{
-						alreadySeen = true;
-						break;
-					}
-				}
-				if (alreadySeen)	continue;
-				
-				suits.push_back(card2.getSuit());
-			}
-			
-			if (suits.size() == 4)	return true;
+			const int idxRank = lowRank(card.getName(), NAMES, N_NAMES);
+			counts[idxRank]++;
 		}
-
+		for (int count : counts)
+			if (count >= 4)
+				return true;
 		return false;
 	}
 
