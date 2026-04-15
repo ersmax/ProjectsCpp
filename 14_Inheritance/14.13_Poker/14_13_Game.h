@@ -10,7 +10,7 @@ namespace myNamespacePoker
 	using Deck = myNamespaceCards::Deck;
 	using Card = myNamespaceCards::Card;
 
-	constexpr int STARTING_BET = 10;
+	constexpr double STARTING_BET = 10.0;
 
 	class Game
 	{
@@ -49,18 +49,22 @@ namespace myNamespacePoker
 		//   Postcondition: show the cards in the main board
 		void resolveRound();
 		//   Postcondition: evaluate hands, determine winner, pay out from pot
-		void setRanking(Player& thePlayer, const std::vector<Card>& theHand);
+		void setRanking(Player& thePlayer, const std::vector<Card>& theHand, const Hand& handPlayer);
 		//   Postcondition: assign a rank to the poker hand hold by each player
+		void handleTies(double& thePot, std::vector<Player>& thePlayers);
+		//   Postcondition: in case of equal poker hands, break the ties according to 
+		// the highest cards rank if possible. Else split the plot equally
 		static bool isRoyalFlush(const std::vector<Card>& theHand);
-		static bool isStraightFlush(const std::vector<Card>& theHand);
-		static bool isFourOfAKind(const std::vector<Card>& theHand);
-		static bool isFullHouse(const std::vector<Card>& theHand);
-		static bool isFlush(const std::vector<Card>& theHand);
+		void royalFlushTie(const double& thePot, std::vector<Player>& thePlayers);
+		static bool isStraightFlush(const std::vector<Card>& theHand, Player& thePlayer);
+		static bool isFourOfAKind(const std::vector<Card>& theHand, Player& thePlayer);
+		static bool isFullHouse(const std::vector<Card>& theHand, Player& thePlayer);
+		static bool isFlush(const std::vector<Card>& theHand, Player& thePlayer);
 		bool isStraight(const std::vector<Card>& theHand);
 		bool isThreeOfAKind(const std::vector<Card>& theHand);
 		bool isTwoPair(const std::vector<Card>& theHand);
 		bool isOnePair(const std::vector<Card>& theHand);
-		bool isHighCard(const std::vector<Card>& theHand);
+		int highCard(const Hand& handPlayer);
 
 		Deck shoe;
 		//   Postcondition: create a deck of 52 cards
@@ -68,12 +72,12 @@ namespace myNamespacePoker
 		//   Postcondition: the vector of players holding 2 cards each
 		std::vector<Card> board;
 		//   Postcondition: this is the board with 3, 4, and 5 cards
-		int pot;
+		double pot;
 		int nPlayers;
 		int smallBlind;
 		int bigBlind;
-		int roundBet;
-		int currentBet;
+		double roundBet;
+		double currentBet;
 		int currentPlayer;
 
 		

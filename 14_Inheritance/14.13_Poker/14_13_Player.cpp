@@ -10,7 +10,7 @@ namespace myNamespacePoker
 		hand.add(theCard);
 	}
 
-	void Player::placeBet(const int theBet)
+	void Player::placeBet(const double theBet)
 	{
 		if (theBet < 0)
 			throw std::out_of_range("Bet cannot be less than 0\n");
@@ -29,9 +29,9 @@ namespace myNamespacePoker
 
 	bool Player::hasFolded() const { return folded; }
 
-	int Player::getBet() const { return bet; }
+	double Player::getBet() const { return bet; }
 
-	int Player::getMoney() const { return money; }
+	double Player::getMoney() const { return money; }
 
 	void Player::fold() { folded = true; }
 
@@ -39,4 +39,13 @@ namespace myNamespacePoker
 
 	void Player::setRanking(const int theRanking) { ranking = theRanking; }
 
+	int Player::getRanking() const { return ranking; }
+
+	void Player::win(const double thePot) { money += thePot; }
+
+	void Player::storeBestHand(int cardRanks[], const int size)
+	{
+		for (int idx = 0; idx < size; idx++)
+			bestHand[idx] = cardRanks[idx];
+	}
 } // myNamespacePoker

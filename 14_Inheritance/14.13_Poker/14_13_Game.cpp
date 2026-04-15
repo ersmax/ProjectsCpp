@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <stdexcept>
 #include <iostream>
 #include <algorithm>
@@ -11,6 +12,8 @@ namespace
 	using myNamespaceCards::SUITS;
 	using myNamespaceCards::N_SUITS;
 	using myNamespaceCards::Card;
+
+	constexpr int CARDS_BEST_DECK = 5;
 
 	int highRank(const std::string& value, const std::string *array, const int size)
 	//   Postcondition: return the ranking of a card number, where Ace values the most
@@ -197,7 +200,7 @@ namespace myNamespacePoker
 			readName(std::cin, choice);
 			if (std::tolower(choice) == 'y')
 			{
-				const int allIn = thePlayer.getMoney();
+				const double allIn = thePlayer.getMoney();
 				thePlayer.placeBet(allIn);
 				pot += allIn;
 			}
@@ -250,43 +253,121 @@ namespace myNamespacePoker
 
 	void Game::resolveRound()
 	{
+		// give a ranking to each player's hand. Skip players that folded 
 		for (int idx = 0; idx < nPlayers; idx++)
 		{
 			int idxPlayer = (currentPlayer + idx) % nPlayers;
 			Player& thePlayer = players[idxPlayer];
+			if (thePlayer.hasFolded())	continue;
+
 			const Hand& handPlayer = thePlayer.getHand();
-			
 			std::vector<Card> theHand;
 			for (size_t idxCard = 0; idxCard < board.size(); idxCard++)
 				theHand.push_back(board[idxCard]);
 			for (int idxCard = 0; idxCard < handPlayer.getNumberCards(); idxCard++)
 				theHand.push_back(handPlayer[idxCard]);
-			setRanking(thePlayer, theHand);
+			setRanking(thePlayer, theHand, handPlayer);
+		}
+		// Find the highest ranking. Skip players that folded 
+		int maxRanking = 0;
+		for (int idx = 0; idx < nPlayers; idx++)
+		{
+			Player& thePlayer = players[idx];
+			
+			if (thePlayer.hasFolded())	continue;
+			maxRanking = std::max(maxRanking, thePlayer.getRanking());
+		}
+		//   Determine the winner by comparing the ranking. Skip players that folded 
+		std::vector<Player> theWinners;
+		for (int idx = 0; idx < nPlayers; idx++)
+		{
+			int idxPlayer = (currentPlayer + idx) % nPlayers;
+			Player& thePlayer = players[idx];
+			if (thePlayer.hasFolded())	continue;
+			if (thePlayer.getRanking() == maxRanking)
+				theWinners.push_back(thePlayer);
+			else
+				handleLoss(thePlayer);
+		}
+		// Break the ties with higher card rank. If equal, split the pot equally.
+		if (theWinners.size() == 1)
+			theWinners[0].win(pot);
+		else
+			handleTies(pot, theWinners);
+	}
+
+	void Game::handleTies(double& thePot, std::vector<Player>& thePlayers)
+	{
+		const int ranking = thePlayers[0].getRanking();
+		switch (ranking)
+		{
+		case 10:
+			royalFlushTie(thePot, thePlayers);
+			break;
+		case 9:
+			straightFlushTie(thePot, thePlayers);
+			break;
+		case 8:
+			fourOfAKindTie(thePot, thePlayers);
+			break;
+		case 7:
+			fullHouseTie(thePot, thePlayers);
+			break;
+		case 6:
+			flushTie(thePot, thePlayers);
+			break;
+		case 5:
+			straightTie(thePot, thePlayers);
+			break;
+		case 4:
+			threeOfAKindTie(thePot, thePlayers);
+			break;
+		case 3:
+			twoPairTie(thePot, thePlayers);
+			break;
+		case 2:
+			aPairTie(thePot, thePlayers);
+			break;
+		case 1:
+			highCardTie(thePot, thePlayers);
+			break;
+		default:
+			break;
 		}
 	}
 
-	void Game::setRanking(Player& thePlayer, const std::vector<Card>& theHand)
+	void Game::royalFlushTie(const double& thePot, std::vector<Player>& thePlayers)
+	{
+		const double equalWin = thePot / static_cast<int>(thePlayers.size());
+		for (Player& player : thePlayers)
+			player.win(equalWin);
+		std::cout << "Equal win for each player!\n";
+	}
+
+
+
+	void Game::setRanking(Player& thePlayer, const std::vector<Card>& theHand, const Hand& handPlayer)
 	{
 		if (isRoyalFlush(theHand))
-			thePlayer.setRanking(1);
-		else if (isStraightFlush(theHand))
-			thePlayer.setRanking(2);
-		else if (isFourOfAKind(theHand))
-			thePlayer.setRanking(3);
-		else if (isFlush(theHand))
-			thePlayer.setRanking(4);
-		else if (isFullHouse(theHand))
-			thePlayer.setRanking(5);
-		else if (isStraight(theHand))
-			thePlayer.setRanking(6);
-		else if (isThreeOfAKind(theHand))
-			thePlayer.setRanking(7);
-		else if (isTwoPair(theHand))
-			thePlayer.setRanking(8);
-		else if (isOnePair(theHand))
-			thePlayer.setRanking(9);
-		else if (isHighCard(theHand))
 			thePlayer.setRanking(10);
+		else if (isStraightFlush(theHand, thePlayer))
+			thePlayer.setRanking(9);
+		else if (isFourOfAKind(theHand, thePlayer))
+			thePlayer.setRanking(8);
+		else if (isFlush(theHand, thePlayer))
+			thePlayer.setRanking(7);
+		else if (isFullHouse(theHand, thePlayer))
+			thePlayer.setRanking(6);
+		else if (isStraight(theHand))
+			thePlayer.setRanking(5);
+		else if (isThreeOfAKind(theHand))
+			thePlayer.setRanking(4);
+		else if (isTwoPair(theHand))
+			thePlayer.setRanking(3);
+		else if (isOnePair(theHand))
+			thePlayer.setRanking(2);
+		else if (highCard(handPlayer))
+			thePlayer.setRanking(1);
 	}
 
 	// Ranking 1
@@ -317,11 +398,12 @@ namespace myNamespacePoker
 			if (has10 && hasJ && hasQ && hasK && hasA)
 				return true;
 		}
+
 		return false;
 	}
 
 	// Ranking 2
-	bool Game::isStraightFlush(const std::vector<Card>& theHand)
+	bool Game::isStraightFlush(const std::vector<Card>& theHand, Player& thePlayer)
 	{
 		using namespace myNamespaceCards;
 		for (const std::string& suit : SUITS)
@@ -351,15 +433,27 @@ namespace myNamespacePoker
 			std::sort(ranksLow.begin(), ranksLow.end());
 			ranksLow.erase(std::unique(ranksLow.begin(), ranksLow.end()), ranksLow.end());
 
+			// Initialize best hand for Player
+			int best[CARDS_BEST_DECK] = {0};
+			size_t startRank = 0;
 
-			// Look for 5 consecutive ranks (in high rank)
+			// Look for 5 consecutive ranks (in high rank) and store the best hand in Player 
 			int consecutive = 1;
 			for (size_t idx = 1; idx < ranksHigh.size(); idx++)
 			{
 				if (ranksHigh[idx] == ranksHigh[idx - 1] + 1)
 				{
 					consecutive++;
-					if (consecutive >= 5)	return true;
+					if (consecutive == 2)	startRank = idx - 1;
+
+					if (consecutive >= 5)
+					{
+						for (int idx2 = 0; idx2 < CARDS_BEST_DECK; idx2++)
+							best[idx2] = ranksHigh[startRank + idx2];
+						thePlayer.storeBestHand(best, CARDS_BEST_DECK);
+
+						return true;
+					}
 				}
 				else if (ranksHigh[idx] != ranksHigh[idx - 1])
 					consecutive = 1;
@@ -372,7 +466,16 @@ namespace myNamespacePoker
 				if (ranksLow[idx] == ranksLow[idx - 1] + 1)
 				{
 					consecutive++;
-					if (consecutive >= 5)	return true;
+					if (consecutive == 2)	startRank = idx - 1;
+
+					if (consecutive >= 5)
+					{
+						for (int idx2 = 0; idx2 < CARDS_BEST_DECK; idx2++)
+							best[idx2] = ranksLow[startRank + idx2];
+						thePlayer.storeBestHand(best, CARDS_BEST_DECK);
+
+						return true;
+					}
 				}
 				else if (ranksLow[idx] != ranksLow[idx - 1])
 					consecutive = 1;
@@ -383,22 +486,50 @@ namespace myNamespacePoker
 	}
 
 	// Ranking 3
-	bool Game::isFourOfAKind(const std::vector<Card>& theHand)
+	bool Game::isFourOfAKind(const std::vector<Card>& theHand, Player& thePlayer)
 	{
 		int counts[N_NAMES] = { 0 };
+		bool isFour = false;
 		for (const Card& card : theHand)
 		{
 			const int idxRank = lowRank(card.getName(), NAMES, N_NAMES);
 			counts[idxRank]++;
 		}
-		for (int count : counts)
-			if (count >= 4)
-				return true;
-		return false;
+
+		int quadRank = -1;
+		for (int idx = 0; idx < N_NAMES; idx++)
+		{
+			if (counts[idx] >= 4)
+			{
+				quadRank = idx;
+				isFour = true;
+				break;
+			}
+		}
+		if (!isFour)	return false;
+
+		// Find the Max Card, where Ace has index 0 and values the most (13)
+		int kicker = -1;
+		for (int idx = N_NAMES - 1; idx >= 0; idx--)
+			if (idx != quadRank && counts[idx] > 0)
+			{
+				kicker = idx;
+				break;
+			}
+		if (kicker == 0)	kicker = 13;	// Ace = 13
+
+		// Store the 4 similar cards and the max rank card (different from the four)
+		int bestSequence[CARDS_BEST_DECK] = {0};
+		for (int idx = 0; idx < 4; idx++)
+			bestSequence[idx] = quadRank;
+		bestSequence[CARDS_BEST_DECK - 1] = kicker;
+		thePlayer.storeBestHand(bestSequence, CARDS_BEST_DECK);
+		
+		return isFour;
 	}
 
 	// Ranking 4
-	bool Game::isFullHouse(const std::vector<Card>& theHand)
+	bool Game::isFullHouse(const std::vector<Card>& theHand, Player& thePlayer)
 	{
 		int triples = 0;
 		int couples = 0;
@@ -408,62 +539,219 @@ namespace myNamespacePoker
 			const int idxCard = lowRank(aCard.getName(), NAMES, N_NAMES);
 			counts[idxCard]++;
 		}
-		for (const int count : counts)
+		int tripleRank[2] = { -1 };
+		int idxTripleRank = 0;
+		int pairRank[2] = { -1 };
+		int idxPairRank = 0;
+		for (int idx = 0; idx < N_NAMES; idx++)
 		{
-			if (count >= 3)
+			if (counts[idx] >= 3)
+			{
 				triples++;
-			else if (count == 2)
+				if (idx == 0)	tripleRank[idxTripleRank++] = 13;	// Account for Ace
+				else			tripleRank[idxTripleRank++] = idx;
+			}
+			else if (counts[idx] == 2)
+			{
 				couples++;
+				if (idx == 0)	pairRank[idxPairRank++] = 13;	// Account for Ace
+				else			pairRank[idxPairRank++] = idx;
+			}
+
+		}
+		// Store best hand rank
+		int bestHand[CARDS_BEST_DECK] = {0};
+		if (triples == 2)
+		{
+			const int max = std::max(tripleRank[0], tripleRank[1]);
+			const int min = std::min(tripleRank[0], tripleRank[1]);
+			// Use higher triple as the three and the lower as pair
+			for (int idx = 0; idx < 3; idx++)
+				bestHand[idx] = max;
+			for (int idx = 3; idx < CARDS_BEST_DECK; idx++)
+				bestHand[idx] = min;
+			thePlayer.storeBestHand(bestHand, CARDS_BEST_DECK);
+			return true;
+		}
+		if (triples == 1 && couples >= 1)
+		{
+			// Find the highest pair not overlapping with the triple
+			const int triple = tripleRank[0];
+			int highestPair = -1;
+			for (int idx = 0; idx < idxPairRank; idx++)
+				if (pairRank[idx] != triple)
+					highestPair = std::max(highestPair, pairRank[idx]);
+
+			// Use the triple and the highest pair as value of best hand
+			for (int idx = 0; idx < 3; idx++)
+				bestHand[idx] = triple;
+			for (int idx = 3; idx < CARDS_BEST_DECK; idx++)
+				bestHand[idx] = highestPair;
+			thePlayer.storeBestHand(bestHand, CARDS_BEST_DECK);
+			return true;
 		}
 
-		return (triples >= 2 || (triples == 1 && couples >= 1));
+		return false;
 	}
 
 	// Ranking 5
-	bool Game::isFlush(const std::vector<Card>& theHand)
+	bool Game::isFlush(const std::vector<Card>& theHand, Player& thePlayer)
 	{
 		int suits[N_SUITS] = {0};
 		for (const Card& aCard : theHand)
 		{
 			const int idxSuit = rankSuit(aCard.getSuit(), SUITS, N_SUITS);
-			if (idxSuit >= 0 && idxSuit < N_SUITS)
-				suits[idxSuit]++;
+			suits[idxSuit]++;
 		}
-		for (const int suit : suits)
-			if (suit >= 5)
-				return true;
+		int flushSuit = -1;
+		for (int idx = 0; idx < N_SUITS; idx++)
+			if (suits[idx] >= 5)
+				flushSuit = idx;
 		
-		return false;
+		if (flushSuit == -1)	return false;
+		
+		// Collect those cards of the Flush suit and their ranks
+		std::vector<int> bestHand;
+		for (const Card& aCard : theHand)
+		{
+			const int idxSuit = rankSuit(aCard.getSuit(), SUITS, N_SUITS);
+			if (idxSuit == flushSuit)
+			{
+				int idxCard = lowRank(aCard.getName(), NAMES, N_NAMES);
+				int rankCard = (idxCard == 0) ? 13 : idxCard;	// Ace value is 13
+				bestHand.push_back(rankCard);
+			}
+		}
+
+		std::sort(bestHand.rbegin(), bestHand.rend());
+		int theBestHand[5] = {0};
+		for (int idx = 0; idx < CARDS_BEST_DECK; idx++)
+			theBestHand[idx] = bestHand[idx];
+		thePlayer.storeBestHand(theBestHand, CARDS_BEST_DECK);
+
+		return true;
 	}
 
 	// Ranking 6
-	bool Game::isStraight(const std::vector<Card>& theHand)
+	bool Game::isStraight(const std::vector<Card>& theHand, Player& thePlayer)
 	{
-		// TODO
+		std::vector<int> rankLowOrder;
+		std::vector<int> rankHighOrder;
+		
+		for (const Card& card : theHand)
+		{
+			const std::string& cardName = card.getName();
+			const int cardLowRank = lowRank(cardName, NAMES, N_NAMES);
+			const int cardHighRank = highRank(cardName, NAMES, N_NAMES);
+			rankLowOrder.push_back(cardLowRank);
+			rankHighOrder.push_back(cardHighRank);
+		}
+		// Sort and remove duplicate for low ordered rank cards
+		std::sort(rankLowOrder.begin(), rankLowOrder.end());
+		rankLowOrder.erase(std::unique(rankLowOrder.begin(), rankLowOrder.end()), rankLowOrder.end());
+		// Sort and remove duplicate for high ordered rank cards
+		std::sort(rankHighOrder.begin(), rankHighOrder.end());
+		rankHighOrder.erase(std::unique(rankHighOrder.begin(), rankHighOrder.end()), rankHighOrder.end());
+
+		// Check whether ranks are in order for High Rank (Ace values the most)
+		int count = 1;
+		int startRank = -1;
+		int bestHand[CARDS_BEST_DECK] = {0};
+		for (size_t idx = 1; idx < rankHighOrder.size(); idx++) {
+			if (rankHighOrder[idx] == rankHighOrder[idx - 1] + 1) 
+			{
+				count++;
+				if (count == 2)	startRank = static_cast<int>(idx - 1);
+				if (count >= 5) 
+				{
+					for (int idxBest = 0; idxBest < CARDS_BEST_DECK; idxBest++)
+						bestHand[idxBest] = startRank + idxBest;
+					thePlayer.storeBestHand(bestHand, CARDS_BEST_DECK);
+					return true;
+				}
+			}
+			else
+				count = 1;
+		}
+		// Check whether ranks are in order for Low Rank (Ace values the least)
+		count = 1;
+		startRank = -1;
+		for (size_t idx = 1; idx < rankLowOrder.size(); idx++) {
+			if (rankLowOrder[idx] == rankLowOrder[idx - 1] + 1)
+			{
+				count++;
+				if (count == 2)	startRank = static_cast<int>(idx - 1);
+				if (count >= 5)
+				{
+					for (int idxBest = 0; idxBest < CARDS_BEST_DECK; idxBest++)
+						bestHand[idxBest] = startRank + idxBest;
+					thePlayer.storeBestHand(bestHand, CARDS_BEST_DECK);
+					return true;
+				}
+			}
+			else
+				count = 1;
+		}
+		return false;
 	}
 
 	// Ranking 7
 	bool Game::isThreeOfAKind(const std::vector<Card>& theHand)
 	{
-		// TODO
+		int counts[N_NAMES] = { 0 };
+		for (const Card& card : theHand) 
+		{
+			const int cardIdx = lowRank(card.getName(), NAMES, N_NAMES);
+			counts[cardIdx]++;
+		}
+		for (const int count : counts)
+			if (count >= 3)	return true;
+
+		return false;
 	}
 
 	// Ranking 8
 	bool Game::isTwoPair(const std::vector<Card>& theHand)
 	{
-		// TODO
+		int pairs = 0;
+		int counts[N_NAMES] = {0};
+		for (const Card& card : theHand)
+		{
+			const int idxCard = lowRank(card.getName(), NAMES, N_NAMES);
+			counts[idxCard]++;
+		}
+		for (const int count : counts)
+			if (count >= 2)
+				pairs++;
+
+		return (pairs >= 2);
 	}
 
 	// Ranking 9
 	bool Game::isOnePair(const std::vector<Card>& theHand)
 	{
-		// TODO
+		int counts[N_NAMES] = { 0 };
+		for (const Card& card : theHand)
+		{
+			const int cardIdx = lowRank(card.getName(), NAMES, N_NAMES);
+			counts[cardIdx]++;
+		}
+		for (const int count : counts)
+			if (count >= 2)	return true;
+
+		return false;
 	}
 
 	// Ranking 10
-	bool Game::isHighCard(const std::vector<Card>& theHand)
+	int Game::highCard(const Hand& handPlayer)
 	{
-		// TODO
+		int higherRank = 0;
+		for (const Card& card : handPlayer)
+		{
+			const int highRankCard = highRank(card.getName(), NAMES, N_NAMES);
+			higherRank = std::max(higherRank, highRankCard);
+		}
+		return higherRank;
 	}
 
 	void Game::resetRoundState()
