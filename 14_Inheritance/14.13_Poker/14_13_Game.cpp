@@ -358,7 +358,7 @@ namespace myNamespacePoker
 			thePlayer.setRanking(7);
 		else if (isFullHouse(theHand, thePlayer))
 			thePlayer.setRanking(6);
-		else if (isStraight(theHand))
+		else if (isStraight(theHand, thePlayer))
 			thePlayer.setRanking(5);
 		else if (isThreeOfAKind(theHand))
 			thePlayer.setRanking(4);
@@ -760,6 +760,7 @@ namespace myNamespacePoker
 		// TODO : roundState is adjusted every time a player is eliminated
 		// TODO : currentPlayer is the player next to CurrentPlayer
 		// TODO : smallBlind is moved by 1 position
+		// TODO : the bet is increased by double amount if one player is eliminated
 	}
 
 } // myNamespacePoker

@@ -48,9 +48,13 @@ namespace myNamespacePoker
 		static void showBoard(const std::vector<Card>& theBoard);
 		//   Postcondition: show the cards in the main board
 		void resolveRound();
-		//   Postcondition: evaluate hands, determine winner, pay out from pot
+		//   Postcondition: evaluate hands, determine winner, pay out from pot, and the losses.
+		// Make use of helper functions: setRanking, handleLoss, handleTies
 		void setRanking(Player& thePlayer, const std::vector<Card>& theHand, const Hand& handPlayer);
 		//   Postcondition: assign a rank to the poker hand hold by each player
+		void handleLoss(const Player& thePlayer);
+		//   Postcondition: handle the case when a player loses the hand,
+		// with subsequent loss of money and possibly the elimination from the Poker game
 		void handleTies(double& thePot, std::vector<Player>& thePlayers);
 		//   Postcondition: in case of equal poker hands, break the ties according to 
 		// the highest cards rank if possible. Else split the plot equally
@@ -60,7 +64,7 @@ namespace myNamespacePoker
 		static bool isFourOfAKind(const std::vector<Card>& theHand, Player& thePlayer);
 		static bool isFullHouse(const std::vector<Card>& theHand, Player& thePlayer);
 		static bool isFlush(const std::vector<Card>& theHand, Player& thePlayer);
-		bool isStraight(const std::vector<Card>& theHand);
+		bool isStraight(const std::vector<Card>& theHand, Player& thePlayer);
 		bool isThreeOfAKind(const std::vector<Card>& theHand);
 		bool isTwoPair(const std::vector<Card>& theHand);
 		bool isOnePair(const std::vector<Card>& theHand);

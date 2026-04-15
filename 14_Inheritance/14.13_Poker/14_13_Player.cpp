@@ -41,7 +41,12 @@ namespace myNamespacePoker
 
 	int Player::getRanking() const { return ranking; }
 
-	void Player::win(const double thePot) { money += thePot; }
+	void Player::win(const double thePot)
+	{
+		money += thePot;
+		std::cout << "Player " << namePlayer << " wins " << thePot 
+				  << ". New balance: " << money << '\n';
+	}
 
 	void Player::storeBestHand(int cardRanks[], const int size)
 	{
