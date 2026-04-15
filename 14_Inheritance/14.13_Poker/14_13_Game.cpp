@@ -656,7 +656,6 @@ namespace myNamespacePoker
 		// Check whether ranks are in order for High Rank (Ace values the most)
 		int count = 1;
 		int startRank = -1;
-		int bestHand[CARDS_BEST_DECK] = {0};
 		for (size_t idx = 1; idx < rankHighOrder.size(); idx++) {
 			if (rankHighOrder[idx] == rankHighOrder[idx - 1] + 1) 
 			{
@@ -664,8 +663,9 @@ namespace myNamespacePoker
 				if (count == 2)	startRank = static_cast<int>(idx - 1);
 				if (count >= 5) 
 				{
+					int bestHand[CARDS_BEST_DECK] = {0};
 					for (int idxBest = 0; idxBest < CARDS_BEST_DECK; idxBest++)
-						bestHand[idxBest] = startRank + idxBest;
+						bestHand[idxBest] = rankHighOrder[startRank + idxBest];
 					thePlayer.storeBestHand(bestHand, CARDS_BEST_DECK);
 					return true;
 				}
@@ -683,8 +683,9 @@ namespace myNamespacePoker
 				if (count == 2)	startRank = static_cast<int>(idx - 1);
 				if (count >= 5)
 				{
+					int bestHand[CARDS_BEST_DECK] = { 0 };
 					for (int idxBest = 0; idxBest < CARDS_BEST_DECK; idxBest++)
-						bestHand[idxBest] = startRank + idxBest;
+						bestHand[idxBest] = rankLowOrder[startRank + idxBest];
 					thePlayer.storeBestHand(bestHand, CARDS_BEST_DECK);
 					return true;
 				}
