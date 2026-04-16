@@ -58,7 +58,7 @@ namespace myNamespacePoker
 		void handleTies(double& thePot, std::vector<Player>& thePlayers);
 		//   Postcondition: in case of equal poker hands, break the ties according to 
 		// the highest cards rank if possible. Else split the plot equally
-		static bool isRoyalFlush(const std::vector<Card>& theHand);
+		static bool isRoyalFlush(const std::vector<Card>& theHand, Player& thePlayer);
 		void royalFlushTie(const double& thePot, std::vector<Player>& thePlayers);
 		static bool isStraightFlush(const std::vector<Card>& theHand, Player& thePlayer);
 		static bool isFourOfAKind(const std::vector<Card>& theHand, Player& thePlayer);

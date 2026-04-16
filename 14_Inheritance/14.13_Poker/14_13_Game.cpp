@@ -12,6 +12,9 @@ namespace
 	using myNamespaceCards::SUITS;
 	using myNamespaceCards::N_SUITS;
 	using myNamespaceCards::Card;
+	using myNamespaceCards::Hand;
+	using myNamespacePoker::Player;
+
 
 	constexpr int CARDS_BEST_DECK = 5;
 
@@ -50,6 +53,43 @@ namespace
 			if (array[idx] == value)
 				return idx;
 		return -1;
+	}
+
+
+	bool findStraightInSortedCards(const std::vector<Card>& sortedCards, Player& thePlayer)
+	{
+		for (size_t idx = 0; idx <= sortedCards.size() - 5; idx++)
+		{
+			std::vector<Card> possibleStraight;
+			possibleStraight.push_back(sortedCards[idx]);
+			int lastRank = lowRank(sortedCards[idx].getName(), NAMES, N_NAMES);
+
+			for (size_t idx2 = idx + 1; idx2 < sortedCards.size(); idx2++)
+			{
+				int currentRank = lowRank(sortedCards[idx2].getName(), NAMES, N_NAMES);
+
+				// Check if cards are consecutive
+				if (currentRank == lastRank + 1)
+				{
+					possibleStraight.push_back(sortedCards[idx2]);
+					lastRank = currentRank;
+
+					// Copy the best Hand and return true ("hand is a Straight flush")
+					if (possibleStraight.size() == 5)
+					{
+						Hand theBestHand;
+						for (size_t idx3 = 0; idx3 < possibleStraight.size(); idx3++)
+							theBestHand.add(possibleStraight[idx3]);
+
+						thePlayer.storeBestHand(theBestHand);
+						return true;
+					}
+				}
+				else
+					break;	// cards are same suit but not consecutive ranks
+			}
+		}
+		return false;
 	}
 
 }  // unnamed namespace
@@ -348,7 +388,7 @@ namespace myNamespacePoker
 
 	void Game::setRanking(Player& thePlayer, const std::vector<Card>& theHand, const Hand& handPlayer)
 	{
-		if (isRoyalFlush(theHand))
+		if (isRoyalFlush(theHand, thePlayer))
 			thePlayer.setRanking(10);
 		else if (isStraightFlush(theHand, thePlayer))
 			thePlayer.setRanking(9);
@@ -370,8 +410,8 @@ namespace myNamespacePoker
 			thePlayer.setRanking(1);
 	}
 
-	// Ranking 1
-	bool Game::isRoyalFlush(const std::vector<Card>& theHand)
+	// Ranking 10
+	bool Game::isRoyalFlush(const std::vector<Card>& theHand, Player& thePlayer)
 	{
 		using namespace myNamespaceCards;
 
@@ -383,148 +423,163 @@ namespace myNamespacePoker
 			bool hasK = false;
 			bool hasA = false;
 
+			Hand theBestHand;
+			std::vector<Card> found(5);
+
 			// look at the cards of the same suit only
 			for (const Card& card : theHand)
 			{
 				if (card.getSuit() != suitCard)	continue;
 				
 				const std::string& name = card.getName();
-				if (name == "10")			has10 = true;
-				else if (name == "Jack")	hasJ = true;
-				else if (name == "Queen")	hasQ = true;
-				else if (name == "King")	hasK = true;
-				else if (name == "Ace")		hasA = true;
+				if (name == "10")
+				{
+					found[0] = card;
+					has10 = true;
+				}
+				else if (name == "Jack")
+				{
+					found[1] = card;
+					hasJ = true;
+				}
+				else if (name == "Queen")
+				{
+					found[2] = card;
+					hasQ = true;
+				}
+				else if (name == "King")
+				{
+					found[3] = card;
+					hasK = true;
+				}
+				else if (name == "Ace")
+				{
+					found[4] = card;
+					hasA = true;
+				}
 			}
 			if (has10 && hasJ && hasQ && hasK && hasA)
+			{
+				for (const Card& card : found)	theBestHand.add(card);
+				thePlayer.storeBestHand(theBestHand);
 				return true;
+			}
 		}
 
 		return false;
 	}
 
-	// Ranking 2
+	// Ranking 9
 	bool Game::isStraightFlush(const std::vector<Card>& theHand, Player& thePlayer)
 	{
 		using namespace myNamespaceCards;
+		bool isStraight = false;
+
 		for (const std::string& suit : SUITS)
 		{
-			std::vector<int> ranksHigh;		// 10, J, Q, K, Ace
-			std::vector<int> ranksLow;		// Ace, 2, 3, 4, 5
-
-			// Collect ranks of a specific suit
+			std::vector<Card> suitedCards;
 			for (const Card& card : theHand)
-			{
-				if (card.getSuit() != suit)	continue;
-				int rankHigh = highRank(card.getName(), NAMES, N_NAMES);
-				int rankLow = lowRank(card.getName(), NAMES, N_NAMES);
-				
-				ranksHigh.push_back(rankHigh);
-				ranksLow.push_back(rankLow);
-			}
+				if (card.getSuit() == suit)
+					suitedCards.push_back(card);
 
-			// Skip if deck does not have at least 5 cards of same suit
-			if (ranksHigh.size() < 5)	continue;
+			if (suitedCards.size() < 5)	continue;
 
-			// Sort and remove duplicates for High rank
-			std::sort(ranksHigh.begin(), ranksHigh.end());
-			ranksHigh.erase(std::unique(ranksHigh.begin(), ranksHigh.end()), ranksHigh.end());
-
-			// Sort and remove duplicates for Low rank
-			std::sort(ranksLow.begin(), ranksLow.end());
-			ranksLow.erase(std::unique(ranksLow.begin(), ranksLow.end()), ranksLow.end());
-
-			// Initialize best hand for Player
-			int best[CARDS_BEST_DECK] = {0};
-			size_t startRank = 0;
-
-			// Look for 5 consecutive ranks (in high rank) and store the best hand in Player 
-			int consecutive = 1;
-			for (size_t idx = 1; idx < ranksHigh.size(); idx++)
-			{
-				if (ranksHigh[idx] == ranksHigh[idx - 1] + 1)
+			
+			// Case 1: Ace is the highest Rank in suitedCardsHigh (10, J, Q, K, Ace)
+			std::vector<Card> suitedCardsHigh = suitedCards;
+			for (size_t idx = 0; idx < suitedCardsHigh.size(); idx++)
+				for (size_t idx2 = idx + 1; idx2 < suitedCardsHigh.size(); idx2++)
 				{
-					consecutive++;
-					if (consecutive == 2)	startRank = idx - 1;
-
-					if (consecutive >= 5)
+					int rank1 = highRank(suitedCardsHigh[idx].getName(), NAMES, N_NAMES);
+					int rank2 = highRank(suitedCardsHigh[idx2].getName(), NAMES, N_NAMES);
+					if (rank1 > rank2)
 					{
-						for (int idx2 = 0; idx2 < CARDS_BEST_DECK; idx2++)
-							best[idx2] = ranksHigh[startRank + idx2];
-						thePlayer.storeBestHand(best, CARDS_BEST_DECK);
-
-						return true;
+						Card temp = suitedCardsHigh[idx];
+						suitedCardsHigh[idx] = suitedCardsHigh[idx2];
+						suitedCardsHigh[idx2] = temp;
 					}
 				}
-				else if (ranksHigh[idx] != ranksHigh[idx - 1])
-					consecutive = 1;
-				
-			}
-			// Look for 5 consecutive ranks (in low rank: A, 2, 3, 4, 5)
-			consecutive = 1;
-			for (size_t idx = 1; idx < ranksLow.size(); idx++)
-			{
-				if (ranksLow[idx] == ranksLow[idx - 1] + 1)
+
+			// Check for Straight flush (check only first three with idx, since we need at least 5)
+			isStraight = findStraightInSortedCards(suitedCardsHigh, thePlayer);
+			if (isStraight)	return true;
+			
+			// Case 2: Ace is the lowest Rank in suitedCardsLow	(Ace, 2, 3, 4, 5)
+			for (size_t idx = 0; idx < suitedCards.size(); idx++)
+				for (size_t idx2 = idx + 1; idx2 < suitedCards.size(); idx2++)
 				{
-					consecutive++;
-					if (consecutive == 2)	startRank = idx - 1;
-
-					if (consecutive >= 5)
+					int rank1 = lowRank(suitedCards[idx].getName(), NAMES, N_NAMES);
+					int rank2 = lowRank(suitedCards[idx2].getName(), NAMES, N_NAMES);
+					if (rank1 > rank2)
 					{
-						for (int idx2 = 0; idx2 < CARDS_BEST_DECK; idx2++)
-							best[idx2] = ranksLow[startRank + idx2];
-						thePlayer.storeBestHand(best, CARDS_BEST_DECK);
-
-						return true;
+						Card temp = suitedCards[idx];
+						suitedCards[idx] = suitedCards[idx2];
+						suitedCards[idx2] = temp;
 					}
 				}
-				else if (ranksLow[idx] != ranksLow[idx - 1])
-					consecutive = 1;
-			}
-
+			isStraight = findStraightInSortedCards(suitedCards, thePlayer);
+			if (isStraight)	return true;
 		}
-		return false;
+		return isStraight;
 	}
 
-	// Ranking 3
+	// Ranking 8
 	bool Game::isFourOfAKind(const std::vector<Card>& theHand, Player& thePlayer)
 	{
 		int counts[N_NAMES] = { 0 };
 		bool isFour = false;
-		for (const Card& card : theHand)
+
+		// Count occurence of each rank
+		for (size_t card = 0; card < theHand.size(); card++)
 		{
-			const int idxRank = lowRank(card.getName(), NAMES, N_NAMES);
-			counts[idxRank]++;
+			const int idx = lowRank(theHand[idx].getName(), NAMES, N_NAMES);
+			counts[idx]++;
 		}
 
+		// Find the rank that occurs 4 times
 		int quadRank = -1;
 		for (int idx = 0; idx < N_NAMES; idx++)
-		{
-			if (counts[idx] >= 4)
+			if (counts[idx] == 4)
 			{
 				quadRank = idx;
 				isFour = true;
 				break;
 			}
-		}
 		if (!isFour)	return false;
 
-		// Find the Max Card, where Ace has index 0 and values the most (13)
+		//   Find the kicker (highest card not part of the quad)
+		// If Ace is kicker, it is the most valuable
 		int kicker = -1;
-		for (int idx = N_NAMES - 1; idx >= 0; idx--)
+		for (int idx = 0; idx < N_NAMES; idx++)
+		{
 			if (idx != quadRank && counts[idx] > 0)
 			{
-				kicker = idx;
+				kicker = idx; 
+				if (idx == 0)	
+					break;
+			}
+		}
+
+		// Add quad to the best hand of Player
+		Hand bestHand;
+		for (size_t card = 0; card < theHand.size(); card++)
+		{
+			int idx = lowRank(theHand[card].getName(), NAMES, N_NAMES);
+			if (idx == quadRank)
+				bestHand.add(theHand[card]);
+		}
+		// Add kicker to the best hand of Player
+		for (size_t card = 0; card < theHand.size(); card++)
+		{
+			int idx = lowRank(theHand[card].getName(), NAMES, N_NAMES);
+			if (idx != quadRank && idx == kicker)
+			{
+				bestHand.add(theHand[card]);
 				break;
 			}
-		if (kicker == 0)	kicker = 13;	// Ace = 13
 
-		// Store the 4 similar cards and the max rank card (different from the four)
-		int bestSequence[CARDS_BEST_DECK] = {0};
-		for (int idx = 0; idx < 4; idx++)
-			bestSequence[idx] = quadRank;
-		bestSequence[CARDS_BEST_DECK - 1] = kicker;
-		thePlayer.storeBestHand(bestSequence, CARDS_BEST_DECK);
-		
+		}
+		thePlayer.storeBestHand(bestHand);
 		return isFour;
 	}
 
@@ -559,39 +614,63 @@ namespace myNamespacePoker
 			}
 
 		}
-		// Store best hand rank
-		int bestHand[CARDS_BEST_DECK] = {0};
+		
+		if (!(triples == 2 || (triples == 1 && couples >= 1)) )	return false;
+
+		// Store best hand
+		Hand bestHand;
 		if (triples == 2)
 		{
+			// Use higher triple as the three and the lower as pair
 			const int max = std::max(tripleRank[0], tripleRank[1]);
 			const int min = std::min(tripleRank[0], tripleRank[1]);
-			// Use higher triple as the three and the lower as pair
-			for (int idx = 0; idx < 3; idx++)
-				bestHand[idx] = max;
-			for (int idx = 3; idx < CARDS_BEST_DECK; idx++)
-				bestHand[idx] = min;
-			thePlayer.storeBestHand(bestHand, CARDS_BEST_DECK);
-			return true;
+			int tripleCounter = 0, pairCounter = 0;
+			for (const Card& card : theHand)
+			{
+				int idxCard = highRank(card.getName(), NAMES, N_NAMES);
+				if (idxCard == max && tripleCounter < 3)
+				{
+					bestHand.add(card);
+					tripleCounter++;
+				}
+			}
+			for (const Card& card : theHand)
+			{
+				int idxCard = highRank(card.getName(), NAMES, N_NAMES);
+				if (idxCard == min & pairCounter < 2)
+				{
+					bestHand.add(card);
+					pairCounter++;
+				}
+			}
 		}
-		if (triples == 1 && couples >= 1)
+		else if (triples == 1 && couples >= 1)
 		{
 			// Find the highest pair not overlapping with the triple
 			const int triple = tripleRank[0];
-			int highestPair = -1;
-			for (int idx = 0; idx < idxPairRank; idx++)
-				if (pairRank[idx] != triple)
-					highestPair = std::max(highestPair, pairRank[idx]);
-
-			// Use the triple and the highest pair as value of best hand
-			for (int idx = 0; idx < 3; idx++)
-				bestHand[idx] = triple;
-			for (int idx = 3; idx < CARDS_BEST_DECK; idx++)
-				bestHand[idx] = highestPair;
-			thePlayer.storeBestHand(bestHand, CARDS_BEST_DECK);
-			return true;
+			const int pair = std::max(pairRank[0], pairRank[1]);
+			int tripleCounter = 0, pairCounter = 0;
+			for (const Card& card : theHand)
+			{
+				int idxCard = highRank(card.getName(), NAMES, N_NAMES);
+				if (idxCard == triple && tripleCounter < 3)
+				{
+					bestHand.add(card);
+					tripleCounter++;
+				}
+			}
+			for (const Card& card : theHand)
+			{
+				int idxCard = highRank(card.getName(), NAMES, N_NAMES);
+				if (idxCard == pair & pairCounter < 2)
+				{
+					bestHand.add(card);
+					pairCounter++;
+				}
+			}
 		}
 
-		return false;
+		return true;
 	}
 
 	// Ranking 5
@@ -611,7 +690,7 @@ namespace myNamespacePoker
 		if (flushSuit == -1)	return false;
 		
 		// Collect those cards of the Flush suit and their ranks
-		std::vector<int> bestHand;
+		std::vector<std::pair<int, Card>> flushCards;
 		for (const Card& aCard : theHand)
 		{
 			const int idxSuit = rankSuit(aCard.getSuit(), SUITS, N_SUITS);
@@ -619,80 +698,85 @@ namespace myNamespacePoker
 			{
 				int idxCard = lowRank(aCard.getName(), NAMES, N_NAMES);
 				int rankCard = (idxCard == 0) ? 13 : idxCard;	// Ace value is 13
-				bestHand.push_back(rankCard);
+				flushCards.emplace_back(rankCard, aCard);
 			}
 		}
 
-		std::sort(bestHand.rbegin(), bestHand.rend());
-		int theBestHand[5] = {0};
-		for (int idx = 0; idx < CARDS_BEST_DECK; idx++)
-			theBestHand[idx] = bestHand[idx];
-		thePlayer.storeBestHand(theBestHand, CARDS_BEST_DECK);
+		// Sort by rank descending (Ace high)
+		std::sort(flushCards.rbegin(), flushCards.rend());
 
+		// Store the best 5 cards in the player's best hand
+		Hand bestHand;
+		for (int idx = 0; idx < CARDS_BEST_DECK; idx++)
+			bestHand.add(flushCards[idx].second);
+		
+		thePlayer.storeBestHand(bestHand);
 		return true;
 	}
 
 	// Ranking 6
 	bool Game::isStraight(const std::vector<Card>& theHand, Player& thePlayer)
 	{
-		std::vector<int> rankLowOrder;
-		std::vector<int> rankHighOrder;
-		
-		for (const Card& card : theHand)
-		{
-			const std::string& cardName = card.getName();
-			const int cardLowRank = lowRank(cardName, NAMES, N_NAMES);
-			const int cardHighRank = highRank(cardName, NAMES, N_NAMES);
-			rankLowOrder.push_back(cardLowRank);
-			rankHighOrder.push_back(cardHighRank);
-		}
-		// Sort and remove duplicate for low ordered rank cards
-		std::sort(rankLowOrder.begin(), rankLowOrder.end());
-		rankLowOrder.erase(std::unique(rankLowOrder.begin(), rankLowOrder.end()), rankLowOrder.end());
-		// Sort and remove duplicate for high ordered rank cards
-		std::sort(rankHighOrder.begin(), rankHighOrder.end());
-		rankHighOrder.erase(std::unique(rankHighOrder.begin(), rankHighOrder.end()), rankHighOrder.end());
+		bool isStraight = false;
 
-		// Check whether ranks are in order for High Rank (Ace values the most)
-		int count = 1;
-		int startRank = -1;
-		for (size_t idx = 1; idx < rankHighOrder.size(); idx++) {
-			if (rankHighOrder[idx] == rankHighOrder[idx - 1] + 1) 
+		// Case 1: Ace is the highest Rank (10, J, Q, K, Ace)
+		std::vector<Card> cardsHigh = theHand;
+		// Sort by high rank (Ace as 13)
+		for (size_t idx = 0; idx < cardsHigh.size(); idx++)
+			for (size_t idx2 = idx + 1; idx2 < cardsHigh.size(); idx2++)
 			{
-				count++;
-				if (count == 2)	startRank = static_cast<int>(idx - 1);
-				if (count >= 5) 
+				int rank1 = highRank(cardsHigh[idx].getName(), NAMES, N_NAMES);
+				int rank2 = highRank(cardsHigh[idx2].getName(), NAMES, N_NAMES);
+				if (rank1 > rank2)
 				{
-					int bestHand[CARDS_BEST_DECK] = {0};
-					for (int idxBest = 0; idxBest < CARDS_BEST_DECK; idxBest++)
-						bestHand[idxBest] = rankHighOrder[startRank + idxBest];
-					thePlayer.storeBestHand(bestHand, CARDS_BEST_DECK);
-					return true;
+					Card temp = cardsHigh[idx];
+					cardsHigh[idx] = cardsHigh[idx2];
+					cardsHigh[idx2] = temp;
 				}
 			}
-			else
-				count = 1;
+		// Remove duplicates by rank
+		std::vector<Card> uniqueHigh;
+		for (const Card& card : cardsHigh)
+		{
+			bool found = false;
+			for (const Card& unique : uniqueHigh)
+				if (card.getName() == unique.getName())
+					found = true;
+			if (!found)
+				uniqueHigh.push_back(card);
 		}
-		// Check whether ranks are in order for Low Rank (Ace values the least)
-		count = 1;
-		startRank = -1;
-		for (size_t idx = 1; idx < rankLowOrder.size(); idx++) {
-			if (rankLowOrder[idx] == rankLowOrder[idx - 1] + 1)
+		isStraight = findStraightInSortedCards(uniqueHigh, thePlayer);
+		if (isStraight)	return true;
+
+		// Case 2: Ace is the lowest Rank (Ace, 2, 3, 4, 5)
+		std::vector<Card> cardsLow = theHand;
+		// Sort by low rank (Ace as 0)
+		for (size_t idx = 0; idx < cardsLow.size(); idx++)
+			for (size_t idx2 = idx + 1; idx2 < cardsLow.size(); idx2++)
 			{
-				count++;
-				if (count == 2)	startRank = static_cast<int>(idx - 1);
-				if (count >= 5)
+				int rank1 = lowRank(cardsLow[idx].getName(), NAMES, N_NAMES);
+				int rank2 = lowRank(cardsLow[idx2].getName(), NAMES, N_NAMES);
+				if (rank1 > rank2)
 				{
-					int bestHand[CARDS_BEST_DECK] = { 0 };
-					for (int idxBest = 0; idxBest < CARDS_BEST_DECK; idxBest++)
-						bestHand[idxBest] = rankLowOrder[startRank + idxBest];
-					thePlayer.storeBestHand(bestHand, CARDS_BEST_DECK);
-					return true;
+					Card temp = cardsLow[idx];
+					cardsLow[idx] = cardsLow[idx2];
+					cardsLow[idx2] = temp;
 				}
 			}
-			else
-				count = 1;
+		// Remove duplicate by rank
+		std::vector<Card> uniqueLow;
+		for (const Card& card : cardsLow)
+		{
+			bool found = false;
+			for (const Card& unique : uniqueLow)
+				if (card.getName() == unique.getName())
+					found = true;
+			if (!found)
+				uniqueLow.push_back(card);
 		}
+		isStraight = findStraightInSortedCards(uniqueLow, thePlayer);
+		if (isStraight)	return true;
+
 		return false;
 	}
 

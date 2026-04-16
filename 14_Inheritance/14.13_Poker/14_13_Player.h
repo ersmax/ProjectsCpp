@@ -1,6 +1,7 @@
 #ifndef PLAYER_14_13_H
 #define PLAYER_14_13_H
 
+#include <vector>
 #include "../14.11_Cards/14_11_Hand.h"
 
 namespace myNamespacePoker
@@ -31,7 +32,7 @@ namespace myNamespacePoker
 		void addCard(const Card& theCard);
 		//   Postcondition: add a card to the player's hand;
 		const Hand& getHand() const;
-		void storeBestHand(int cardRanks[], int size);
+		void storeBestHand(const Hand& theHand);
 	private:
 		Hand hand;
 		//   Postcondition: hold the player's current 2-card hand
@@ -40,7 +41,7 @@ namespace myNamespacePoker
 		std::string namePlayer;
 		bool folded;
 		int ranking;
-		int bestHand[DECK_SIZE] = {0};	
+		Hand bestHand;	
 	};
 
 

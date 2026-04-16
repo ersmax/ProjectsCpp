@@ -48,9 +48,10 @@ namespace myNamespacePoker
 				  << ". New balance: " << money << '\n';
 	}
 
-	void Player::storeBestHand(int cardRanks[], const int size)
+	void Player::storeBestHand(const Hand& theHand)
 	{
-		for (int idx = 0; idx < size; idx++)
-			bestHand[idx] = cardRanks[idx];
+		for (const Card& card : theHand)
+			bestHand.add(card);
 	}
+
 } // myNamespacePoker
