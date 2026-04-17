@@ -5,7 +5,7 @@ house. The implementation reuses the `Card`, `Deck`, `Hand`, and input
 validation utilities from project **14.11_Cards** and adds a `Game` class that
 orchestrates the blackjack flow.
 
-# Illustrative example (Spaceship crashes into Pulsar)
+# Illustrative example
 <p align="center">
   <img src="./Figures/Blackjack.gif" alt="Blackjack" width="48%" />
 </p>

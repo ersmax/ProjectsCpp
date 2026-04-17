@@ -689,3 +689,15 @@ Inheritance basics, Programming with Inheritance.
     <p align="center">
       <img src="14_Inheritance/14.12_Blackjack/Figures/Blackjack.gif" alt="Blackjack" width="48%" />
     </p>
+13. [Texam Hold'em Poker](14_Inheritance/14.13_Poker)
+    Implements a console-based Texas Hold'em Poker game for multiple players, building on the `Card`/`Deck`/`Hand` classes.
+    The `Game` class manages the full round structure: shuffling, posting blinds, dealing two private cards to each player, 
+    and revealing community cards (flop, turn, river) with betting rounds in between.
+    Players can call, raise, or fold during each betting round. 
+    The game evaluates all active hands at showdown using standard Poker hand rankings (Royal Flush down to High Card), 
+    with robust tie-breaking logic based on the best five-card hand for each player.
+    The pot is awarded to the winner(s), and players are eliminated when their bankroll reaches zero. 
+    The game continues until only one player remains.
+    <p align="center">
+      <img src="14_Inheritance/14.13_Poker/Figures/Poker.gif" alt="Poker" width="48%" />
+    </p>
