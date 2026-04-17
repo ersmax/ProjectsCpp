@@ -16,13 +16,15 @@ namespace myNamespacePoker
 	public:
 		Player();
 		//   Postcondition: set the current player's name, money, etc.
-		Player(const std::string& theName, double money);
-		void clearHand();
+		Player(const std::string& theName, double theMoney);
+		void resetTurn();
 		//   Postcondition: calling the emptyDeck() function to move to the next round
 		void win(double thePot);
+		void lose();
 		void setRanking(int theRanking);
 		int getRanking() const;
 		double getMoney() const;
+		const std::string& getName() const;
 		bool hasFolded() const;
 		void fold();
 		void placeBet(double theBet);
@@ -32,13 +34,14 @@ namespace myNamespacePoker
 		void addCard(const Card& theCard);
 		//   Postcondition: add a card to the player's hand;
 		const Hand& getHand() const;
+		const Hand& getWinningHand() const;
 		void storeBestHand(const Hand& theHand);
 	private:
-		Hand hand;
-		//   Postcondition: hold the player's current 2-card hand
+		std::string namePlayer;
 		double money;
 		double bet;
-		std::string namePlayer;
+		Hand hand;
+		//   Postcondition: hold the player's current 2-card hand
 		bool folded;
 		int ranking;
 		Hand bestHand;	

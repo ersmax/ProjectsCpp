@@ -5,6 +5,17 @@
 
 namespace myNamespacePoker
 {
+	Player::Player() : Player("No Name", 100)
+	{ /* body intentionally left empty */ }
+
+
+	Player::Player(const std::string& theName, const double theMoney) : namePlayer(theName), money(theMoney)
+	{
+		bet = 0.0;
+		folded = false;
+		ranking = 0;
+	}
+
 	void Player::addCard(const Card& theCard)
 	{
 		hand.add(theCard);
@@ -27,6 +38,13 @@ namespace myNamespacePoker
 		}
 	}
 
+	void Player::resetTurn()
+	{
+		bet = 0;
+		folded = false;
+		hand.remove();
+	}
+
 	bool Player::hasFolded() const { return folded; }
 
 	double Player::getBet() const { return bet; }
@@ -37,15 +55,26 @@ namespace myNamespacePoker
 
 	const Hand& Player::getHand() const { return hand; }
 
+	const Hand& Player::getWinningHand() const { return bestHand; }
+
 	void Player::setRanking(const int theRanking) { ranking = theRanking; }
 
 	int Player::getRanking() const { return ranking; }
+
+	const std::string& Player::getName() const { return namePlayer; }
 
 	void Player::win(const double thePot)
 	{
 		money += thePot;
 		std::cout << "Player " << namePlayer << " wins " << thePot 
 				  << ". New balance: " << money << '\n';
+	}
+
+	void Player::lose()
+	{
+		money -= bet;
+		if (money == 0)
+			std::cout << "The player is eliminated\n";
 	}
 
 	void Player::storeBestHand(const Hand& theHand)

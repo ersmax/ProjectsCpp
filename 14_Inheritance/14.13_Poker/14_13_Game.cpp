@@ -98,21 +98,20 @@ namespace
 namespace myNamespacePoker
 {
 	
-	Game::Game() : Game(2)
+	Game::Game() : Game(std::vector<Player>{Player("Player 1", 100), Player("Player 2", 100) })
 	{ /* Body intentionally left empty */ }
 
-	Game::Game(const int thePlayers)
+	Game::Game(const std::vector<Player>& thePlayers)
 	{
-		if (thePlayers < 2)
+		if (thePlayers.size() < 2)
 			throw std::invalid_argument("Number of players must be greater than 2\n");
 		
-		nPlayers = thePlayers;
-		players.resize(nPlayers);
+		nPlayers = static_cast<int>(thePlayers.size());
+		players = thePlayers;
 		smallBlind = 0;
 		bigBlind = 1;
 		roundBet = STARTING_BET;
-		shoe.shuffle();
-		initiateTurn();
+		play();
 	}
 
 
@@ -121,9 +120,11 @@ namespace myNamespacePoker
 		constexpr int CARDS_PLAYER = 2;
 		constexpr int CARDS_BOARD = 3;
 
+		shoe.shuffle();
+
 		// reset the hand of each player in a new turn
 		for (int idx = 0; idx < nPlayers; idx++)
-			players[idx].clearHand();
+			players[idx].resetTurn();
 
 		// pre-flop
 		players[smallBlind].placeBet(roundBet);
@@ -336,7 +337,12 @@ namespace myNamespacePoker
 			handleTies(pot, theWinners);
 	}
 
-	void Game::handleTies(double& thePot, std::vector<Player>& thePlayers)
+	void Game::handleLoss(Player& thePlayer)
+	{
+		thePlayer.lose();
+	}
+
+	void Game::handleTies(const double& thePot, std::vector<Player>& thePlayers)
 	{
 		const int ranking = thePlayers[0].getRanking();
 		switch (ranking)
@@ -378,13 +384,63 @@ namespace myNamespacePoker
 
 	void Game::royalFlushTie(const double& thePot, std::vector<Player>& thePlayers)
 	{
+		std::cout << "Equal win for each player!\n";
+		
 		const double equalWin = thePot / static_cast<int>(thePlayers.size());
 		for (Player& player : thePlayers)
+		{
 			player.win(equalWin);
-		std::cout << "Equal win for each player!\n";
+			std::cout << "Player " << player.getName() << " wins " << equalWin;
+			std::cout << " with hands:\n";
+			std::cout << player.getWinningHand() << '\n';
+			std::cout << "Player total money: " << player.getMoney() << '\n';
+		}
 	}
 
+	void Game::straightFlushTie(const double& thePot, std::vector<Player>& thePlayers)
+	{
+		// TODO: handle the winners (split the pot) and losers with handleLoss
+	}
 
+	void Game::fourOfAKindTie(const double& thePot, std::vector<Player>& thePlayers)
+	{
+		// TODO: handle the winners (split the pot) and losers with handleLoss
+	}
+
+	void Game::fullHouseTie(const double& thePot, std::vector<Player>& thePlayers)
+	{
+		// TODO: handle the winners (split the pot) and losers with handleLoss
+	}
+
+	void Game::flushTie(const double& thePot, std::vector<Player>& thePlayers)
+	{
+		// TODO: handle the winners (split the pot) and losers with handleLoss
+	}
+
+	void Game::straightTie(const double& thePot, std::vector<Player>& thePlayers)
+	{
+		// TODO: handle the winners (split the pot) and losers with handleLoss
+	}
+
+	void Game::threeOfAKindTie(const double& thePot, std::vector<Player>& thePlayers)
+	{
+		// TODO: handle the winners (split the pot) and losers with handleLoss
+	}
+
+	void Game::twoPairTie(const double& thePot, std::vector<Player>& thePlayers)
+	{
+		// TODO: handle the winners (split the pot) and losers with handleLoss
+	}
+
+	void Game::aPairTie(const double& thePot, std::vector<Player>& thePlayers)
+	{
+		// TODO: handle the winners (split the pot) and losers with handleLoss
+	}
+
+	void Game::highCardTie(const double& thePot, std::vector<Player>& thePlayers)
+	{
+		// TODO: handle the winners (split the pot) and losers with handleLoss
+	}
 
 	void Game::setRanking(Player& thePlayer, const std::vector<Card>& theHand, const Hand& handPlayer)
 	{
@@ -400,13 +456,13 @@ namespace myNamespacePoker
 			thePlayer.setRanking(6);
 		else if (isStraight(theHand, thePlayer))
 			thePlayer.setRanking(5);
-		else if (isThreeOfAKind(theHand))
+		else if (isThreeOfAKind(theHand, thePlayer))
 			thePlayer.setRanking(4);
-		else if (isTwoPair(theHand))
+		else if (isTwoPair(theHand, thePlayer))
 			thePlayer.setRanking(3);
-		else if (isOnePair(theHand))
+		else if (isOnePair(theHand, thePlayer))
 			thePlayer.setRanking(2);
-		else if (highCard(handPlayer))
+		else if (highCard(handPlayer, thePlayer))
 			thePlayer.setRanking(1);
 	}
 
@@ -745,6 +801,8 @@ namespace myNamespacePoker
 			if (!found)
 				uniqueHigh.push_back(card);
 		}
+		// store the bestHand in Player and returns if it is a straight
+		// Ace is the highest, 2 is the lowest
 		isStraight = findStraightInSortedCards(uniqueHigh, thePlayer);
 		if (isStraight)	return true;
 
@@ -774,6 +832,8 @@ namespace myNamespacePoker
 			if (!found)
 				uniqueLow.push_back(card);
 		}
+		// store the bestHand in Player and returns if it is a straight
+		// Ace is lowest, King is Highest
 		isStraight = findStraightInSortedCards(uniqueLow, thePlayer);
 		if (isStraight)	return true;
 
@@ -781,7 +841,7 @@ namespace myNamespacePoker
 	}
 
 	// Ranking 7
-	bool Game::isThreeOfAKind(const std::vector<Card>& theHand)
+	bool Game::isThreeOfAKind(const std::vector<Card>& theHand, Player& thePlayer)
 	{
 		int counts[N_NAMES] = { 0 };
 		for (const Card& card : theHand) 
@@ -789,14 +849,71 @@ namespace myNamespacePoker
 			const int cardIdx = lowRank(card.getName(), NAMES, N_NAMES);
 			counts[cardIdx]++;
 		}
-		for (const int count : counts)
-			if (count >= 3)	return true;
 
-		return false;
+		// Find the tris
+		int tris = -1;
+		for (int idx = 0; idx < N_NAMES; idx++)
+			if (counts[idx] == 3) 
+			{
+				if (idx == 0)		// Ace
+				{
+					tris = idx;
+					break;
+				}
+				tris = idx;
+			}
+		if (tris == -1)	return false;
+
+		// Find the highest and second-highest cards (not in tris)
+		int highest = -1;
+		for (int idx = 0; idx < N_NAMES; idx++) 
+			if (counts[idx] > 0 && idx != tris)
+			{
+				if (idx == 0)
+				{
+					highest = idx;
+					break;
+				}
+				highest = idx;
+			}
+		int secondHighest = -1;
+		for (int idx = 0; idx < N_NAMES; idx++)
+			if (counts[idx] > 0 && idx != tris && idx != highest)
+				secondHighest = idx;
+
+		// Build best hand
+		Hand bestHand;
+		int trisCount = 0;
+		for (const Card& card : theHand)
+		{
+			const int rankCard = lowRank(card.getName(), NAMES, N_NAMES);
+			if (rankCard == tris && trisCount < 3)
+			{
+				bestHand.add(card);
+				trisCount++;
+			}
+		}
+		for (const Card& card : theHand)
+		{
+			const int rankCard = lowRank(card.getName(), NAMES, N_NAMES);
+			if (rankCard == highest)
+				bestHand.add(card);
+		}
+		for (const Card& card : theHand)
+		{
+			const int rankCard = lowRank(card.getName(), NAMES, N_NAMES);
+			if (rankCard == secondHighest)
+				bestHand.add(card);
+		}
+		
+		thePlayer.storeBestHand(bestHand);
+		// Store in order Tris, then Highest, then Second Highest
+
+		return true;
 	}
 
 	// Ranking 8
-	bool Game::isTwoPair(const std::vector<Card>& theHand)
+	bool Game::isTwoPair(const std::vector<Card>& theHand, Player& thePlayer)
 	{
 		int pairs = 0;
 		int counts[N_NAMES] = {0};
@@ -805,15 +922,76 @@ namespace myNamespacePoker
 			const int idxCard = lowRank(card.getName(), NAMES, N_NAMES);
 			counts[idxCard]++;
 		}
-		for (const int count : counts)
-			if (count >= 2)
-				pairs++;
 
-		return (pairs >= 2);
+		// Find the highest pair
+		int highestPair = -1;
+		for (int idx = 0; idx < N_NAMES; idx++)
+			if (counts[idx] == 2)
+			{
+				if (idx == 0)		// Ace
+				{
+					highestPair = idx;
+					break;
+				}
+				highestPair = idx;
+			}
+		if (highestPair == -1)	return false;
+		// Find the next highest pair
+		int secondPair = -1;
+		for (int idx = 0; idx < N_NAMES; idx++)
+			if (counts[idx] == 2 && idx != highestPair)
+				secondPair = idx;
+		if (secondPair == -1)	return false;
+		
+		// Find the highest card
+		int highest = -1;
+		for (int idx = 0; idx < N_NAMES; idx++)
+			if (counts[idx] > 0 && idx!= highestPair && idx != secondPair)
+			{
+				if (idx == 0)		// Ace
+				{
+					highest = idx;
+					break;
+				}
+				highest = idx;
+			}
+
+		// Build best hand
+		Hand bestHand;
+		int pairCount = 0;
+		for (const Card& card : theHand)
+		{
+			const int rankCard = lowRank(card.getName(), NAMES, N_NAMES);
+			if (rankCard == highestPair && pairCount < 2)
+			{
+				bestHand.add(card);
+				pairCount++;
+			}
+		}
+		pairCount = 0;
+		for (const Card& card : theHand)
+		{
+			const int rankCard = lowRank(card.getName(), NAMES, N_NAMES);
+			if (rankCard == secondPair && pairCount < 2)
+			{
+				bestHand.add(card);
+				pairCount++;
+			}
+		}
+		for (const Card& card : theHand)
+		{
+			const int rankCard = lowRank(card.getName(), NAMES, N_NAMES);
+			if (rankCard == highest)
+				bestHand.add(card);
+		}
+		thePlayer.storeBestHand(bestHand);
+		// Store in order the Highest Pair, the second pair and highest card 
+
+		return true;
 	}
 
 	// Ranking 9
-	bool Game::isOnePair(const std::vector<Card>& theHand)
+	bool Game::isOnePair(const std::vector<Card>& theHand, Player& thePlayer)
 	{
 		int counts[N_NAMES] = { 0 };
 		for (const Card& card : theHand)
@@ -821,27 +999,158 @@ namespace myNamespacePoker
 			const int cardIdx = lowRank(card.getName(), NAMES, N_NAMES);
 			counts[cardIdx]++;
 		}
-		for (const int count : counts)
-			if (count >= 2)	return true;
 
-		return false;
+		// Find the pair
+		int pair = -1;
+		for (int idx = 0; idx < N_NAMES; idx++)
+			if (counts[idx] == 2)
+			{
+				if (idx == 0)		// Ace
+				{
+					pair = idx;
+					break;
+				}
+				pair = idx;
+			}
+		if (pair == -1)	return false;
+		
+		// Find the highest card
+		int highest = -1;
+		for (int idx = 0; idx < N_NAMES; idx++)
+			if (counts[idx] > 0 && idx != pair )
+			{
+				if (idx == 0)		// Ace
+				{
+					highest = idx;
+					break;
+				}
+				highest = idx;
+			}
+		// Find the second-highest card
+		int secondHighest = -1;
+		for (int idx = 0; idx < N_NAMES; idx++)
+			if (counts[idx] > 0 && idx != pair && idx != highest)
+				secondHighest = idx;
+
+		// Find the third-highest card
+		int thirdHighest = -1;
+		for (int idx = 0; idx < N_NAMES; idx++)
+			if (counts[idx] > 0 && idx != pair && idx != highest && idx != secondHighest)
+				thirdHighest = idx;
+		
+		// Build best hand: Pair first, then highest, second highest, and highest card
+		Hand bestHand;
+		int pairCount = 0;
+		for (const Card& card : theHand)
+		{
+			const int rankCard = lowRank(card.getName(), NAMES, N_NAMES);
+			if (rankCard == pair && pairCount < 2)
+			{
+				bestHand.add(card);
+				pairCount++;
+			}
+		}
+		for (const Card& card : theHand)
+		{
+			const int rankCard = lowRank(card.getName(), NAMES, N_NAMES);
+			if (rankCard == highest)
+				bestHand.add(card);
+		}
+		for (const Card& card : theHand)
+		{
+			const int rankCard = lowRank(card.getName(), NAMES, N_NAMES);
+			if (rankCard == secondHighest)
+				bestHand.add(card);
+		}
+		for (const Card& card : theHand)
+		{
+			const int rankCard = lowRank(card.getName(), NAMES, N_NAMES);
+			if (rankCard == thirdHighest)
+				bestHand.add(card);
+		}
+		thePlayer.storeBestHand(bestHand);
+
+		return true;
 	}
 
 	// Ranking 10
-	int Game::highCard(const Hand& handPlayer)
+	bool Game::highCard(const Hand& handPlayer, Player& thePlayer)
 	{
-		int higherRank = 0;
-		for (const Card& card : handPlayer)
+		// Find higher and lower rank cards in the hand of player
+		int higherCardPlayer = -1;
+		for (int idx = 0; idx < handPlayer.getNumberCards(); idx++)
 		{
-			const int highRankCard = highRank(card.getName(), NAMES, N_NAMES);
-			higherRank = std::max(higherRank, highRankCard);
+			const int lowRankCard = lowRank(handPlayer[idx].getName(), NAMES, N_NAMES);
+			higherCardPlayer = std::max(higherCardPlayer, lowRankCard);
+			if (lowRankCard == 0) // Ace
+				break;
 		}
-		return higherRank;
+		int lowerCardPlayer = 99;	
+		for (int idx = 0; idx < handPlayer.getNumberCards();idx++)
+		{
+			const int highRankCard = higherCardPlayer(handPlayer[idx].getName(), NAMES, N_NAMES);
+			lowerCardPlayer = std::min(lowerCardPlayer, highRankCard);
+		}
+		// Find the three highest cards in board
+		int highestBoard = -1;
+		for (const Card& card : board)
+		{
+			int cardRankBoard = lowerCardPlayer(card.getName(), NAMES, N_NAMES);
+			if (cardRankBoard == 0)		// Ace
+			{
+				highestBoard = cardRankBoard;
+				break;
+			}
+			if (cardRankBoard > highestBoard)
+				highestBoard = cardRankBoard;
+		}
+		int secondHighestBoard = -1;
+		for (const Card& card : board)
+		{
+			int cardRankBoard = lowerCardPlayer(card.getName(), NAMES, N_NAMES);
+			if (cardRankBoard > secondHighestBoard && cardRankBoard != highestBoard)
+				secondHighestBoard = cardRankBoard;
+		}
+		int thirdHighestBoard = -1;
+		for (const Card& card : board)
+		{
+			int cardRankBoard = lowerCardPlayer(card.getName(), NAMES, N_NAMES);
+			if (cardRankBoard > thirdHighestBoard && 
+				cardRankBoard != highestBoard && 
+				cardRankBoard != secondHighestBoard)
+				
+				thirdHighestBoard = cardRankBoard;
+		}
+		// Add the best Hand in this order: 
+		// Player 1st highest, Player 2nd highest, Board 3 highest cards in desceding order
+		Hand bestHand;
+		for (int idx = 0; idx < handPlayer.getNumberCards(); idx++)
+			if (higherCardPlayer == lowerCardPlayer(handPlayer[idx].getName(), NAMES, N_NAMES))
+				bestHand.add(handPlayer[idx]);
+		for (int idx = 0; idx < handPlayer.getNumberCards(); idx++)
+			if (lowerCardPlayer == lowerCardPlayer(handPlayer[idx].getName(), NAMES, N_NAMES))
+				bestHand.add(handPlayer[idx]);
+		for (const Card& card : board)
+			if (highestBoard == lowerCardPlayer(card.getName(), NAMES, N_NAMES))
+				bestHand.add(card);
+		for (const Card& card : board)
+			if (secondHighestBoard == lowerCardPlayer(card.getName(), NAMES, N_NAMES))
+				bestHand.add(card);
+		for (const Card& card : board)
+			if (thirdHighestBoard == lowerCardPlayer(card.getName(), NAMES, N_NAMES))
+				bestHand.add(card);
+
+		thePlayer.storeBestHand(bestHand);
+		return true;
 	}
 
 	void Game::resetRoundState()
 	{
+		// TODO : thePot = 0
+		// TODO : the hand of each player and board is emptied: cards return to the deck
 		// TODO : roundState is adjusted every time a player is eliminated
+		// TODO : if the player is eliminated (money == 0), then vector players is 
+		//			resized to account for the less player. nPlayers gets reduced of course
 		// TODO : currentPlayer is the player next to CurrentPlayer
 		// TODO : smallBlind is moved by 1 position
 		// TODO : the bet is increased by double amount if one player is eliminated
