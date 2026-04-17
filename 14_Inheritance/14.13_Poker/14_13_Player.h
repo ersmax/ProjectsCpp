@@ -35,8 +35,6 @@ namespace myNamespacePoker
 		void fold();
 		void placeBet(double theBet);
 		//   Postcondition: allow Game class to set up the bet in each round
-		void resetBetForStreet();
-		//   Postcondition: resets current street contribution to 0
 		double getBet() const;
 		//   Postcondition: returns the bet
 		void addCard(const Card& theCard);

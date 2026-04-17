@@ -76,6 +76,9 @@ namespace
 
 	bool findStraightInSortedCards(const std::vector<Card>& sortedCards, Player& thePlayer)
 	{
+		if (sortedCards.size() < 5)
+			return false;
+
 		for (size_t idx = 0; idx <= sortedCards.size() - 5; idx++)
 		{
 			std::vector<Card> possibleStraight;
@@ -758,9 +761,9 @@ namespace myNamespacePoker
 			const int idxCard = lowRank(aCard.getName(), NAMES, N_NAMES);
 			counts[idxCard]++;
 		}
-		int tripleRank[2] = { -1 };
+		int tripleRank[2] = { -1, -1 };
 		int idxTripleRank = 0;
-		int pairRank[2] = { -1 };
+		int pairRank[2] = { -1, -1 };
 		int idxPairRank = 0;
 		for (int idx = 0; idx < N_NAMES; idx++)
 		{
