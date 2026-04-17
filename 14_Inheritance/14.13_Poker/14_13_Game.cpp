@@ -19,6 +19,34 @@ namespace
 
 	constexpr int CARDS_BEST_DECK = 5;
 
+	const char* rankingToString(const int ranking)
+	{
+		switch (ranking)
+		{
+		case 10: return "Royal Flush";
+		case 9: return "Straight Flush";
+		case 8: return "Four of a Kind";
+		case 7: return "Full House";
+		case 6: return "Flush";
+		case 5: return "Straight";
+		case 4: return "Three of a Kind";
+		case 3: return "Two Pair";
+		case 2: return "One Pair";
+		case 1: return "High Card";
+		default: return "Unknown";
+		}
+	}
+
+	void showWinningHand(const Player& thePlayer)
+	{
+		std::cout << "Winning hand type: " << rankingToString(thePlayer.getRanking()) << '\n';
+		std::cout << "Winning hand:\n";
+
+		const Hand& winningHand = thePlayer.getWinningHand();
+		for (int idx = 0; idx < winningHand.getNumberCards(); idx++)
+			std::cout << "  [" << idx + 1 << "] " << winningHand[idx].getSuit() << " " << winningHand[idx].getName() << '\n';
+	}
+
 	void printSection(const std::string& title)
 	{
 		std::cout << "\n========== " << title << " ==========\n";
@@ -257,7 +285,9 @@ namespace myNamespacePoker
 				} while (choice != 'c' && choice != 'r' && choice != 'f');
 
 				
-				int callingBet = currentBet - thePlayer.getBet();
+				double callingBet = currentBet - thePlayer.getBet();
+				if (callingBet < 0)
+					callingBet = 0;
 				switch (choice)
 				{
 				case 'c':
@@ -288,18 +318,21 @@ namespace myNamespacePoker
 		} while (someoneRaised && atLeastTwoBetting());
 	}
 
-	void Game::callHand(Player& thePlayer, const int callingBet)
+	void Game::callHand(Player& thePlayer, const double callingBet)
 	{
-		thePlayer.placeBet(callingBet);
-		pot += callingBet;
+		const double safeCallingBet = std::max(0.0, callingBet);
+		thePlayer.placeBet(safeCallingBet);
+		pot += safeCallingBet;
 	}
 
-	void Game::raiseHand(Player& thePlayer, const int callingBet)
+	void Game::raiseHand(Player& thePlayer, const double callingBet)
 	{
 		using myNamespaceValidation::readName;
 		using myNamespaceValidation::readNumber;
 
-		if (thePlayer.getMoney() <= callingBet)
+		const double safeCallingBet = std::max(0.0, callingBet);
+
+		if (thePlayer.getMoney() <= safeCallingBet)
 		{
 			char choice;
 			std::cout << "Player does not have enough money to raise. Go all in (y/n)?\n";
@@ -321,9 +354,9 @@ namespace myNamespacePoker
 		int theDifference;
 		do
 		{
-			std::cout << "Enter a bet (at least " << callingBet << "):\n";
+			std::cout << "Enter a bet (at least " << safeCallingBet << "):\n";
 			readNumber(std::cin, theDifference);
-		} while (theDifference < callingBet);
+		} while (theDifference < safeCallingBet);
 
 		thePlayer.placeBet(theDifference);
 		pot += theDifference;
@@ -403,7 +436,11 @@ namespace myNamespacePoker
 		}
 		// Break the ties with higher card rank. If equal, split the pot equally.
 		if (winnerIndexes.size() == 1)
-			players[winnerIndexes[0]].win(pot);
+		{
+			Player& winner = players[winnerIndexes[0]];
+			winner.win(pot);
+			showWinningHand(winner);
+		}
 		else
 			handleTies(pot, winnerIndexes);
 	}
@@ -549,8 +586,14 @@ namespace myNamespacePoker
 		}
 
 		const double equalWin = thePot / static_cast<int>(bestIndexes.size());
+		if (bestIndexes.size() > 1)
+			std::cout << "Tie between " << bestIndexes.size() << " players. Pot is split equally.\n";
+
 		for (const int idx : bestIndexes)
+		{
 			players[idx].win(equalWin);
+			showWinningHand(players[idx]);
+		}
 	}
 
 	void Game::setRanking(Player& thePlayer, const std::vector<Card>& theHand, const Hand& handPlayer)
@@ -753,87 +796,65 @@ namespace myNamespacePoker
 	// Ranking 4
 	bool Game::isFullHouse(const std::vector<Card>& theHand, Player& thePlayer)
 	{
-		int triples = 0;
-		int couples = 0;
 		int counts[N_NAMES] = { 0 };
 		for (const Card& aCard : theHand)
 		{
 			const int idxCard = lowRank(aCard.getName(), NAMES, N_NAMES);
-			counts[idxCard]++;
+			if (idxCard >= 0)
+				counts[idxCard]++;
 		}
-		int tripleRank[2] = { -1, -1 };
-		int idxTripleRank = 0;
-		int pairRank[2] = { -1, -1 };
-		int idxPairRank = 0;
+
+		int bestTriple = -1;
+		int secondTriple = -1;
+		int bestPair = -1;
+
 		for (int idx = 0; idx < N_NAMES; idx++)
 		{
+			const int rankValue = (idx == 0) ? 13 : idx;
+
 			if (counts[idx] >= 3)
 			{
-				triples++;
-				if (idx == 0)	tripleRank[idxTripleRank++] = 13;	// Account for Ace
-				else			tripleRank[idxTripleRank++] = idx;
-			}
-			else if (counts[idx] == 2)
-			{
-				couples++;
-				if (idx == 0)	pairRank[idxPairRank++] = 13;	// Account for Ace
-				else			pairRank[idxPairRank++] = idx;
+				if (rankValue > bestTriple)
+				{
+					secondTriple = bestTriple;
+					bestTriple = rankValue;
+				}
+				else if (rankValue > secondTriple)
+					secondTriple = rankValue;
 			}
 
+			if (counts[idx] >= 2 && rankValue > bestPair)
+				bestPair = rankValue;
 		}
-		
-		if (!(triples == 2 || (triples == 1 && couples >= 1)) )	return false;
+
+		if (bestTriple == -1)
+			return false;
+
+		const int pairForHouse = (secondTriple != -1) ? secondTriple : bestPair;
+		if (pairForHouse == -1 || pairForHouse == bestTriple)
+			return false;
 
 		// Store best hand
 		Hand bestHand;
-		if (triples == 2)
+		int tripleCounter = 0;
+		for (const Card& card : theHand)
 		{
-			// Use higher triple as the three and the lower as pair
-			const int max = std::max(tripleRank[0], tripleRank[1]);
-			const int min = std::min(tripleRank[0], tripleRank[1]);
-			int tripleCounter = 0, pairCounter = 0;
-			for (const Card& card : theHand)
+			int idxCard = highRank(card.getName(), NAMES, N_NAMES);
+			if (idxCard == bestTriple && tripleCounter < 3)
 			{
-				int idxCard = highRank(card.getName(), NAMES, N_NAMES);
-				if (idxCard == max && tripleCounter < 3)
-				{
-					bestHand.add(card);
-					tripleCounter++;
-				}
-			}
-			for (const Card& card : theHand)
-			{
-				int idxCard = highRank(card.getName(), NAMES, N_NAMES);
-				if (idxCard == min && pairCounter < 2)
-				{
-					bestHand.add(card);
-					pairCounter++;
-				}
+				bestHand.add(card);
+				tripleCounter++;
 			}
 		}
-		else if (triples == 1 && couples >= 1)
+
+		int pairCounter = 0;
+		for (const Card& card : theHand)
 		{
-			// Find the highest pair not overlapping with the triple
-			const int triple = tripleRank[0];
-			const int pair = std::max(pairRank[0], pairRank[1]);
-			int tripleCounter = 0, pairCounter = 0;
-			for (const Card& card : theHand)
+			int idxCard = highRank(card.getName(), NAMES, N_NAMES);
+			if (idxCard == pairForHouse && pairCounter < 2)
 			{
-				int idxCard = highRank(card.getName(), NAMES, N_NAMES);
-				if (idxCard == triple && tripleCounter < 3)
-				{
-					bestHand.add(card);
-					tripleCounter++;
-				}
-			}
-			for (const Card& card : theHand)
-			{
-				int idxCard = highRank(card.getName(), NAMES, N_NAMES);
-				if (idxCard == pair && pairCounter < 2)
-				{
-					bestHand.add(card);
-					pairCounter++;
-				}
+				bestHand.add(card);
+				pairCounter++;
 			}
 		}
 
@@ -1028,53 +1049,47 @@ namespace myNamespacePoker
 	// Ranking 8
 	bool Game::isTwoPair(const std::vector<Card>& theHand, Player& thePlayer)
 	{
-		int pairs = 0;
-		int counts[N_NAMES] = {0};
+		int counts[N_NAMES] = { 0 };
 		for (const Card& card : theHand)
 		{
 			const int idxCard = lowRank(card.getName(), NAMES, N_NAMES);
-			counts[idxCard]++;
+			if (idxCard >= 0)
+				counts[idxCard]++;
 		}
 
-		// Find the highest pair
 		int highestPair = -1;
+		int secondPair = -1;
 		for (int idx = 0; idx < N_NAMES; idx++)
 			if (counts[idx] == 2)
 			{
-				if (idx == 0)		// Ace
+				const int rankValue = (idx == 0) ? 13 : idx;
+				if (rankValue > highestPair)
 				{
-					highestPair = idx;
-					break;
+					secondPair = highestPair;
+					highestPair = rankValue;
 				}
-				highestPair = idx;
+				else if (rankValue > secondPair)
+					secondPair = rankValue;
 			}
-		if (highestPair == -1)	return false;
-		// Find the next highest pair
-		int secondPair = -1;
-		for (int idx = 0; idx < N_NAMES; idx++)
-			if (counts[idx] == 2 && idx != highestPair)
-				secondPair = idx;
+
 		if (secondPair == -1)	return false;
 		
-		// Find the highest card
 		int highest = -1;
 		for (int idx = 0; idx < N_NAMES; idx++)
-			if (counts[idx] > 0 && idx!= highestPair && idx != secondPair)
+			if (counts[idx] > 0)
 			{
-				if (idx == 0)		// Ace
-				{
-					highest = idx;
-					break;
-				}
-				highest = idx;
+				const int rankValue = (idx == 0) ? 13 : idx;
+				if (rankValue != highestPair && rankValue != secondPair && rankValue > highest)
+					highest = rankValue;
 			}
+		if (highest == -1)	return false;
 
 		// Build best hand
 		Hand bestHand;
 		int pairCount = 0;
 		for (const Card& card : theHand)
 		{
-			const int rankCard = lowRank(card.getName(), NAMES, N_NAMES);
+			const int rankCard = highRank(card.getName(), NAMES, N_NAMES);
 			if (rankCard == highestPair && pairCount < 2)
 			{
 				bestHand.add(card);
@@ -1084,7 +1099,7 @@ namespace myNamespacePoker
 		pairCount = 0;
 		for (const Card& card : theHand)
 		{
-			const int rankCard = lowRank(card.getName(), NAMES, N_NAMES);
+			const int rankCard = highRank(card.getName(), NAMES, N_NAMES);
 			if (rankCard == secondPair && pairCount < 2)
 			{
 				bestHand.add(card);
@@ -1093,9 +1108,12 @@ namespace myNamespacePoker
 		}
 		for (const Card& card : theHand)
 		{
-			const int rankCard = lowRank(card.getName(), NAMES, N_NAMES);
+			const int rankCard = highRank(card.getName(), NAMES, N_NAMES);
 			if (rankCard == highest)
+			{
 				bestHand.add(card);
+				break;
+			}
 		}
 		thePlayer.storeBestHand(bestHand);
 		// Store in order the Highest Pair, the second pair and highest card 
@@ -1110,53 +1128,54 @@ namespace myNamespacePoker
 		for (const Card& card : theHand)
 		{
 			const int cardIdx = lowRank(card.getName(), NAMES, N_NAMES);
-			counts[cardIdx]++;
+			if (cardIdx >= 0)
+				counts[cardIdx]++;
 		}
 
-		// Find the pair
 		int pair = -1;
 		for (int idx = 0; idx < N_NAMES; idx++)
 			if (counts[idx] == 2)
 			{
-				if (idx == 0)		// Ace
-				{
-					pair = idx;
-					break;
-				}
-				pair = idx;
+				const int rankValue = (idx == 0) ? 13 : idx;
+				if (rankValue > pair)
+					pair = rankValue;
 			}
 		if (pair == -1)	return false;
 		
-		// Find the highest card
 		int highest = -1;
-		for (int idx = 0; idx < N_NAMES; idx++)
-			if (counts[idx] > 0 && idx != pair )
-			{
-				if (idx == 0)		// Ace
-				{
-					highest = idx;
-					break;
-				}
-				highest = idx;
-			}
-		// Find the second-highest card
 		int secondHighest = -1;
-		for (int idx = 0; idx < N_NAMES; idx++)
-			if (counts[idx] > 0 && idx != pair && idx != highest)
-				secondHighest = idx;
-
-		// Find the third-highest card
 		int thirdHighest = -1;
 		for (int idx = 0; idx < N_NAMES; idx++)
-			if (counts[idx] > 0 && idx != pair && idx != highest && idx != secondHighest)
-				thirdHighest = idx;
+			if (counts[idx] > 0)
+			{
+				const int rankValue = (idx == 0) ? 13 : idx;
+				if (rankValue == pair)
+					continue;
+
+				if (rankValue > highest)
+				{
+					thirdHighest = secondHighest;
+					secondHighest = highest;
+					highest = rankValue;
+				}
+				else if (rankValue > secondHighest)
+				{
+					thirdHighest = secondHighest;
+					secondHighest = rankValue;
+				}
+				else if (rankValue > thirdHighest)
+					thirdHighest = rankValue;
+			}
+
+		if (highest == -1 || secondHighest == -1 || thirdHighest == -1)
+			return false;
 		
 		// Build best hand: Pair first, then highest, second highest, and highest card
 		Hand bestHand;
 		int pairCount = 0;
 		for (const Card& card : theHand)
 		{
-			const int rankCard = lowRank(card.getName(), NAMES, N_NAMES);
+			const int rankCard = highRank(card.getName(), NAMES, N_NAMES);
 			if (rankCard == pair && pairCount < 2)
 			{
 				bestHand.add(card);
@@ -1165,21 +1184,30 @@ namespace myNamespacePoker
 		}
 		for (const Card& card : theHand)
 		{
-			const int rankCard = lowRank(card.getName(), NAMES, N_NAMES);
+			const int rankCard = highRank(card.getName(), NAMES, N_NAMES);
 			if (rankCard == highest)
+			{
 				bestHand.add(card);
+				break;
+			}
 		}
 		for (const Card& card : theHand)
 		{
-			const int rankCard = lowRank(card.getName(), NAMES, N_NAMES);
+			const int rankCard = highRank(card.getName(), NAMES, N_NAMES);
 			if (rankCard == secondHighest)
+			{
 				bestHand.add(card);
+				break;
+			}
 		}
 		for (const Card& card : theHand)
 		{
-			const int rankCard = lowRank(card.getName(), NAMES, N_NAMES);
+			const int rankCard = highRank(card.getName(), NAMES, N_NAMES);
 			if (rankCard == thirdHighest)
+			{
 				bestHand.add(card);
+				break;
+			}
 		}
 		thePlayer.storeBestHand(bestHand);
 
@@ -1224,6 +1252,8 @@ namespace myNamespacePoker
 		{
 			if (!player.isEliminated())
 				remainingPlayers.push_back(player);
+			else
+				std::cout << "Player " << player.getName() << " is eliminated.\n";
 		}
 
 		players = remainingPlayers;

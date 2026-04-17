@@ -27,9 +27,9 @@ namespace myNamespacePoker
 
 		void playHand();
 		//   Postcondition: play one Texas Hold'em hand		
-		void callHand(Player& thePlayer, const int callingBet);
+		void callHand(Player& thePlayer, const double callingBet);
 		//   Postcondition: allows the player to call and bet the money in the last call
-		void raiseHand(Player& thePlayer, const int callingBet);
+		void raiseHand(Player& thePlayer, const double callingBet);
 		//   Postcondition: allows the player to raise the last bet
 		void foldHand(Player& thePlayer);
 		//   Postcondition: allows the player to skip this hand

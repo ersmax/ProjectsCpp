@@ -90,7 +90,7 @@ namespace myNamespacePoker
 	void Player::lose()
 	{
 		if (money <= 0)
-			std::cout << "The player is eliminated\n";
+			std::cout << "Player " << namePlayer << " is eliminated.\n";
 	}
 
 	void Player::storeBestHand(const Hand& theHand)
