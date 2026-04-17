@@ -34,7 +34,6 @@ namespace myNamespacePoker
 		void foldHand(Player& thePlayer);
 		//   Postcondition: allows the player to skip this hand
 		bool atLeastTwoBetting() const;
-		bool bettingRoundSettled() const;
 		//   Postcondition: returns true if at least two players are raising the bet
 		// and have not folded
 		void resetRoundState();
