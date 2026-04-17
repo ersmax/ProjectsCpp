@@ -34,6 +34,7 @@ namespace myNamespacePoker
 		void foldHand(Player& thePlayer);
 		//   Postcondition: allows the player to skip this hand
 		bool atLeastTwoBetting() const;
+		bool bettingRoundSettled() const;
 		//   Postcondition: returns true if at least two players are raising the bet
 		// and have not folded
 		void resetRoundState();
@@ -55,63 +56,65 @@ namespace myNamespacePoker
 		void handleLoss(Player& thePlayer);
 		//   Postcondition: handle the case when a player loses the hand,
 		// with subsequent loss of money and possibly the elimination from the Poker game
-		void handleTies(const double& thePot, std::vector<Player>& thePlayers);
+		void handleTies(const double& thePot, const std::vector<int>& winnerIndexes);
 		//   Postcondition: in case of equal poker hands, break the ties according to 
 		// the highest cards rank if possible. Else split the plot equally
 		static bool isRoyalFlush(const std::vector<Card>& theHand, Player& thePlayer);
-		void royalFlushTie(const double& thePot, std::vector<Player>& thePlayers);
+		void royalFlushTie(const double& thePot, const std::vector<int>& winnerIndexes);
 		static bool isStraightFlush(const std::vector<Card>& theHand, Player& thePlayer);
 		//   Postcondition: handle the winning of thePot and the losses of players in
 		// case of Royal Flush tie. All players with straight flush wins, hence a tie.
-		void straightFlushTie(const double& thePot, std::vector<Player>& thePlayers);
+		void straightFlushTie(const double& thePot, const std::vector<int>& winnerIndexes);
 		//   Postcondition: handle the winning of thePot and the losses of players in
 		// case of Straight Flush Tie. The Player with the highest card wins.
 		// Else there is a tie.
 		static bool isFourOfAKind(const std::vector<Card>& theHand, Player& thePlayer);
-		void fourOfAKindTie(const double& thePot, std::vector<Player>& thePlayers);
+		void fourOfAKindTie(const double& thePot, const std::vector<int>& winnerIndexes);
 		//   Postcondition: handle the winning of thePot and the losses of players in
 		// case of Four of a kind tie. The Player with the highest card in the four wins.
 		// To break ties, the highest rank of the fifth card (kicker) wins.
 		// Else there is a tie.
 		static bool isFullHouse(const std::vector<Card>& theHand, Player& thePlayer);
-		void fullHouseTie(const double& thePot, std::vector<Player>& thePlayers);
+		void fullHouseTie(const double& thePot, const std::vector<int>& winnerIndexes);
 		//   Postcondition: handle the winning of thePot and the losses of players in
 		// case of Full House tie. The player with the highest rank of tris wins.
 		// To break ties, the player with the highest rank of pair wins.
 		// Else there is a tie.
 		static bool isFlush(const std::vector<Card>& theHand, Player& thePlayer);
-		void flushTie(const double& thePot, std::vector<Player>& thePlayers);
+		void flushTie(const double& thePot, const std::vector<int>& winnerIndexes);
 		//   Postcondition: handle the winning of thePot and the losses of players in
 		// case of Flush tie. The player with the highest card in flush wins.
 		// Else, the second, third, fourth and fifth cards are checked to break ties.
 		bool isStraight(const std::vector<Card>& theHand, Player& thePlayer);
-		void straightTie(const double& thePot, std::vector<Player>& thePlayers);
+		void straightTie(const double& thePot, const std::vector<int>& winnerIndexes);
 		//   Postcondition: handle the winning of thePot and the losses of players in
 		// case of Straight tie. The player with the highest card rank in a straight wins.
 		// Else a tie happens.
 		bool isThreeOfAKind(const std::vector<Card>& theHand, Player& thePlayer);
-		void threeOfAKindTie(const double& thePot, std::vector<Player>& thePlayers);
+		void threeOfAKindTie(const double& thePot, const std::vector<int>& winnerIndexes);
 		//   Postcondition: handle the winning of thePot and the losses of players in
 		// case of Three of a kind tie. The player with the highest rank in the tris wins.
 		// Else the fourth and fifth cards are checked to break ties.
 		bool isTwoPair(const std::vector<Card>& theHand, Player& thePlayer);
-		void twoPairTie(const double& thePot, std::vector<Player>& thePlayers);
+		void twoPairTie(const double& thePot, const std::vector<int>& winnerIndexes);
 		//   Postcondition: handle the winning of thePot and the losses of players in
 		// case of two pair tie. The player with the highest rank in the first pair wins.
 		// Else the second pair rank is checked, and eventually the last card to break ties.
 		bool isOnePair(const std::vector<Card>& theHand, Player& thePlayer);
-		void aPairTie(const double& thePot, std::vector<Player>& thePlayers);
+		void aPairTie(const double& thePot, const std::vector<int>& winnerIndexes);
 		//   Postcondition: handle the winning of thePot and the losses of players in
 		// case of A Pair tie. The player with the highest rank in the pair wins.
 		// Else the third, fourth and fifth cards are checked to break ties.
 		bool highCard(const Hand& handPlayer, Player& thePlayer);
 		//   Postcondition: handle the winning of thePot and the losses of players in
 		// case of A Pair tie. 
-		void highCardTie(const double& thePot, std::vector<Player>& thePlayers);
+		void highCardTie(const double& thePot, const std::vector<int>& winnerIndexes);
 		//   Postcondition: handle the winning of thePot and the losses of players in
 		// case of a high Card Tie. The player with the highest rank on their hand wins.
 		// If the players have same high card in hand, the second card in hand is checked.
 		// If both cards in hand of the players have same ranks, the pot is split equally.
+		int compareBestHands(const Player& leftPlayer, const Player& rightPlayer) const;
+		void payTieWinners(const double& thePot, const std::vector<int>& contenderIndexes);
 		
 
 		Deck shoe;

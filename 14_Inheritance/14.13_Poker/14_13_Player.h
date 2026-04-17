@@ -19,6 +19,12 @@ namespace myNamespacePoker
 		Player(const std::string& theName, double theMoney);
 		void resetTurn();
 		//   Postcondition: calling the emptyDeck() function to move to the next round
+		void resetBestHand();
+		//   Postcondition: clear the best evaluated hand from the previous resolution
+		void resetRanking();
+		//   Postcondition: reset ranking to the default non-ranked state
+		bool isEliminated() const;
+		//   Postcondition: returns true if player has no money left
 		void win(double thePot);
 		void lose();
 		void setRanking(int theRanking);
@@ -29,6 +35,8 @@ namespace myNamespacePoker
 		void fold();
 		void placeBet(double theBet);
 		//   Postcondition: allow Game class to set up the bet in each round
+		void resetBetForStreet();
+		//   Postcondition: resets current street contribution to 0
 		double getBet() const;
 		//   Postcondition: returns the bet
 		void addCard(const Card& theCard);

@@ -18,5 +18,6 @@ add_subdirectory ("14.09_RPG")
 add_subdirectory ("14.10_Pet")
 add_subdirectory ("14.11_Cards")
 add_subdirectory ("14.12_Blackjack")
+add_subdirectory ("14.13_Poker")
 
 # TODO: Add tests and install targets if needed.
