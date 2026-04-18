@@ -1,7 +1,13 @@
 #include <stdexcept>
 #include <iostream>
+#include <cmath>
 #include "14_13_Player.h"
 #include "../14.11_Cards/14_11_Validation.h"
+
+namespace
+{
+	constexpr double MONEY_EPSILON = 1e-9;
+}
 
 namespace myNamespacePoker
 {
@@ -23,9 +29,11 @@ namespace myNamespacePoker
 
 	void Player::placeBet(const double theBet)
 	{
-		if (theBet < 0)
+		if (theBet < -MONEY_EPSILON)
 			throw std::out_of_range("Bet cannot be less than 0\n");
-		if (theBet >= money)
+		if (std::abs(theBet) <= MONEY_EPSILON)
+			return;
+		if (theBet + MONEY_EPSILON >= money)
 		{
 			std::cout << "All in!\n";
 			bet += money;
@@ -59,7 +67,7 @@ namespace myNamespacePoker
 
 	bool Player::isEliminated() const
 	{
-		return money <= 0;
+		return money <= MONEY_EPSILON;
 	}
 
 	void Player::win(const double thePot)
@@ -71,7 +79,7 @@ namespace myNamespacePoker
 
 	void Player::lose()
 	{
-		if (money <= 0)
+		if (money <= MONEY_EPSILON)
 			std::cout << "Player " << namePlayer << " is eliminated.\n";
 	}
 

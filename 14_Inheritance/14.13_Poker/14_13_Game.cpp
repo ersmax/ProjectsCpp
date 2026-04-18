@@ -3,6 +3,7 @@
 #include <iostream>
 #include <algorithm>
 #include <cctype>
+#include <cmath>
 #include "14_13_Game.h"
 #include "../14.11_Cards/14_11_Validation.h"
 
@@ -18,6 +19,7 @@ namespace
 
 
 	constexpr int CARDS_BEST_DECK = 5;
+	constexpr double MONEY_EPSILON = 1e-9;
 
 	const char* rankingToString(const int ranking)
 	{
@@ -107,6 +109,8 @@ namespace
 		if (sortedCards.size() < 5)
 			return false;
 
+		// Check for Straight flush (check only first three with idx, since we need at least 5)
+		// Hence, idx <= sortedCards.size() - 5, that is (7 -5) = 2, idx = 0, idx = 1, idx = 2
 		for (size_t idx = 0; idx <= sortedCards.size() - 5; idx++)
 		{
 			std::vector<Card> possibleStraight;
@@ -186,13 +190,25 @@ namespace myNamespacePoker
 		// pre-flop
 		const double smallBlindBet = roundBet;
 		const double bigBlindBet = roundBet * 2;
+		const double smallBlindPreviousBet = players[smallBlind].getBet();
 		players[smallBlind].placeBet(smallBlindBet);
-		pot += smallBlindBet;
-		players[bigBlind].placeBet(bigBlindBet);
-		pot += bigBlindBet;
+		const double smallBlindPaid = players[smallBlind].getBet() - smallBlindPreviousBet;
+		pot += smallBlindPaid;
 
-		std::cout << "Small blind: Player " << smallBlind + 1 << " (" << players[smallBlind].getName() << ") $" << smallBlindBet << "\n";
-		std::cout << "Big blind:   Player " << bigBlind + 1   << " (" << players[bigBlind].getName()   << ") $" << bigBlindBet << "\n";
+		const double bigBlindPreviousBet = players[bigBlind].getBet();
+		players[bigBlind].placeBet(bigBlindBet);
+		const double bigBlindPaid = players[bigBlind].getBet() - bigBlindPreviousBet;
+		pot += bigBlindPaid;
+
+		std::cout << "Small blind: Player " << smallBlind + 1 << " (" << players[smallBlind].getName() << ") $" << smallBlindPaid;
+		if (smallBlindPaid + MONEY_EPSILON < smallBlindBet)
+			std::cout << " (all in)";
+		std::cout << "\n";
+
+		std::cout << "Big blind:   Player " << bigBlind + 1   << " (" << players[bigBlind].getName()   << ") $" << bigBlindPaid;
+		if (bigBlindPaid + MONEY_EPSILON < bigBlindBet)
+			std::cout << " (all in)";
+		std::cout << "\n";
 
 		// distribute the new cards 
 		for (int idxCard = 0; idxCard < CARDS_PLAYER; idxCard++)
@@ -288,8 +304,7 @@ namespace myNamespacePoker
 
 				
 				double callingBet = currentBet - thePlayer.getBet();
-				if (callingBet < 0)
-					callingBet = 0;
+				callingBet = std::max<double>(callingBet, 0);
 				switch (choice)
 				{
 				case 'c':
@@ -335,7 +350,7 @@ namespace myNamespacePoker
 
 		const double safeCallingBet = std::max(0.0, callingBet);
 
-		if (thePlayer.getMoney() <= safeCallingBet)
+		if (thePlayer.getMoney() <= safeCallingBet + MONEY_EPSILON)
 		{
 			char choice;
 			std::cout << "Player does not have enough money to raise. Go all in (y/n)?\n";
@@ -403,7 +418,7 @@ namespace myNamespacePoker
 		// give a ranking to each player's hand. Skip players that folded 
 		for (int idx = 0; idx < nPlayers; idx++)
 		{
-			int idxPlayer = (currentPlayer + idx) % nPlayers;
+			const int idxPlayer = (currentPlayer + idx) % nPlayers;
 			Player& thePlayer = players[idxPlayer];
 			if (thePlayer.hasFolded())	continue;
 			thePlayer.resetBestHand();
@@ -446,38 +461,12 @@ namespace myNamespacePoker
 			showWinningHand(winner);
 		}
 		else
-			handleTies(pot, winnerIndexes);
+			payTieWinners(pot, winnerIndexes);
 	}
 
 	void Game::handleLoss(Player& thePlayer)
 	{
 		thePlayer.lose();
-	}
-
-	void Game::handleTies(const double& thePot, const std::vector<int>& winnerIndexes)
-	{
-		if (winnerIndexes.empty())
-			return;
-
-		payTieWinners(thePot, winnerIndexes);
-	}
-
-	int Game::compareBestHands(const Player& leftPlayer, const Player& rightPlayer) const
-	{
-		const Hand& leftHand = leftPlayer.getWinningHand();
-		const Hand& rightHand = rightPlayer.getWinningHand();
-		const int cardsToCompare = std::min(leftHand.getNumberCards(), rightHand.getNumberCards());
-
-		for (int idx = 0; idx < cardsToCompare; idx++)
-		{
-			const int leftRank = rankForComparison(leftHand[idx]);
-			const int rightRank = rankForComparison(rightHand[idx]);
-			if (leftRank > rightRank)
-				return 1;
-			if (leftRank < rightRank)
-				return -1;
-		}
-		return 0;
 	}
 
 	void Game::payTieWinners(const double& thePot, const std::vector<int>& contenderIndexes)
@@ -494,6 +483,9 @@ namespace myNamespacePoker
 				continue;
 			}
 
+			// If new Player has higher Poker hand (the comparison is > 0), 
+			// update the bestIndexes vector to contain only the new Player index.
+			// If equal Poker hand, add the new Player index to the bestIndexes vector.
 			const int comparison = compareBestHands(players[idx], players[bestIndexes[0]]);
 			if (comparison > 0)
 			{
@@ -504,6 +496,7 @@ namespace myNamespacePoker
 				bestIndexes.push_back(idx);
 		}
 
+		// If bestIndexes has more than one index, it means that 2 or more players have equal hands, so we split the pot equally 
 		const double equalWin = thePot / static_cast<int>(bestIndexes.size());
 		if (bestIndexes.size() > 1)
 			std::cout << "Tie between " << bestIndexes.size() << " players. Pot is split equally.\n";
@@ -513,6 +506,24 @@ namespace myNamespacePoker
 			players[idx].win(equalWin);
 			showWinningHand(players[idx]);
 		}
+	}
+
+	int Game::compareBestHands(const Player& leftPlayer, const Player& rightPlayer)
+	{
+		const Hand& leftHand = leftPlayer.getWinningHand();
+		const Hand& rightHand = rightPlayer.getWinningHand();
+		const int cardsToCompare = std::min(leftHand.getNumberCards(), rightHand.getNumberCards());
+
+		for (int idx = 0; idx < cardsToCompare; idx++)
+		{
+			const int leftRank = rankForComparison(leftHand[idx]);
+			const int rightRank = rankForComparison(rightHand[idx]);
+			if (leftRank > rightRank)
+				return 1;
+			if (leftRank < rightRank)
+				return -1;
+		}
+		return 0;
 	}
 
 	void Game::setRanking(Player& thePlayer, const std::vector<Card>& theHand, const Hand& handPlayer)
@@ -552,12 +563,10 @@ namespace myNamespacePoker
 			bool hasK = false;
 			bool hasA = false;
 
-			Hand theBestHand;
 			std::vector<Card> found(5);
-
-			// look at the cards of the same suit only
 			for (const Card& card : theHand)
 			{
+				// look at the cards of the same suit only
 				if (card.getSuit() != suitCard)	continue;
 				
 				const std::string& name = card.getName();
@@ -589,6 +598,7 @@ namespace myNamespacePoker
 			}
 			if (has10 && hasJ && hasQ && hasK && hasA)
 			{
+				Hand theBestHand;
 				for (const Card& card : found)	theBestHand.add(card);
 				thePlayer.storeBestHand(theBestHand);
 				return true;
@@ -615,6 +625,7 @@ namespace myNamespacePoker
 
 			
 			// Case 1: Ace is the highest Rank in suitedCardsHigh (10, J, Q, K, Ace)
+			// Sort the cards in ascending order, with Ace the highest rank card
 			std::vector<Card> suitedCardsHigh = suitedCards;
 			for (size_t idx = 0; idx < suitedCardsHigh.size(); idx++)
 				for (size_t idx2 = idx + 1; idx2 < suitedCardsHigh.size(); idx2++)
@@ -691,28 +702,27 @@ namespace myNamespacePoker
 
 		// Add quad to the best hand of Player
 		Hand bestHand;
-		for (size_t card = 0; card < theHand.size(); card++)
+		for (const Card& card : theHand)
 		{
-			int idx = lowRank(theHand[card].getName(), NAMES, N_NAMES);
+			const int idx = lowRank(card.getName(), NAMES, N_NAMES);
 			if (idx == quadRank)
-				bestHand.add(theHand[card]);
+				bestHand.add(card);
 		}
 		// Add kicker to the best hand of Player
-		for (size_t card = 0; card < theHand.size(); card++)
+		for (const Card& card : theHand)
 		{
-			int idx = lowRank(theHand[card].getName(), NAMES, N_NAMES);
+			const int idx = lowRank(card.getName(), NAMES, N_NAMES);
 			if (idx != quadRank && idx == kicker)
 			{
-				bestHand.add(theHand[card]);
+				bestHand.add(card);
 				break;
 			}
-
 		}
 		thePlayer.storeBestHand(bestHand);
 		return isFour;
 	}
 
-	// Ranking 4
+	// Ranking 7
 	bool Game::isFullHouse(const std::vector<Card>& theHand, Player& thePlayer)
 	{
 		int counts[N_NAMES] = { 0 };
@@ -782,7 +792,7 @@ namespace myNamespacePoker
 		return true;
 	}
 
-	// Ranking 5
+	// Ranking 6
 	bool Game::isFlush(const std::vector<Card>& theHand, Player& thePlayer)
 	{
 		int suits[N_SUITS] = {0};
@@ -823,7 +833,7 @@ namespace myNamespacePoker
 		return true;
 	}
 
-	// Ranking 6
+	// Ranking 5
 	bool Game::isStraight(const std::vector<Card>& theHand, Player& thePlayer)
 	{
 		bool isStraight = false;
@@ -893,7 +903,7 @@ namespace myNamespacePoker
 		return false;
 	}
 
-	// Ranking 7
+	// Ranking 4
 	bool Game::isThreeOfAKind(const std::vector<Card>& theHand, Player& thePlayer)
 	{
 		int counts[N_NAMES] = { 0 };
@@ -922,7 +932,7 @@ namespace myNamespacePoker
 		for (int idx = 0; idx < N_NAMES; idx++) 
 			if (counts[idx] > 0 && idx != tris)
 			{
-				if (idx == 0)
+				if (idx == 0)		// Ace
 				{
 					highest = idx;
 					break;
@@ -959,13 +969,13 @@ namespace myNamespacePoker
 				bestHand.add(card);
 		}
 		
+		// Store in order Tris, then Highest rank card, then Second-Highest rank card
 		thePlayer.storeBestHand(bestHand);
-		// Store in order Tris, then Highest, then Second Highest
 
 		return true;
 	}
 
-	// Ranking 8
+	// Ranking 3
 	bool Game::isTwoPair(const std::vector<Card>& theHand, Player& thePlayer)
 	{
 		int counts[N_NAMES] = { 0 };
@@ -1040,7 +1050,7 @@ namespace myNamespacePoker
 		return true;
 	}
 
-	// Ranking 9
+	// Ranking 2
 	bool Game::isOnePair(const std::vector<Card>& theHand, Player& thePlayer)
 	{
 		int counts[N_NAMES] = { 0 };
@@ -1056,8 +1066,7 @@ namespace myNamespacePoker
 			if (counts[idx] == 2)
 			{
 				const int rankValue = (idx == 0) ? 13 : idx;
-				if (rankValue > pair)
-					pair = rankValue;
+				pair = std::max(rankValue, pair);
 			}
 		if (pair == -1)	return false;
 		
@@ -1089,7 +1098,7 @@ namespace myNamespacePoker
 		if (highest == -1 || secondHighest == -1 || thirdHighest == -1)
 			return false;
 		
-		// Build best hand: Pair first, then highest, second highest, and highest card
+		// Build best hand: Pair first, then the highest, second-highest, and third-highest rank card
 		Hand bestHand;
 		int pairCount = 0;
 		for (const Card& card : theHand)
@@ -1133,10 +1142,11 @@ namespace myNamespacePoker
 		return true;
 	}
 
-	// Ranking 10
+	// Ranking 1
 	bool Game::highCard(const Hand& handPlayer, Player& thePlayer)
 	{
 		std::vector<Card> allCards;
+		allCards.reserve(static_cast<size_t>(handPlayer.getNumberCards() + board.size()));
 		for (int idx = 0; idx < handPlayer.getNumberCards(); idx++)
 			allCards.push_back(handPlayer[idx]);
 		for (const Card& card : board)
