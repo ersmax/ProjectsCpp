@@ -222,6 +222,7 @@ namespace myNamespacePoker
 		printSection("Flop Betting");
 		takeBets();
 		if (!atLeastTwoBetting())
+		// If there are no players left that call or raise (3 cards on deck), ends Poker round immediately
 		{
 			resolveRound();
 			resetRoundState();
@@ -232,6 +233,7 @@ namespace myNamespacePoker
 		printSection("Turn Betting");
 		takeBets();
 		if (!atLeastTwoBetting())
+		// If there are no players left that call or raise (4 cards on deck), ends Poker round immediately
 		{
 			resolveRound();
 			resetRoundState();
