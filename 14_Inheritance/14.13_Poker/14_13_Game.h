@@ -62,56 +62,36 @@ namespace myNamespacePoker
 		//   Precondition: theHand is the vector of cards to be evaluated for the player,
 		// and thePlayer is the player for which the hand is evaluated.
 		//   Postcondition: return true if the hand is a Royal Flush. 
-		// The pot is split equally among the players with Royal Flush, hence a tie.
-		void royalFlushTie(const double& thePot, const std::vector<int>& winnerIndexes);
+		// Tie resolution is centralized in payTieWinners.
 		static bool isStraightFlush(const std::vector<Card>& theHand, Player& thePlayer);
 		//   Postcondition: return true if the hand is a Straight Flush.
-		// The Player with the highest card wins. Else there is a tie.
-		void straightFlushTie(const double& thePot, const std::vector<int>& winnerIndexes);
+		// Tie resolution is centralized in payTieWinners.
 		static bool isFourOfAKind(const std::vector<Card>& theHand, Player& thePlayer);
 		//   Postcondition: return true if the hand is a Four of a Kind.
-		// The Player with the highest card in the four wins.
-		// To break ties, the highest rank of the fifth card (kicker) wins.
-		// Else there is a tie.
-		void fourOfAKindTie(const double& thePot, const std::vector<int>& winnerIndexes);
+		// Tie resolution is centralized in payTieWinners.
 		static bool isFullHouse(const std::vector<Card>& theHand, Player& thePlayer);
 		//   Postcondition: return true if the hand is a Full House.
-		// The player with the highest rank of tris wins.
-		// To break ties, the player with the highest rank of pair wins.
-		// Else there is a tie.
-		void fullHouseTie(const double& thePot, const std::vector<int>& winnerIndexes);
+		// Tie resolution is centralized in payTieWinners.
 		static bool isFlush(const std::vector<Card>& theHand, Player& thePlayer);
 		//   Postcondition: return true if the hand is a Flush.
-		// The player with the highest card in the flush wins.
-		// Else, the second, third, fourth and fifth cards are checked to break ties.
-		void flushTie(const double& thePot, const std::vector<int>& winnerIndexes);
+		// Tie resolution is centralized in payTieWinners.
 		bool isStraight(const std::vector<Card>& theHand, Player& thePlayer);
 		//   Postcondition: return true if the hand is a Straight.
-		// The player with the highest card rank in a straight wins. Else a tie happens.
-		void straightTie(const double& thePot, const std::vector<int>& winnerIndexes);
+		// Tie resolution is centralized in payTieWinners.
 		bool isThreeOfAKind(const std::vector<Card>& theHand, Player& thePlayer);
 		//   Postcondition: return true if the hand is a Three of a Kind.
-		// The player with the highest rank in the tris wins.
-		// Else the fourth and fifth cards are checked to break ties.
-		void threeOfAKindTie(const double& thePot, const std::vector<int>& winnerIndexes);
+		// Tie resolution is centralized in payTieWinners.
 		bool isTwoPair(const std::vector<Card>& theHand, Player& thePlayer);
 		//   Postcondition: return true if the hand is a Two Pair.
-		// The player with the highest rank in the first pair wins.
-		// Else the second pair rank is checked, and eventually the last card to break ties.
-		void twoPairTie(const double& thePot, const std::vector<int>& winnerIndexes);
+		// Tie resolution is centralized in payTieWinners.
 		bool isOnePair(const std::vector<Card>& theHand, Player& thePlayer);
 		//   Postcondition: return true if the hand is a One Pair.
-		// The player with the highest rank in the pair wins.
-		// Else the third, fourth and fifth cards are checked to break ties.
-		void aPairTie(const double& thePot, const std::vector<int>& winnerIndexes);
+		// Tie resolution is centralized in payTieWinners.
 		bool highCard(const Hand& handPlayer, Player& thePlayer);
 		//   Postcondition: returns true to signal that the poker hand is evaluated as High Card, 
 		// and set the best hand of the player to the 5 highest cards in hand and on board.
 		// Two cards are those in hand of the player. The other three cards are those on the board.
-		// The player with the highest rank on their hand wins.
-		// If the players have same high card in hand, the second card in hand is checked.
-		// If both cards in hand of the players have same ranks, the pot is split equally.
-		void highCardTie(const double& thePot, const std::vector<int>& winnerIndexes);
+		// Tie resolution is centralized in payTieWinners.
 		int compareBestHands(const Player& leftPlayer, const Player& rightPlayer) const;
 		//   Postcondition: compare the best hand of two players and return 1 if leftPlayer wins, 
 		// -1 if rightPlayer wins, and 0 if there is a tie.

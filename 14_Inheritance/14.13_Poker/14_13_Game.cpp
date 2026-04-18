@@ -321,8 +321,9 @@ namespace myNamespacePoker
 	void Game::callHand(Player& thePlayer, const double callingBet)
 	{
 		const double safeCallingBet = std::max(0.0, callingBet);
+		const double previousBet = thePlayer.getBet();
 		thePlayer.placeBet(safeCallingBet);
-		pot += safeCallingBet;
+		pot += (thePlayer.getBet() - previousBet);
 	}
 
 	void Game::raiseHand(Player& thePlayer, const double callingBet)
@@ -358,8 +359,9 @@ namespace myNamespacePoker
 			readNumber(std::cin, theDifference);
 		} while (theDifference < safeCallingBet);
 
+		const double previousBet = thePlayer.getBet();
 		thePlayer.placeBet(theDifference);
-		pot += theDifference;
+		pot += (thePlayer.getBet() - previousBet);
 		currentBet = thePlayer.getBet();
 	}
 
@@ -455,91 +457,6 @@ namespace myNamespacePoker
 		if (winnerIndexes.empty())
 			return;
 
-		const int ranking = players[winnerIndexes[0]].getRanking();
-		switch (ranking)
-		{
-		case 10:
-			royalFlushTie(thePot, winnerIndexes);
-			break;
-		case 9:
-			straightFlushTie(thePot, winnerIndexes);
-			break;
-		case 8:
-			fourOfAKindTie(thePot, winnerIndexes);
-			break;
-		case 7:
-			fullHouseTie(thePot, winnerIndexes);
-			break;
-		case 6:
-			flushTie(thePot, winnerIndexes);
-			break;
-		case 5:
-			straightTie(thePot, winnerIndexes);
-			break;
-		case 4:
-			threeOfAKindTie(thePot, winnerIndexes);
-			break;
-		case 3:
-			twoPairTie(thePot, winnerIndexes);
-			break;
-		case 2:
-			aPairTie(thePot, winnerIndexes);
-			break;
-		case 1:
-			highCardTie(thePot, winnerIndexes);
-			break;
-		default:
-			break;
-		}
-	}
-
-	void Game::royalFlushTie(const double& thePot, const std::vector<int>& winnerIndexes)
-	{
-		payTieWinners(thePot, winnerIndexes);
-	}
-
-	void Game::straightFlushTie(const double& thePot, const std::vector<int>& winnerIndexes)
-	{
-		payTieWinners(thePot, winnerIndexes);
-	}
-
-	void Game::fourOfAKindTie(const double& thePot, const std::vector<int>& winnerIndexes)
-	{
-		payTieWinners(thePot, winnerIndexes);
-	}
-
-	void Game::fullHouseTie(const double& thePot, const std::vector<int>& winnerIndexes)
-	{
-		payTieWinners(thePot, winnerIndexes);
-	}
-
-	void Game::flushTie(const double& thePot, const std::vector<int>& winnerIndexes)
-	{
-		payTieWinners(thePot, winnerIndexes);
-	}
-
-	void Game::straightTie(const double& thePot, const std::vector<int>& winnerIndexes)
-	{
-		payTieWinners(thePot, winnerIndexes);
-	}
-
-	void Game::threeOfAKindTie(const double& thePot, const std::vector<int>& winnerIndexes)
-	{
-		payTieWinners(thePot, winnerIndexes);
-	}
-
-	void Game::twoPairTie(const double& thePot, const std::vector<int>& winnerIndexes)
-	{
-		payTieWinners(thePot, winnerIndexes);
-	}
-
-	void Game::aPairTie(const double& thePot, const std::vector<int>& winnerIndexes)
-	{
-		payTieWinners(thePot, winnerIndexes);
-	}
-
-	void Game::highCardTie(const double& thePot, const std::vector<int>& winnerIndexes)
-	{
 		payTieWinners(thePot, winnerIndexes);
 	}
 
