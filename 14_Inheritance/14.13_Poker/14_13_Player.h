@@ -18,7 +18,8 @@ namespace myNamespacePoker
 		//   Postcondition: set the current player's name, money, etc.
 		Player(const std::string& theName, double theMoney);
 		void resetTurn();
-		//   Postcondition: calling the emptyDeck() function to move to the next round
+		//   Postcondition: set the number of cards in the hand of player to 0, 
+		// reset the bet to 0, and set folded to false
 		void resetBestHand();
 		//   Postcondition: clear the best evaluated hand from the previous resolution
 		void resetRanking();
@@ -26,22 +27,29 @@ namespace myNamespacePoker
 		bool isEliminated() const;
 		//   Postcondition: returns true if player has no money left
 		void win(double thePot);
+		//   Postcondition: add the amount won to the player's money
 		void lose();
+		//   Postcondition: print that the player has lost 
 		void setRanking(int theRanking);
+		//   Postcondition: set the ranking of the player's hand 
+		// (1 for High Card, 2 for One Pair, etc. with 10 being the Royal Flush)
+		void fold();
+		//   Postcondition: set folded to true (player skip the poker current hand)
+		void placeBet(double theBet);
+		//   Postcondition: allow Game class to set up the bet in each round
+		void addCard(const Card& theCard);
+		//   Postcondition: add a card to the player's hand;
+		void storeBestHand(const Hand& theHand);
+		//   Postcondition: store the best hand evaluated for the player in the current hand
+		// This is useful to determine the winner and break ties by comparing the best hand of the players 
+		// with the same ranking
 		int getRanking() const;
 		double getMoney() const;
 		const std::string& getName() const;
 		bool hasFolded() const;
-		void fold();
-		void placeBet(double theBet);
-		//   Postcondition: allow Game class to set up the bet in each round
 		double getBet() const;
-		//   Postcondition: returns the bet
-		void addCard(const Card& theCard);
-		//   Postcondition: add a card to the player's hand;
 		const Hand& getHand() const;
 		const Hand& getWinningHand() const;
-		void storeBestHand(const Hand& theHand);
 	private:
 		std::string namePlayer;
 		double money;
