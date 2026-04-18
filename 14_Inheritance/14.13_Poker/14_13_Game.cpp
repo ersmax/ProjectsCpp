@@ -191,8 +191,8 @@ namespace myNamespacePoker
 		players[bigBlind].placeBet(bigBlindBet);
 		pot += bigBlindBet;
 
-		std::cout << "Small blind: Player " << smallBlind + 1 << " ($" << smallBlindBet << ")\n";
-		std::cout << "Big blind:   Player " << bigBlind + 1 << " ($" << bigBlindBet << ")\n";
+		std::cout << "Small blind: Player " << smallBlind + 1 << " (" << players[smallBlind].getName() << ") $" << smallBlindBet << "\n";
+		std::cout << "Big blind:   Player " << bigBlind + 1   << " (" << players[bigBlind].getName()   << ") $" << bigBlindBet << "\n";
 
 		// distribute the new cards 
 		for (int idxCard = 0; idxCard < CARDS_PLAYER; idxCard++)
@@ -264,7 +264,7 @@ namespace myNamespacePoker
 				const int idxPlayer = (currentPlayer + idx) % nPlayers;
 				Player& thePlayer = players[idxPlayer];
 
-				std::cout << "\n-- Player " << idxPlayer + 1 << " turn --\n";
+				std::cout << "\n-- Player " << idxPlayer + 1 << " (" << players[idxPlayer].getName() << ") turn --\n";
 				std::cout << "Balance: $" << thePlayer.getMoney() << '\n';
 
 				if (thePlayer.hasFolded())
