@@ -701,3 +701,13 @@ Inheritance basics, Programming with Inheritance.
     <p align="center">
       <img src="14_Inheritance/14.13_Poker/Figures/Poker.gif" alt="Poker" width="48%" />
     </p>
+
+---
+
+## 15. Polymorphism and Virtual Functions
+Virtual function basics, Pointers and Virtual Functions
+
+1. [Graph](15_Polymorphism_Virtual_functions/15.01_Graph) 
+   \- This program defines a base class `Graph` with virtual member functions `draw()` and `erase()`, and two derived classes `BarGraph` and `LineGraph` that override these functions. 
+   The main function creates instances of both graph types and calls their `draw()` and `erase()` methods to demonstrate polymorphism. 
+   The program also includes comments explaining the difference in behavior when the base class functions are virtual versus non-virtual, highlighting how virtual functions enable dynamic dispatch based on the actual object type at runtime.

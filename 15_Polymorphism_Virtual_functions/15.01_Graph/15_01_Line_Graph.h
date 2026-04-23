@@ -1,0 +1,19 @@
+#ifndef LINE_GRAPH_15_01_H
+#define LINE_GRAPH_15_01_H
+
+#include "15_01_Graph.h"
+
+namespace myGraph
+{
+	class LineGraph : public Graph
+	{
+	public:
+		LineGraph();
+		virtual void erase() override final;
+		virtual void draw() override final;
+	private:
+	};
+
+} // myGraph
+
+#endif // LINE_GRAPH_15_01_H
