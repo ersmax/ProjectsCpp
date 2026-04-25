@@ -10,11 +10,6 @@ namespace myGraph
 	LineGraph::LineGraph(const Graph& anotherGraph) : Graph(anotherGraph)
 	{ /* Copy LabelValue.nameCategory, LabelValue.valueCategory, maxValue and numberStars */ }
 
-    void LineGraph::erase()
-    {
-        Graph::erase();
-    }
-
     void LineGraph::draw()
     {
         const int nCategories = getCategories();

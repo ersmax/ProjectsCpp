@@ -10,11 +10,6 @@ namespace myGraph
 	BarGraph::BarGraph(const Graph& anotherGraph) : Graph(anotherGraph)
 	{ /* Copy LabelValue.nameCategory, LabelValue.valueCategory, maxValue and numberStars */ }
 
-	void BarGraph::erase()
-	{
-		Graph::erase();
-	}
-
 	void BarGraph::draw()
 	{
 		const int nCategories = getCategories();
