@@ -73,7 +73,7 @@ int main( )
 	// bar.erase();
 
 	LineGraph *line = new LineGraph(*bar);
-	std::cout << "Derived class LineGraph object calling draw() and erase()\n";
+	// Copy data from bar graph with copy constructor
 	// line->draw();
 	// line.erase();
 

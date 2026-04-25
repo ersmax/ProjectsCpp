@@ -1,18 +1,45 @@
-
-Statistics are usually shown in the form of graphs. Graphs can be of different types,
-such as bar graphs, line graphs, pie charts, and so on. A bar graph is shown with
-vertical or horizontal bars against a scale, while a pie chart is shown by dividing
-a circle into proportionate segments. In a well-designed system, these would be
-derived from a common class, Graph. You are to implement such a system.
-
-The class Graph is the base class. You should add only BarGraph and LineGraph
-classes derived from Graph. Each class has stubs for member functions erase and
-draw. Each of these member functions outputs a message telling what function has
-been called and what the class of the calling object is. Since these are just stubs, they
-do nothing more than output this message. The member functions should take no
-arguments. There are three parts to this project:
-a. Do the class definitions using no virtual functions. Compile and test.
-b. Make the base class member functions virtual. Compile and test.
-c. Explain the difference in results.
+Flesh out Programming Problem 15.1. Give new definitions for the various constructors
+and member functions, Graph::draw, Graph::erase, BarGraph::draw,
+BarGraph::erase, LineGraph::draw, and LineGraph::erase so that the
+draw functions actually draw figures on the screen by placing the character ‘*’
+at suitable locations on the screen. For the erase functions, you can simply clear
+the screen (by outputting blank lines or by doing something more sophisticated).
+There are a lot of details in this and you will have to decide on some of them on
+your own.
 
 ---
+
+
+# Illustrative example
+<p align="center">
+  <img src="./Figures/Graph_visualisation.gif" alt="Graph" width="48%" />
+</p>
+
+## Project Structure and Class Logic
+
+### Code Structure
+- **graph.h / graph.cpp**: Defines and implements the base class `Graph`.
+- **bargraph.h / bargraph.cpp**: Defines and implements the derived class `BarGraph`.
+- **linegraph.h / linegraph.cpp**: Defines and implements the derived class `LineGraph`.
+- **main test file**: Uses the provided `main()` to create `BarGraph` and `LineGraph` objects and call `draw()` and `erase()`.
+
+### Main Class Responsibilities
+- **`Graph` (base class)**:
+  - Provides shared interface for all graph types.
+  - Declares `draw()` and `erase()` member functions.
+  - In Part (a), these are non-virtual; in Part (b), they are virtual to enable runtime polymorphism.
+
+- **`BarGraph` (derived class)**:
+  - Overrides `draw()` with bar-graph behavior (stub output in 15.1, real drawing in 15.2).
+  - Overrides `erase()` to clear/reset bar-graph output.
+
+- **`LineGraph` (derived class)**:
+  - Overrides `draw()` with line-graph behavior (stub output in 15.1, real drawing in 15.2).
+  - Overrides `erase()` to clear/reset line-graph output.
+
+### Testing Flow in `main()`
+1. Construct a `BarGraph` object, call `draw()` and `erase()`.
+2. Construct a `LineGraph` object, call `draw()` and `erase()`.
+3. Compare behavior with non-virtual vs virtual functions to observe polymorphism effects.
+
+

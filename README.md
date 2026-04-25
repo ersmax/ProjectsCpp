@@ -711,3 +711,11 @@ Virtual function basics, Pointers and Virtual Functions
    \- This program defines a base class `Graph` with virtual member functions `draw()` and `erase()`, and two derived classes `BarGraph` and `LineGraph` that override these functions. 
    The main function creates instances of both graph types and calls their `draw()` and `erase()` methods to demonstrate polymorphism. 
    The program also includes comments explaining the difference in behavior when the base class functions are virtual versus non-virtual, highlighting how virtual functions enable dynamic dispatch based on the actual object type at runtime.
+2. [Graph Visualisation](15_Polymorphism_Virtual_functions/15.02_Graph_visualisation) 
+   \- This project implements a graph visualization system with an abstract `Graph` base class and two derived classes: `BarGraph` and `LineGraph`. It supports entering, storing, and rendering statistical datasets in different visual forms while keeping a shared polymorphic interface.
+   The `Graph` class is responsible for common data handling (labels, values, normalization/scaling support) and exposes virtual behavior for rendering through `draw()`; shared cleanup/reset behavior is handled through `erase()`.
+   `BarGraph` implements `draw()` to display values as formatted vertical bars, while `LineGraph` implements `draw()` by plotting and connecting points to show trends across categories. Both classes reuse the shared base data model and override behavior only where visualization differs.
+   The driver code demonstrates polymorphism by working through base-class pointers/references, invoking `draw()` dynamically for each concrete graph type, and includes validated user input helpers and modular separation between graph logic and application flow.
+   <p align="center">
+      <img src="15_Polymorphism_Virtual_functions/15.02_Graph_Visualisation/Figures/Graph_visualisation.gif" alt="Graph" width="48%" />
+   </p>

@@ -9,8 +9,13 @@ namespace myGraph
 	{
 	public:
 		LineGraph();
+		//  Postcondition: creates an empty line graph
 		LineGraph(const Graph& anotherGraph);
+		//  Postcondition: creates a line graph with the same LabelValue.nameCategory,
+		// LabelValue.valueCategory, maxValue and numberStars as anotherGraph
 		virtual void draw() override final;
+		//   Postcondition: draws the line graph on the screen by placing
+		// the character `*` at suitable locations on the screen.
 	private:
 	};
 
