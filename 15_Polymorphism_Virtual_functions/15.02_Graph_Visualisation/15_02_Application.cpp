@@ -55,6 +55,7 @@ your own.
 
 
 #include <iostream>
+#include <vector>
 #include "15_02_Graph.h"
 #include "15_02_Bar_Graph.h"
 #include "15_02_Line_Graph.h"
@@ -65,20 +66,28 @@ int main( )
 	using myGraph::LineGraph;
 	using myGraph::Graph;
 
-	BarGraph bar;
-	std::cout << "Derived class BarGraph object calling draw() and erase()\n";
-	bar.draw();
-	bar.erase();
+	BarGraph *bar = new BarGraph;
+	std::cout << "Enter data for the bar graph\n";
+	std::cin >> *bar;
+	// bar->draw();
+	// bar.erase();
 
-	LineGraph line;
+	LineGraph *line = new LineGraph(*bar);
 	std::cout << "Derived class LineGraph object calling draw() and erase()\n";
-	line.draw();
-	line.erase();
+	// line->draw();
+	// line.erase();
 
-	Graph *pGraph;
-	pGraph = new LineGraph;
-	std::cout << "Calling method draw() on derived class Line Graph\n";
-	pGraph->draw();
+	std::vector<Graph*> someGraphs;
+	someGraphs.push_back(bar);
+	someGraphs.push_back(line);
+	for (Graph* graph : someGraphs)
+	{
+		graph->draw();
+		std::cout << "\n\n";
+	}
+	
+	delete bar;
+	delete line;
 
 	std::cout << '\n';
 	return 0;

@@ -9,7 +9,7 @@ namespace myGraph
 	{
 	public:
 		BarGraph();
-		virtual void erase() override final;
+		BarGraph(const Graph& anotherGraph);
 		virtual void draw() override final;
 	private:
 	};

@@ -7,6 +7,7 @@
 
 # Multi-source examples live in their own subfolders with local CMakeLists.txt
 add_subdirectory ("15.01_Graph")
+add_subdirectory ("15.02_Graph_Visualisation")
 
 
 # TODO: Add tests and install targets if needed.
