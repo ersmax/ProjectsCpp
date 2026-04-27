@@ -1,7 +1,8 @@
 #ifndef WORLD_15_03_H
 #define WORLD_15_03_H
 
-#include <vector>
+#include <random>
+#include "15_03_Organism.h"
 
 namespace myGame
 {
@@ -13,24 +14,20 @@ namespace myGame
 	constexpr char DOODLEBUG = 'X';
 	constexpr char EMPTY = ' ';
 	
-	struct Position
-	{
-		int x;
-		int y;
-	};
-
 	class World
 	{
 	public:
 		World();
+		~World();
 		void output() const;
 	private:
-		//const Position& returnPosition() const;
-		char board[N_ROWS][N_COLS];
+		Organism *board[N_ROWS][N_COLS];
 		int nAnts;
 		int nDoodlebug;
+		std::mt19937 rng;
 		void initialize();
 		void placeRandom(char creature, int numCreatures);
+		char symbolAt(int row, int col) const;
 	};
 
 } // myGame
