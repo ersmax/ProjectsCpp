@@ -12,14 +12,14 @@ namespace myGame
 	class Organism
 	{
 	public:
-		Organism(const Position& thePosition, char theSymbol);
+		Organism();
 		virtual ~Organism() = default;
+		virtual void move() = 0;
+		virtual char getCreature() const = 0;
 		void setPosition(const Position& thePosition);
 		const Position& getPosition() const;
-		char getSymbol() const;
 	private:
 		Position position;
-		char symbol;
 	};
 
 } // myGame

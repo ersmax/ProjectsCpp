@@ -2,13 +2,11 @@
 
 namespace myGame
 {
-	Organism::Organism(const Position& thePosition, const char theSymbol) : position(thePosition), symbol(theSymbol)
+	Organism::Organism() : position({ -1, -1 })
 	{ /* Body left empty */ }
 
 	const Position& Organism::getPosition() const { return position; }
 
 	void Organism::setPosition(const Position& thePosition) { position = thePosition; }
-
-	char Organism::getSymbol() const { return symbol; }
 
 } // myGame

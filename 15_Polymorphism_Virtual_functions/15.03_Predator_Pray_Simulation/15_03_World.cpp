@@ -2,6 +2,10 @@
 #include <random>
 #include "15_03_World.h"
 
+#include "15_03_Organism.h"
+#include "15_03_Doodlebug.h"
+#include "15_03_Ant.h"
+
 
 namespace myGame
 {
@@ -25,39 +29,38 @@ namespace myGame
 
 	void World::initialize()
 	{
-		placeRandom(DOODLEBUG, nDoodlebug);
-		placeRandom(ANT, nAnts);
+		for (int doodlebug = 0; doodlebug < nDoodlebug; doodlebug++)
+			placeRandom(new Doodlebug());
+		
+		for (int ant = 0; ant < nAnts; ant++)
+			placeRandom(new Ant());
 	}
 
-	void World::placeRandom(const char creature, const int numCreatures)
+	void World::placeRandom(Organism *newOrganism)
 	{
 		std::uniform_int_distribution<int> rowDist(0, N_ROWS - 1);
 		std::uniform_int_distribution<int> colDist(0, N_COLS - 1);
-		
-		int placed = 0;
-		while (placed < numCreatures)
+
+		while (true)
 		{
 			const int row = rowDist(rng);
 			const int col = colDist(rng);
-			Position thePosition;
-			thePosition.x = row;
-			thePosition.y = col;
-			if (board[row][col] == nullptr)
+			Position thePosition(row, col);
+			if (board[thePosition.x][thePosition.y] == nullptr)
 			{
-				board[row][col] = new Organism(thePosition, creature);
-				placed++;
+				board[thePosition.x][thePosition.y] = newOrganism;
+				newOrganism->setPosition(thePosition);
+				break;
 			}
 		}
 	}
 
-	char World::symbolAt(const int row, const int col) const
+	char World::creatureAt(const Position& thePosition) const
 	{
-		const Organism *theOrganism = board[row][col];
-		
+		const Organism *theOrganism = board[thePosition.x][thePosition.y];
 		if (theOrganism == nullptr)
 			return EMPTY;
-		
-		return theOrganism->getSymbol();
+		return theOrganism->getCreature();
 	}
 
 	void World::output() const
@@ -72,7 +75,8 @@ namespace myGame
 			std::cout << '|';
 			for (int col = 0; col < N_COLS; col++)
 			{
-				std::cout << symbolAt(row, col);
+				Position thePosition{ row,col };
+				std::cout << creatureAt(thePosition);
 				std::cout << '|';
 			}
 			std::cout << '\n';
