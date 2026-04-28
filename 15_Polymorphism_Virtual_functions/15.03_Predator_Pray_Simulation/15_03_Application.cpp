@@ -50,3 +50,17 @@ int main( )
 	std::cout << '\n';
 	return 0;
 }
+
+// TODO : next() 
+// doodlebug X needs to eat
+// search for ants 0 to move there and eat
+// if not, move normally => define basic move in organism
+// Then update status and born (placeRandom)
+
+// ants 0 need to survive
+// move normally => use basic move in Organism 
+// Then update status and born (placeRandom)
+
+// TODO : update GAME OVER()
+// which means that continue next() until all cells are busy
+// or nAnts = 0, which implies starvation of Doodlebugs as well.

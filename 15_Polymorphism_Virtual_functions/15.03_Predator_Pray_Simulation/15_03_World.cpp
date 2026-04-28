@@ -28,6 +28,7 @@ namespace myGame
 	}
 
 	void World::initialize()
+	// Cannot create a local object because it gets destroyed out of scope
 	{
 		for (int doodlebug = 0; doodlebug < nDoodlebug; doodlebug++)
 			placeRandom(new Doodlebug());
@@ -48,6 +49,20 @@ namespace myGame
 			Position thePosition(row, col);
 			if (board[thePosition.x][thePosition.y] == nullptr)
 			{
+				// we must assign new dynamic variable without dereferencing:
+				// *board[x][y] = &newOrganism  : dereference a nullptr.
+				// Moreover, if we fix the null pointer by assigning 
+				// the address board[...] = &newOrganism; 
+				// then the board will consist of dangling pointers 
+				// pointing to destroyed local stack variables (if we used in the for loop:
+				// for (int doodlebug = 0; doodlebug < nDoodlebug; doodlebug++)
+				// {
+				// 	  Doodlebug aDoodlebug; // Created locally on the STACK
+				//	  placeRandom(aDoodlebug); aDoodlebug is DESTROYED here at the end of the loop
+				// } 
+				// And because World::~World() calls delete on the board items, 
+				// it will try to delete stack memory, causing a crash.
+				// So we use pointers do reference the dynamic variable on the heap
 				board[thePosition.x][thePosition.y] = newOrganism;
 				newOrganism->setPosition(thePosition);
 				break;
