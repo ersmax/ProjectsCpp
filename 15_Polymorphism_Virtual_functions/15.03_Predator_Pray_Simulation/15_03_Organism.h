@@ -20,6 +20,7 @@ namespace myGame
 		const Position& getPosition() const;
 	private:
 		Position position;
+		bool moved;
 	};
 
 } // myGame

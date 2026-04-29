@@ -2,7 +2,7 @@
 
 namespace myGame
 {
-	Organism::Organism() : position({ -1, -1 })
+	Organism::Organism() : position({ -1, -1 }), moved(false)
 	{ /* Body left empty */ }
 
 	const Position& Organism::getPosition() const { return position; }

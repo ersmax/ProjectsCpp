@@ -2,6 +2,7 @@
 #define WORLD_15_03_H
 
 #include <random>
+#include <vector>
 #include "15_03_Organism.h"
 
 namespace myGame
@@ -18,6 +19,7 @@ namespace myGame
 		World();
 		~World();
 		void output() const;
+		void next();
 	private:
 		Organism *board[N_ROWS][N_COLS];
 		int nAnts;
@@ -26,6 +28,11 @@ namespace myGame
 		void initialize();
 		void placeRandom(Organism *newOrganism);
 		char creatureAt(const Position& thePosition) const;
+		std::vector<Position> neighborAnts(const Organism *theOrganism) const;
+		//   Postcondition: returns a (possible) vector of ants that
+		// are neighbors of the Doodlebug. Useful for the doodlebug to eat nearby ants.
+		bool positionInBounds(const Position& thePosition) const;
+		//   Postcondition: returns whether the position is within the board bounds
 	};
 
 } // myGame

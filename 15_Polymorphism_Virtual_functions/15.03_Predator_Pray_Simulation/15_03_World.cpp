@@ -58,24 +58,21 @@ namespace myGame
 				// for (int doodlebug = 0; doodlebug < nDoodlebug; doodlebug++)
 				// {
 				// 	  Doodlebug aDoodlebug; // Created locally on the STACK
-				//	  placeRandom(aDoodlebug); aDoodlebug is DESTROYED here at the end of the loop
-				// } 
+				//	  placeRandom(aDoodlebug); 
+				// } aDoodlebug is DESTROYED here at the end of the loop
 				// And because World::~World() calls delete on the board items, 
 				// it will try to delete stack memory, causing a crash.
-				// So we use pointers do reference the dynamic variable on the heap
+				// Basically, &aDoodlebug points to an address on the stack, 
+				// and calling delete on it creates undefined behavior.
+				// It is literally trying to tell the heap manager to free 
+				// a piece of memory that belongs to the stack frame.
+				// So we use pointers do reference the dynamic variable on the heap.
+				// Later, the destructor will return the heap memory to the freestore manager.
 				board[thePosition.x][thePosition.y] = newOrganism;
 				newOrganism->setPosition(thePosition);
 				break;
 			}
 		}
-	}
-
-	char World::creatureAt(const Position& thePosition) const
-	{
-		const Organism *theOrganism = board[thePosition.x][thePosition.y];
-		if (theOrganism == nullptr)
-			return EMPTY;
-		return theOrganism->getCreature();
 	}
 
 	void World::output() const
@@ -90,8 +87,10 @@ namespace myGame
 			std::cout << '|';
 			for (int col = 0; col < N_COLS; col++)
 			{
-				Position thePosition{ row,col };
-				std::cout << creatureAt(thePosition);
+				if (board[row][col] == nullptr)
+					std::cout << EMPTY;
+				else
+					std::cout << board[row][col]->getCreature();
 				std::cout << '|';
 			}
 			std::cout << '\n';
@@ -103,4 +102,35 @@ namespace myGame
 		std::cout << '\n';
 	}
 
+	std::vector<Position> World::neighborAnts(const Organism *theOrganism) const
+	{
+		std::vector<Position> positionNearbyAnts;
+		positionNearbyAnts.reserve(4);
+
+		const Position organismPosition = theOrganism->getPosition();
+		const Position candidates[4] = {
+			{ organismPosition.x - 1, organismPosition.y },	// UP
+			{ organismPosition.x + 1, organismPosition.y }, // DOWN
+			{ organismPosition.x, organismPosition.y + 1 },	// RIGHT
+			{ organismPosition.x, organismPosition.y - 1 }	// LEFT
+		};
+
+		for (const Position& candidate : candidates)
+		{
+			if (!positionInBounds(candidate))
+				continue;
+
+			const Organism *neighbor = board[candidate.x][candidate.y];
+			if (neighbor != nullptr && neighbor->getCreature() == 'O')
+				positionNearbyAnts.push_back(candidate);
+		}
+
+		return positionNearbyAnts;
+	}
+
+	bool World::positionInBounds(const Position& thePosition) const
+	{
+		return (thePosition.x >= 0 && thePosition.x < N_ROWS &&
+				thePosition.y >= 0 && thePosition.y < N_COLS);
+	}
 } // myGame
