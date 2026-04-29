@@ -87,10 +87,11 @@ namespace myGame
 			std::cout << '|';
 			for (int col = 0; col < N_COLS; col++)
 			{
-				if (board[row][col] == nullptr)
+				Organism *theOrganism = creatureAt({ row, col });
+				if (theOrganism == nullptr)
 					std::cout << EMPTY;
 				else
-					std::cout << board[row][col]->getCreature();
+					std::cout << theOrganism->getCreature();
 				std::cout << '|';
 			}
 			std::cout << '\n';
@@ -102,6 +103,11 @@ namespace myGame
 		std::cout << '\n';
 	}
 
+	Organism* World::creatureAt(const Position& thePosition) const 
+	{
+		return board[thePosition.x][thePosition.y];
+	}
+
 	std::vector<Position> World::neighborAnts(const Organism *theOrganism) const
 	{
 		std::vector<Position> positionNearbyAnts;
@@ -109,10 +115,10 @@ namespace myGame
 
 		const Position organismPosition = theOrganism->getPosition();
 		const Position candidates[4] = {
-			{ organismPosition.x - 1, organismPosition.y },	// UP
+			{ organismPosition.x - 1, organismPosition.y }, // UP
 			{ organismPosition.x + 1, organismPosition.y }, // DOWN
-			{ organismPosition.x, organismPosition.y + 1 },	// RIGHT
-			{ organismPosition.x, organismPosition.y - 1 }	// LEFT
+			{ organismPosition.x, organismPosition.y + 1 }, // RIGHT
+			{ organismPosition.x, organismPosition.y - 1 }	  // LEFT
 		};
 
 		for (const Position& candidate : candidates)
@@ -133,4 +139,40 @@ namespace myGame
 		return (thePosition.x >= 0 && thePosition.x < N_ROWS &&
 				thePosition.y >= 0 && thePosition.y < N_COLS);
 	}
+
+	bool World::doodlebugCanEat(const std::vector<Position>& neighborAnts)
+	{
+		return (!neighborAnts.empty());
+	}
+
+	std::vector<Position> World::freePositions(const Organism* theOrganism) const
+	{
+		std::vector<Position> freePositions;
+		freePositions.reserve(4);
+
+		const Position& organismPosition = theOrganism->getPosition();
+		const Position candidates[4] = {
+			{organismPosition.x - 1, organismPosition.y},	// UP
+			{organismPosition.x + 1, organismPosition.y},	// DOWN
+			{organismPosition.x, organismPosition.y + 1}, // RIGHT
+			{organismPosition.x, organismPosition.y - 1}	// LEFT
+		};
+
+		for (const Position& candidate : candidates)
+		{
+			if (!positionInBounds(candidate))
+				continue;
+
+			const Organism *neighbor = board[candidate.x][candidate.y];
+			if (neighbor == nullptr)
+				freePositions.push_back(candidate);
+		}
+		return freePositions;
+	}
+
+	bool World::canMoveToFreePosition(const std::vector<Position>& freePositions)
+	{
+		return (!freePositions.empty());
+	}
+
 } // myGame
