@@ -9,7 +9,7 @@ namespace myGame
 	{
 	public:
 		Ant();
-		virtual void move() override final;
+		virtual void move(World& theWorld) override final;
 		virtual char getCreature() const override final;
 	private:
 		char creature = 'O';

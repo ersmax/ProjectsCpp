@@ -8,7 +8,7 @@ namespace myGame
 
 	char Ant::getCreature() const { return creature; }
 
-	void Ant::move()
+	void Ant::move(World& theWorld)
 	{
 		std::cout << "Calling Ant::move()\n";
 	}

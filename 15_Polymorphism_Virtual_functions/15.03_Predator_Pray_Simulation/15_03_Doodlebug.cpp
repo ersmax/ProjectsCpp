@@ -8,7 +8,7 @@ namespace myGame
 
 	char Doodlebug::getCreature() const { return creature; }
 
-	void Doodlebug::move()
+	void Doodlebug::move(World& theWorld)
 	{
 		std::cout << "Calling Doodlebug::move()\n";
 	}

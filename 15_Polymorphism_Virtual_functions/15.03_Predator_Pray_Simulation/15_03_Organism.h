@@ -3,6 +3,8 @@
 
 namespace myGame
 {
+	class World;
+
 	struct Position
 	{
 		int x;
@@ -14,7 +16,7 @@ namespace myGame
 	public:
 		Organism();
 		virtual ~Organism() = default;
-		virtual void move() = 0;
+		virtual void move(World& theWorld) = 0;
 		virtual char getCreature() const = 0;
 		void setPosition(const Position& thePosition);
 		const Position& getPosition() const;
