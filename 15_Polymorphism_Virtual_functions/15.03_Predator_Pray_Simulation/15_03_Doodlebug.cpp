@@ -13,7 +13,7 @@ namespace myGame
 	void Doodlebug::move(World& theWorld)
 	{
 		// Case 1: There are ants as neighbors
-		const std::vector<Position> neighbors = theWorld.neighborAnts(this);
+		const std::vector<Position>& neighbors = theWorld.neighborAnts(this);
 		if (World::doodlebugCanEat(neighbors))
 		{
 			const Position& newPosition = chooseRandomPosition(neighbors);
@@ -23,10 +23,10 @@ namespace myGame
 		}
 
 		// Case 2: There are free cells nearby
-		const std::vector<Position> freePosition = theWorld.freePositions(this);
+		const std::vector<Position>& freePosition = theWorld.freePositions(this);
 		if (World::canMoveToFreePosition(freePosition))
 		{
-			const Position& newPosition = chooseRandomPosition(freePosition);
+			const Position& newPosition = Organism::chooseRandomPosition(freePosition);
 			theWorld.changePosition(this, newPosition);
 			Organism::play();
 			return;
