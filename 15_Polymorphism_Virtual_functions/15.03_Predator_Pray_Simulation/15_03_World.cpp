@@ -175,4 +175,32 @@ namespace myGame
 		return (!freePositions.empty());
 	}
 
+	void World::eatAnt(Organism *theDoodlebug, const Position& newPosition)
+	{
+		if (theDoodlebug == nullptr)	return;
+		
+		const Position& oldPosition = theDoodlebug->getPosition();
+		const Organism *oldAnt = creatureAt(oldPosition);
+		if (oldAnt == nullptr)	return;
+
+		delete oldAnt;
+		board[newPosition.x][newPosition.y] = theDoodlebug;
+		board[oldPosition.x][oldPosition.y] = nullptr;
+		theDoodlebug->setPosition(newPosition);
+		nAnts--;
+	}
+
+	void World::changePosition(Organism *theOrganism, const Position& newPosition)
+	{
+		//	if the Organism to move does not exist, or a Critter in new position already exists, 
+		//	don't move at all
+		if (theOrganism == nullptr)	return;
+		if (creatureAt(newPosition) != nullptr)	return;		
+
+		const Position& oldPosition = theOrganism->getPosition();
+		board[newPosition.x][newPosition.y] = theOrganism;
+		board[oldPosition.x][oldPosition.y] = nullptr;
+		theOrganism->setPosition(newPosition);
+	}
+
 } // myGame

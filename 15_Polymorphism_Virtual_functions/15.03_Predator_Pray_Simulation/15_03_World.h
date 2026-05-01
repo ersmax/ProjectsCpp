@@ -20,13 +20,6 @@ namespace myGame
 		~World();
 		void output() const;
 		void next();
-	private:
-		Organism *board[N_ROWS][N_COLS];
-		int nAnts;
-		int nDoodlebug;
-		std::mt19937 rng;
-		void initialize();
-		void placeRandom(Organism *newOrganism);
 		Organism* creatureAt(const Position& thePosition) const;
 		std::vector<Position> neighborAnts(const Organism *theOrganism) const;
 		//   Postcondition: returns a (possible) vector of ants that
@@ -40,6 +33,17 @@ namespace myGame
 		// where the Organism (Ant/Doodlebug) can move without collision.
 		static bool canMoveToFreePosition(const std::vector<Position>& freePositions);
 		//   Postcondition: return whether there is at least one free cell to move
+		void eatAnt(Organism *theDoodlebug, const Position& newPosition);
+		//   Postcondition: allow a Doodlebug to change position and eat an Ant
+		void changePosition(Organism* theOrganism, const Position& newPosition);
+		//   Postcondition: allow an Ant/Doodlebug to change position to a newPosition
+	private:
+		Organism *board[N_ROWS][N_COLS];
+		int nAnts;
+		int nDoodlebug;
+		std::mt19937 rng;
+		void initialize();
+		void placeRandom(Organism *newOrganism);
 	};
 
 } // myGame
