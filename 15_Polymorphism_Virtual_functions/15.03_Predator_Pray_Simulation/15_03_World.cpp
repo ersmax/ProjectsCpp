@@ -180,7 +180,7 @@ namespace myGame
 		if (theDoodlebug == nullptr)	return;
 		
 		const Position& oldPosition = theDoodlebug->getPosition();
-		const Organism *oldAnt = creatureAt(oldPosition);
+		const Organism *oldAnt = creatureAt(newPosition);
 		if (oldAnt == nullptr)	return;
 
 		delete oldAnt;
@@ -201,6 +201,48 @@ namespace myGame
 		board[newPosition.x][newPosition.y] = theOrganism;
 		board[oldPosition.x][oldPosition.y] = nullptr;
 		theOrganism->setPosition(newPosition);
+	}
+
+	void World::next()
+	{
+		initializeFlags();
+		doodlebugsTurn();
+		antsTurn();
+	}
+
+	void World::initializeFlags() const
+	{
+		for (int row = 0; row < N_ROWS; row++)
+			for (int col = 0; col < N_COLS; col++)
+			{
+				Organism *theOrganism = board[row][col];
+				if (theOrganism != nullptr)
+				theOrganism->initializePlay();
+			}
+	}
+
+	void World::doodlebugsTurn()
+	{
+		for (auto& row : board)
+			for (const auto theOrganism : row)
+			{
+				if (theOrganism == nullptr || theOrganism->hasPlayed())	
+					continue;
+				if (dynamic_cast<Doodlebug*>(theOrganism) != nullptr)
+					theOrganism->move(*this);
+			}
+	}
+
+	void World::antsTurn()
+	{
+		for (auto& row : board)
+			for (const auto theOrganism : row)
+			{
+				if (theOrganism == nullptr || theOrganism->hasPlayed())
+					continue;
+				if (dynamic_cast<Ant*>(theOrganism) != nullptr)
+					theOrganism->move(*this);
+			}
 	}
 
 } // myGame

@@ -24,6 +24,7 @@ namespace myGame
 		virtual char getCreature() const = 0;
 		void setPosition(const Position& thePosition);
 		void play();
+		void initializePlay();
 		bool hasPlayed() const;
 		const Position& chooseRandomPosition(const std::vector<Position>& thePositions) const;
 		const Position& getPosition() const;

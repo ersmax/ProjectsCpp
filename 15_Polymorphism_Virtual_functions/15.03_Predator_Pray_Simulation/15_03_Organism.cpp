@@ -7,6 +7,8 @@ namespace myGame
 
 	void Organism::play() { played = true; }
 
+	void Organism::initializePlay() { played = false; }
+
 	bool Organism::hasPlayed() const { return played; }
 
 	const Position& Organism::getPosition() const { return position; }

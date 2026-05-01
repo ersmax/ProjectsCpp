@@ -44,6 +44,11 @@ namespace myGame
 		std::mt19937 rng;
 		void initialize();
 		void placeRandom(Organism *newOrganism);
+		void initializeFlags() const;
+		//   Postcondition: set the played flag of each organism to false, since they 
+		// have not played yet
+		void doodlebugsTurn();
+		void antsTurn();
 	};
 
 } // myGame
