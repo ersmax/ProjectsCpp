@@ -25,6 +25,10 @@ namespace myGame
 		virtual ~Organism() = default;
 		virtual void move(World& theWorld) = 0;
 		virtual char getCreature() const = 0;
+		void setBreedTime(int theTime);
+		void decreaseBreedTime();
+		virtual void resetBreedTime() = 0;
+		int getBreedTime() const;
 		void setPosition(const Position& thePosition);
 		void play();
 		void initializePlay();
@@ -33,8 +37,9 @@ namespace myGame
 		const Position& getPosition() const;
 	private:
 		Position position;
-		mutable std::mt19937 rng;
+		mutable std::mt19937 rng;	
 		bool played;
+		int breedTime;
 	};
 
 } // myGame

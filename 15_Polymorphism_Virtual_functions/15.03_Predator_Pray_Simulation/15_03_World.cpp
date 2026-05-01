@@ -232,7 +232,18 @@ namespace myGame
 				Doodlebug *doodlebug = dynamic_cast<Doodlebug*>(theOrganism);
 				if (doodlebug != nullptr)
 				{
+					// Move phase
 					theOrganism->move(*this);
+					
+					// Breed phase
+					const int timeToBreed = doodlebug->getBreedTime();
+					if (timeToBreed == 0)
+					{
+						doodlebug->resetBreedTime();
+						breed(doodlebug);
+					}
+
+					// Starvation phase
 					const int livesLeft = doodlebug->getStarvation();
 					if (livesLeft == 0)
 						die(theOrganism);
@@ -247,11 +258,24 @@ namespace myGame
 			{
 				if (theOrganism == nullptr || theOrganism->hasPlayed())
 					continue;
-				if (dynamic_cast<Ant*>(theOrganism) != nullptr)
+
+				Ant *ant = dynamic_cast<Ant*>(theOrganism);
+				if (ant != nullptr)
+				{
+					// Move phase
 					theOrganism->move(*this);
+
+					// Breed phase
+					const int timeToBreed = ant->getBreedTime();
+					if (timeToBreed == 0)
+					{
+						ant->resetBreedTime();
+						breed(ant);
+					}
+				}
+
 			}
 	}
-
 
 	void World::die(Organism *theOrganism)
 	{
@@ -265,6 +289,30 @@ namespace myGame
 		const Position thePosition = theOrganism->getPosition();
 		delete theOrganism;
 		board[thePosition.x][thePosition.y] = nullptr;
+	}
+
+	
+	void World::breed(Organism *theOrganism)
+	{
+		const std::vector<Position> neighborsPosition = freePositions(theOrganism);
+
+		if (!canMoveToFreePosition(neighborsPosition))	return;	// no positions nearby
+
+		const Position& randomPosition = theOrganism->chooseRandomPosition(neighborsPosition);
+
+		Ant *ant = dynamic_cast<Ant*>(theOrganism);
+		Doodlebug *doodlebug = dynamic_cast<Doodlebug*>(theOrganism);
+
+		if (ant != nullptr)
+		{
+			board[randomPosition.x][randomPosition.y] = new Ant;
+			nAnts++;
+		}
+		else if (doodlebug != nullptr)
+		{
+			board[randomPosition.x][randomPosition.y] = new Doodlebug;
+			nDoodlebugs++;
+		}
 	}
 
 } // myGame

@@ -35,10 +35,12 @@ namespace myGame
 		//   Postcondition: return whether there is at least one free cell to move
 		void eatAnt(Organism *theDoodlebug, const Position& newPosition);
 		//   Postcondition: allow a Doodlebug to change position and eat an Ant
-		void changePosition(Organism* theOrganism, const Position& newPosition);
+		void changePosition(Organism *theOrganism, const Position& newPosition);
 		//   Postcondition: allow an Ant/Doodlebug to change position to a newPosition
-		void die(Organism* theOrganism);
+		void die(Organism *theOrganism);
 		//   Postcondition: if the remaining life of the Doodlebug reaches 0, then it dies
+		void breed(Organism *theOrganism);
+		//   Postcondition: allow the Ant/Doodlebug to reproduce if the proper time has come
 	private:
 		Organism *board[N_ROWS][N_COLS];
 		int nAnts;

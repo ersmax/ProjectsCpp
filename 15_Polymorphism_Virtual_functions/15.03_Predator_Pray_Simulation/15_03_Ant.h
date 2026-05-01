@@ -11,6 +11,7 @@ namespace myGame
 		Ant();
 		virtual void move(World& theWorld) override final;
 		virtual char getCreature() const override final;
+		virtual void resetBreedTime() override final;
 	private:
 		char creature = 'O';
 	};

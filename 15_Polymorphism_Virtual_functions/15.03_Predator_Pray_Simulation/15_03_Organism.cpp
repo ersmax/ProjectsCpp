@@ -2,7 +2,7 @@
 
 namespace myGame
 {
-	Organism::Organism() : position({ -1, -1 }), played(false), rng(std::random_device{}())
+	Organism::Organism() : position({ -1, -1 }), played(false), rng(std::random_device{}()), breedTime(0)
 	{ /* Body left empty */ }
 
 	void Organism::play() { played = true; }
@@ -15,11 +15,17 @@ namespace myGame
 
 	void Organism::setPosition(const Position& thePosition) { position = thePosition; }
 
+	void Organism::setBreedTime(const int theTime) { breedTime = theTime; }
+
+	void Organism::decreaseBreedTime() { breedTime--; }
+
+	int Organism::getBreedTime() const { return breedTime; }
+
 	const Position& Organism::chooseRandomPosition(const std::vector<Position>& thePositions) const
 	{
-		const int numberNeighbors = static_cast<int>(thePositions.size());
+		const int numberPositions = static_cast<int>(thePositions.size());
 		
-		std::uniform_int_distribution<int> idxPositions(0, numberNeighbors - 1);
+		std::uniform_int_distribution<int> idxPositions(0, numberPositions - 1);
 		const int idxPosition = idxPositions(rng);
 		const Position& randomPosition = thePositions[idxPosition];
 		

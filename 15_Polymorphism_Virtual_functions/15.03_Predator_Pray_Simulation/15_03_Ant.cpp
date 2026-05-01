@@ -6,24 +6,33 @@
 namespace myGame
 {
 	Ant::Ant() : Organism()
-	{ /* Body intentionally left empty */ }
+	{
+		setBreedTime(LIFE_CYCLE);
+	}
+
+	void Ant::resetBreedTime()
+	{
+		setBreedTime(LIFE_CYCLE);
+	}
 
 	char Ant::getCreature() const { return creature; }
 
 	void Ant::move(World& theWorld)
 	{
+		decreaseBreedTime();
+		Organism::play();
+
 		// Case 1: there are free cells nearby
 		const std::vector<Position> freePositions = theWorld.freePositions(this);
 		if (World::canMoveToFreePosition(freePositions))
 		{
 			const Position& newPosition = Organism::chooseRandomPosition(freePositions);
 			theWorld.changePosition(this, newPosition);
-			Organism::play();
 			return;
 		}
 
-		// Case 2: there are no free cells
-		Organism::play();
+		// Case 2: there are no free cells: just return
+		return;
 	}
 
 } // myGame

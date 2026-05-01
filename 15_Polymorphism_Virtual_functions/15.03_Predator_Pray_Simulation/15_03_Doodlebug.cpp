@@ -6,7 +6,9 @@
 namespace myGame
 {
 	Doodlebug::Doodlebug() : Organism(), turnsToStarvation(LIFE_CYCLE)
-	{ /* Body intentionally left empty */ }
+	{
+		Organism::setBreedTime(REPRODUCTION_TIME);
+	}
 
 	void Doodlebug::increaseStarvation() { turnsToStarvation--; }
 
@@ -14,10 +16,18 @@ namespace myGame
 
 	int Doodlebug::getStarvation() const { return turnsToStarvation; }
 
+	void Doodlebug::resetBreedTime()
+	{
+		Organism::setBreedTime(REPRODUCTION_TIME);
+	}
+
 	char Doodlebug::getCreature() const { return creature; }
 
 	void Doodlebug::move(World& theWorld)
 	{
+		Organism::play();
+		Organism::decreaseBreedTime();
+
 		// Case 1: There are ants as neighbors
 		const std::vector<Position> neighbors = theWorld.neighborAnts(this);
 		if (World::doodlebugCanEat(neighbors))
@@ -25,7 +35,6 @@ namespace myGame
 			const Position& newPosition = Organism::chooseRandomPosition(neighbors);
 			theWorld.eatAnt(this, newPosition);
 			resetTurnsStarvation();
-			Organism::play();
 			return;
 		}
 
@@ -36,13 +45,11 @@ namespace myGame
 			const Position& newPosition = Organism::chooseRandomPosition(freePosition);
 			theWorld.changePosition(this, newPosition);
 			increaseStarvation();
-			Organism::play();
 			return;
 		}
 		
 		// Case 3: All cells are occupied by other Doodlebugs
 		increaseStarvation();
-		Organism::play();
 	}
 
 	
