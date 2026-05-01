@@ -9,7 +9,7 @@
 
 namespace myGame
 {
-	World::World() : nAnts(INITIAL_ANTS), nDoodlebug(INITIAL_DOODLEBUGS), rng(std::random_device{}())
+	World::World() : nAnts(INITIAL_ANTS), nDoodlebugs(INITIAL_DOODLEBUGS), rng(std::random_device{}())
 	{ 
 		for (int row = 0; row < N_ROWS; row++)
 			for (int col = 0; col < N_COLS; col++)
@@ -30,7 +30,7 @@ namespace myGame
 	void World::initialize()
 	// Cannot create a local object because it gets destroyed out of scope
 	{
-		for (int doodlebug = 0; doodlebug < nDoodlebug; doodlebug++)
+		for (int doodlebug = 0; doodlebug < nDoodlebugs; doodlebug++)
 			placeRandom(new Doodlebug());
 		
 		for (int ant = 0; ant < nAnts; ant++)
@@ -228,8 +228,15 @@ namespace myGame
 			{
 				if (theOrganism == nullptr || theOrganism->hasPlayed())	
 					continue;
-				if (dynamic_cast<Doodlebug*>(theOrganism) != nullptr)
+
+				Doodlebug *doodlebug = dynamic_cast<Doodlebug*>(theOrganism);
+				if (doodlebug != nullptr)
+				{
 					theOrganism->move(*this);
+					const int livesLeft = doodlebug->getStarvation();
+					if (livesLeft == 0)
+						die(theOrganism);
+				}
 			}
 	}
 
@@ -243,6 +250,21 @@ namespace myGame
 				if (dynamic_cast<Ant*>(theOrganism) != nullptr)
 					theOrganism->move(*this);
 			}
+	}
+
+
+	void World::die(Organism *theOrganism)
+	{
+		if (theOrganism == nullptr)	return;
+
+		if (dynamic_cast<Doodlebug*>(theOrganism) != nullptr)
+			nDoodlebugs--;
+		else if (dynamic_cast<Ant*>(theOrganism) != nullptr)
+			nAnts--;
+
+		const Position thePosition = theOrganism->getPosition();
+		delete theOrganism;
+		board[thePosition.x][thePosition.y] = nullptr;
 	}
 
 } // myGame

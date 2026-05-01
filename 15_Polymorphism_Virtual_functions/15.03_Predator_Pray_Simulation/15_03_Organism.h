@@ -5,6 +5,9 @@
 
 namespace myGame
 {
+	// Turns for an ant to reproduce and for a Doodlebug to starve without eating
+	constexpr int LIFE_CYCLE = 3;	
+
 	class World;
 
 	struct Position

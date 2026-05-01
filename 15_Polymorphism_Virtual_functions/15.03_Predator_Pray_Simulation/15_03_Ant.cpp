@@ -13,7 +13,7 @@ namespace myGame
 	void Ant::move(World& theWorld)
 	{
 		// Case 1: there are free cells nearby
-		const std::vector<Position>& freePositions = theWorld.freePositions(this);
+		const std::vector<Position> freePositions = theWorld.freePositions(this);
 		if (World::canMoveToFreePosition(freePositions))
 		{
 			const Position& newPosition = Organism::chooseRandomPosition(freePositions);

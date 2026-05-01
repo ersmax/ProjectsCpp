@@ -37,10 +37,12 @@ namespace myGame
 		//   Postcondition: allow a Doodlebug to change position and eat an Ant
 		void changePosition(Organism* theOrganism, const Position& newPosition);
 		//   Postcondition: allow an Ant/Doodlebug to change position to a newPosition
+		void die(Organism* theOrganism);
+		//   Postcondition: if the remaining life of the Doodlebug reaches 0, then it dies
 	private:
 		Organism *board[N_ROWS][N_COLS];
 		int nAnts;
-		int nDoodlebug;
+		int nDoodlebugs;
 		std::mt19937 rng;
 		void initialize();
 		void placeRandom(Organism *newOrganism);
