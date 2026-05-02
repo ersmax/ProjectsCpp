@@ -305,12 +305,18 @@ namespace myGame
 
 		if (ant != nullptr)
 		{
-			board[randomPosition.x][randomPosition.y] = new Ant;
+			Ant *newAnt = new Ant;
+			board[randomPosition.x][randomPosition.y] = newAnt;
+			newAnt->setPosition(randomPosition);
+			newAnt->play();	// the newly born ant cannot play yet but wait next turn
 			nAnts++;
 		}
 		else if (doodlebug != nullptr)
 		{
-			board[randomPosition.x][randomPosition.y] = new Doodlebug;
+			Doodlebug* newDoodlebug = new Doodlebug;
+			board[randomPosition.x][randomPosition.y] = newDoodlebug;
+			newDoodlebug->setPosition(randomPosition);
+			newDoodlebug->play(); // the newly born doodlebug cannot play yet but wait next turn
 			nDoodlebugs++;
 		}
 	}
