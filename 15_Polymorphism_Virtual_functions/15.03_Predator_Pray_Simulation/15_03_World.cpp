@@ -336,7 +336,8 @@ namespace myGame
 		else if (dynamic_cast<Ant*>(theOrganism) != nullptr)
 			nAnts--;
 
-		const Position thePosition = theOrganism->getPosition();
+		const Position thePosition = theOrganism->getPosition();	
+		// do NOT return a reference here because theOrganism will be destroyed after this function call, and the reference will become dangling
 		delete theOrganism;
 		board[thePosition.x][thePosition.y] = nullptr;
 	}
