@@ -27,6 +27,56 @@ namespace myGame
 			}
 	}
 
+	World::World(const World& anotherWorld) :
+		nAnts(anotherWorld.nAnts),
+		nDoodlebugs(anotherWorld.nDoodlebugs),
+		rng(anotherWorld.rng)
+	{
+		for (int row = 0; row < N_ROWS; row++)
+			for (int col = 0; col < N_COLS; col++)
+				board[row][col] = deepCopyOrganism(anotherWorld.board[row][col]);
+	}
+
+	World& World::operator =(const World& anotherWorld)
+	{
+		if (this == &anotherWorld)	return *this;
+
+		nAnts = anotherWorld.nAnts;
+		nDoodlebugs = anotherWorld.nDoodlebugs;
+		rng = anotherWorld.rng;
+
+		for (int row = 0; row < N_ROWS; row++)
+			for (int col = 0; col < N_COLS; col++)
+			{
+				delete board[row][col];
+				board[row][col] = nullptr;
+			}
+
+
+		for (int row = 0; row < N_ROWS; row++)
+			for (int col = 0; col < N_COLS; col++)
+				board[row][col] = deepCopyOrganism(anotherWorld.board[row][col]);
+
+		return *this;
+	}
+
+	Organism* World::deepCopyOrganism(const Organism* anotherOrganism)
+	{
+		if (anotherOrganism == nullptr)
+			return nullptr;
+
+		const Ant *ant = dynamic_cast<const Ant*>(anotherOrganism);
+		if (ant != nullptr)
+			return new Ant(*ant);
+
+		const Doodlebug* doodlebug = dynamic_cast<const Doodlebug*>(anotherOrganism);
+		if (doodlebug != nullptr)
+			return new Doodlebug(*doodlebug);
+
+		return nullptr;
+	}
+
+
 	void World::initialize()
 	// Cannot create a local object because it gets destroyed out of scope
 	{

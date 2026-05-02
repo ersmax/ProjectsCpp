@@ -17,6 +17,8 @@ namespace myGame
 	{
 	public:
 		World();
+		World(const World& anotherWorld);
+		World& operator =(const World& anotherWorld);
 		~World();
 		void output() const;
 		void next();
@@ -53,6 +55,8 @@ namespace myGame
 		// have not played yet
 		void doodlebugsTurn();
 		void antsTurn();
+		static Organism* deepCopyOrganism(const Organism *anotherOrganism);
+		
 	};
 
 } // myGame

@@ -62,27 +62,3 @@ int main( )
 	std::cout << '\n';
 	return 0;
 }
-
-// TODO: 
-// Now the search functions of ants and free moves exist
-// I need to implement the actual move:
-// For each cell, set the flag "moved" to false
-// Then sequentially for each cell, check if it is a Doodlebug
-// Next, if it is a doodlebug, set the flag "moved" to true
-// And then, operate the search for Ants, and move there randomly.
-// If no ants as neighbor, move freely.
-// Move to the Ants, until 
-
-// TODO : next() 
-// doodlebug X needs to eat			
-// search for ants 0 to move there and eat		
-// if not, move normally => define basic move in organism
-// Then update status and born (placeRandom)
-
-// ants 0 need to survive
-// move normally => use basic move in Organism 
-// Then update status and born (placeRandom)
-
-// TODO : update GAME OVER()
-// which means that continue next() until all cells are busy
-// or nAnts = 0, which implies starvation of Doodlebugs as well.
