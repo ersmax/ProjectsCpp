@@ -719,7 +719,7 @@ Virtual function basics, Pointers and Virtual Functions
    <p align="center">
       <img src="15_Polymorphism_Virtual_functions/15.02_Graph_Visualisation/Figures/Graph_visualisation.gif" alt="Graph" width="48%" />
    </p> 
-3. [Ants vs Doodlebugs](15_Polymorphism_Virtual_functions/15.03_Ants_vs_Doodlebugs)  
+3. [Predator-Pray Simulation](15_Polymorphism_Virtual_functions/15.03_Predator_Pray_Simulation)  
    A full-featured predator-prey simulation on a 20x20 grid, implemented with modern C++ OOP and polymorphism. 
    The world is managed by a `World` class that owns all organisms (either `Ant` or `Doodlebug`).
    - **Simulation logic:**
@@ -729,5 +729,5 @@ Virtual function basics, Pointers and Virtual Functions
     - Ants move randomly and breed every 3 turns.
     - The world handles all board mutations (moving, eating, breeding, dying) and ensures only one organism acts per cell per turn.
    <p align="center">
-      <img src="15_Polymorphism_Virtual_functions/15.03_Graph_Visualisation/Figures/AntsDoodlebugs.gif" alt="AntsDoodlebugs" width="48%" />
+      <img src="15_Polymorphism_Virtual_functions/15.03_Predator_Pray_Simulation/Figures/AntsDoodlebugs.gif" alt="AntsDoodlebugs" width="48%" />
    </p> 
