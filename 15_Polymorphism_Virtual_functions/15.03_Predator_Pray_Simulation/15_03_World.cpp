@@ -69,7 +69,7 @@ namespace myGame
 		if (ant != nullptr)
 			return new Ant(*ant);
 
-		const Doodlebug* doodlebug = dynamic_cast<const Doodlebug*>(anotherOrganism);
+		const Doodlebug *doodlebug = dynamic_cast<const Doodlebug*>(anotherOrganism);
 		if (doodlebug != nullptr)
 			return new Doodlebug(*doodlebug);
 

@@ -718,4 +718,16 @@ Virtual function basics, Pointers and Virtual Functions
    The driver code demonstrates polymorphism by working through base-class pointers/references, invoking `draw()` dynamically for each concrete graph type, and includes validated user input helpers and modular separation between graph logic and application flow.
    <p align="center">
       <img src="15_Polymorphism_Virtual_functions/15.02_Graph_Visualisation/Figures/Graph_visualisation.gif" alt="Graph" width="48%" />
-   </p>
+   </p> 
+3. [Ants vs Doodlebugs](15_Polymorphism_Virtual_functions/15.03_Ants_vs_Doodlebugs)  
+   A full-featured predator-prey simulation on a 20x20 grid, implemented with modern C++ OOP and polymorphism. 
+   The world is managed by a `World` class that owns all organisms (either `Ant` or `Doodlebug`).
+   - **Simulation logic:**
+    - The simulation alternates turns: all doodlebugs act first, then all ants.
+    - Each organism's `move(World&)` method is called by the world. The organism decides its action (move, eat, breed, starve) but delegates all board changes to the world.
+    - Doodlebugs prioritize eating adjacent ants, otherwise move randomly, breed every 8 turns, and starve if they don't eat for 3 turns.
+    - Ants move randomly and breed every 3 turns.
+    - The world handles all board mutations (moving, eating, breeding, dying) and ensures only one organism acts per cell per turn.
+   <p align="center">
+      <img src="15_Polymorphism_Virtual_functions/15.03_Graph_Visualisation/Figures/AntsDoodlebugs.gif" alt="AntsDoodlebugs" width="48%" />
+   </p> 
