@@ -23,6 +23,7 @@ will spawn off a new doodlebug in the same manner as the ant.
 - Starve. If a doodlebug has not eaten an ant within three time steps, at the end
 of the third time step it will starve and die. The doodlebug should then be removed
 from the grid of cells.
+
 During one turn, all the doodlebugs should move before the ants.
 Write a program to implement this simulation and draw the world using ASCII
 characters of “O” for an ant and “X” for a doodlebug. Create a class named
