@@ -135,10 +135,27 @@ int main( )
 	std::cout << "Enter stats for Cyberdemon:\n";
 	std::cin >> aCyberdemon;
 
-	battleArena(anElf, aBalrog);
-	battleArena(aHuman, aCyberdemon);
-	battleArena(aBalrog, aCyberdemon);
-	battleArena(anElf, aHuman);
+	// Create copies of creatures before each battle
+	{
+		Elf elf = anElf; Balrog balrog = aBalrog;
+		std::cout << "\n--- Elf vs Balrog ---\n";
+		battleArena(elf, balrog);
+	}
+	{
+		Human human = aHuman; Cyberdemon cyberdemon = aCyberdemon;
+		std::cout << "\n--- Human vs Cyberdemon ---\n";
+		battleArena(human, cyberdemon);
+	}
+	{
+		Balrog balrog = aBalrog; Cyberdemon cyberdemon = aCyberdemon;
+		std::cout << "\n--- Balrog vs Cyberdemon ---\n";
+		battleArena(balrog, cyberdemon);
+	}
+	{
+		Elf elf = anElf; Human human = aHuman;
+		std::cout << "\n--- Elf vs Human ---\n";
+		battleArena(elf, human);
+	}
 
 	std::cout << '\n';
 	return 0;
@@ -175,4 +192,5 @@ void battleArena(Creature& creature1, Creature& creature2)
 	else if (lifeCreature2 > 0)
 		std::cout << creature2.getSpecies() << " wins (remaining life: " << lifeCreature2 << ")\n";
 		
+	std::cout << '\n';
 }
