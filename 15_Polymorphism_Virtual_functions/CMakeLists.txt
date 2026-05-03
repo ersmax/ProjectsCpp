@@ -9,6 +9,7 @@
 add_subdirectory ("15.01_Graph")
 add_subdirectory ("15.02_Graph_Visualisation")
 add_subdirectory ("15.03_Predator_Pray_Simulation")
+add_subdirectory ("15.04_RPG")
 
 
 # TODO: Add tests and install targets if needed.

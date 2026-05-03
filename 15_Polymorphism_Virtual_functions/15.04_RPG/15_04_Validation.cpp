@@ -1,4 +1,5 @@
 #include <iostream>
+#include <limits>
 #include "15_04_Validation.h"
 
 namespace

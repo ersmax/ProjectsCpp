@@ -17,14 +17,14 @@ namespace myRPG
 
 	void Creature::setStrength(const int theStrength)
 	{
-		if (theStrength < 0 || theStrength > MAX_STRENGTH)
+		if (theStrength <= 0 || theStrength > MAX_STRENGTH)
 			throw std::invalid_argument("Not a valid value\n");
 		strength = theStrength;
 	}
 
 	void Creature::setHitpoints(const int theHitpoints)
 	{
-		if (theHitpoints < 0 || theHitpoints > MAX_STRENGTH)
+		if (theHitpoints <= 0 || theHitpoints > MAX_HITPOINTS)
 			throw std::invalid_argument("Not a valid value\n");
 		hitpoints = theHitpoints;
 	}
@@ -50,10 +50,10 @@ namespace myRPG
 		{
 			std::cout << "Enter " << theCreature.getSpecies() << " strength (1-" << MAX_STRENGTH << "):\n";
 			readNumber(inputStream, theCreature.strength);
-			std::cout << "Enter " << theCreature.getHitpoints() << " hitpoints (1-" << MAX_HITPOINTS << "):\n";
+			std::cout << "Enter " << theCreature.getSpecies() << " hitpoints (1-" << MAX_HITPOINTS << "):\n";
 			readNumber(inputStream, theCreature.hitpoints);
 			if (theCreature.strength > 0 && theCreature.strength <= MAX_STRENGTH &&
-				theCreature.hitpoints > 0 && theCreature.strength <= MAX_HITPOINTS)
+				theCreature.hitpoints > 0 && theCreature.hitpoints <= MAX_HITPOINTS)
 			{
 				break;
 			}

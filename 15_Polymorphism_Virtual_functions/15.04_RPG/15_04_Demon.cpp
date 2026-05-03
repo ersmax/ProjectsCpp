@@ -28,5 +28,3 @@ namespace myRPG
 	}
 
 } // myRPG
-
-// TODO: implement the Classes Balrogs and Cyberdemons, plus the final battle royal logic in main

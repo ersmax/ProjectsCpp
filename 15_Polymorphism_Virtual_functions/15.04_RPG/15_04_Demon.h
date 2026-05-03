@@ -12,7 +12,7 @@ namespace myRPG
 	public:
 		Demon();
 		Demon(int theStrength, int theHitpoints);
-		virtual int getDamage() override final;
+		virtual int getDamage() override;
 	private:
 	};
 
