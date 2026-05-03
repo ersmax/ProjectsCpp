@@ -24,7 +24,7 @@ namespace myRPG
 
 	void Creature::setHitpoints(const int theHitpoints)
 	{
-		if (theHitpoints <= 0 || theHitpoints > MAX_HITPOINTS)
+		if (theHitpoints > MAX_HITPOINTS)
 			throw std::invalid_argument("Not a valid value\n");
 		hitpoints = theHitpoints;
 	}
