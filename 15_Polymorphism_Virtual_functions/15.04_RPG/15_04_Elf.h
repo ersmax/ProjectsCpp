@@ -12,6 +12,9 @@ namespace myRPG
 		Elf();
 		Elf(int theStrength, int theHitpoints);
 		virtual int getDamage() override final;
+		//   Postcondition: returns the damage inflicted by an Elf,
+		// which is the sum of the damage inflicted by a Creature and, with a 10% chance, 
+		// magical damage that is double the amount of damage inflicted by the Creature.
 		virtual const std::string& getSpecies() const override final;
 	private:
 		std::string species = "Elf";

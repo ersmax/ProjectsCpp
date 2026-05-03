@@ -11,6 +11,9 @@ namespace myRPG
 		Balrog();
 		Balrog(int theStrength, int theHitpoints);
 		virtual int getDamage() override final;
+		//   Postcondition: returns the damage inflicted by a Balrog, 
+		// which is the sum of the damage inflicted by a Demon 
+		// and an additional attack that inflicts the same amount of damage as the first attack.
 		virtual const std::string& getSpecies() const override final;
 	private:
 		std::string species = "Balrog";

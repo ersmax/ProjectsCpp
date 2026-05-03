@@ -13,6 +13,8 @@ namespace myRPG
 		Demon();
 		Demon(int theStrength, int theHitpoints);
 		virtual int getDamage() override;
+		//   Postcondition: returns the damage inflicted by a Demon, 
+		// which is the sum of the damage inflicted by a Creature and an additional 5% of that damage.
 	private:
 	};
 

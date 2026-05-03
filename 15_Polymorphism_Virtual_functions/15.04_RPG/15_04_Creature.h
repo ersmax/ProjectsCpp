@@ -14,6 +14,8 @@ namespace myRPG
 		virtual ~Creature() = default;
 		Creature(int theStrength, int theHitpoints);
 		virtual int getDamage();
+		//   Postcondition: returns the amount of damage this Creature inflicts, 
+		// which is a random number up to the value of strength.
 		void setStrength(int theStrength);
 		void setHitpoints(int theHitpoints);
 		int getStrength() const;

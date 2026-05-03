@@ -731,3 +731,7 @@ Virtual function basics, Pointers and Virtual Functions
    <p align="center">
       <img src="15_Polymorphism_Virtual_functions/15.03_Predator_Pray_Simulation/Figures/AntsDoodlebugs.gif" alt="AntsDoodlebugs" width="48%" />
    </p> 
+4. [RPG](15_Polymorphism_Virtual_functions/15.04_RPG) 
+   \- This program implements a simple RPG combat system using polymorphism and virtual functions. 
+   It defines a base class `Creature` with virtual functions for getting species and calculating damage, and derived classes `Human`, `Demon`, `Cyberdemon`, `Balrog`, and `Elf` that override these functions to implement specific behaviors (e.g., demons have a chance for extra damage, elves have a chance for double damage). 
+   The main function creates instances of each creature type, simulates combat by calling their damage functions, and demonstrates how polymorphism allows the program to treat all creatures uniformly while still invoking the correct behavior based on their actual types at runtime.
